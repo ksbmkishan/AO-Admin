@@ -1,0 +1,110 @@
+.header {
+    background-color: #fff;
+    width: 100%;
+    color: rgba(0, 0, 0, .5);
+    padding: 0.3rem 1rem;
+    border-bottom: 1px solid #dee2e6
+}
+
+.header_wrapper {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.header_wrapper ul {
+    padding-left: 0px;
+}
+
+.user_wrapper {
+    /* background-color: rgba(103, 99, 99, 0.134); */
+    position: absolute;
+    top: 3.3rem;
+    right: 0px;
+
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .15);
+    /* border-left: 1px solid rgba(0,0,0,.15);
+    border-right: 1px solid rgba(0,0,0,.15); */
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .175);
+
+}
+
+.user_list_style {
+
+    /* display: block; */
+    list-style: none;
+    width: 100%;
+    padding: 0.25rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+
+}
+
+.user_list_icon {
+    display: block;
+    margin-right: 5px;
+}
+
+.user_list_style a {
+    text-decoration: none;
+    background: none;
+    border: none;
+    font-weight: 500;
+    color: black;
+    padding: 0px 5px;
+    display: flex;
+    align-items: center;
+
+}
+
+.user_icon {
+    cursor: pointer;
+    color: #8A1C19;
+    font-size: 1.5rem;
+    transition: 200ms ease-in-out;
+
+}
+
+.user_icon:hover {
+    cursor: pointer;
+    color: #1B1B45;
+
+}
+
+.hr {
+    margin: 0px 0px;
+}
+
+.header_icon_name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: 'Philosopher';
+    color: #1B1B45
+}
+
+.bars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #8A1C19;
+    color: white;
+    border-radius: 0.2rem;
+    width: 2rem;
+    height: 2rem;
+
+}
+
+.bars_main {
+    justify-content: center;
+    align-items: center;
+}
