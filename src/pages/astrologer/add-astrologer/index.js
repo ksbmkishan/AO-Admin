@@ -1600,8 +1600,6 @@ const AddAstrologer = ({ dispatch, skillsData, subSkillData, expertiesData, main
                         />
                     </Grid>
 
-
-
                     {/* Check Box Start */}
                     {/* <Grid item lg={12} sm={12} md={12} xs={12}>
                         <FormControl component="fieldset">
@@ -1639,71 +1637,65 @@ const AddAstrologer = ({ dispatch, skillsData, subSkillData, expertiesData, main
                     </Grid> */}
 
                     <Grid item lg={12} sm={12} md={12} xs={12}>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend" sx={{ fontWeight: 'bold' }}>
-                                Skills <span style={{ color: "red" }}>*</span>
-                            </FormLabel>
-                            <FormGroup aria-label="position" row>
-                                {skillsData &&
-                                    skillsData?.sort((a, b) => a.skill.localeCompare(b.skill))?.map((item, index) => {
-                                        return (
-                                            <Grid key={index} xs={12} md={3}>
-                                                <FormControlLabel
-                                                    value={item._id}
-                                                    className={classes.checkbox}
-                                                    control={
-                                                        <Checkbox
-                                                            checked={skills && skills.includes(item._id)}
-                                                            onChange={() => handleSkills(item)}
-                                                            className={classes.smallCheckbox}
-                                                            style={{ fontSize: '14px' }}
-                                                            size="small"
-                                                        />
-                                                    }
-                                                    label={item?.skill}
-                                                    labelPlacement="end"
-                                                />
-                                            </Grid>
-                                        );
-                                    })}
-                            </FormGroup>
-                        </FormControl>
+                        <FormLabel component="legend" sx={{ fontWeight: 'bold' }}>
+                            Skills <span style={{ color: "red" }}>*</span>
+                        </FormLabel>
+                        <FormGroup aria-label="position" row>
+                            {skillsData &&
+                                skillsData?.sort((a, b) => a.skill.localeCompare(b.skill))?.map((item, index) => {
+                                    return (
+                                        <Grid key={index} xs={12} md={3}>
+                                            <FormControlLabel
+                                                value={item._id}
+                                                className={classes.checkbox}
+                                                control={
+                                                    <Checkbox
+                                                        checked={skills && skills.includes(item._id)}
+                                                        onChange={() => handleSkills(item)}
+                                                        className={classes.smallCheckbox}
+                                                        style={{ fontSize: '14px' }}
+                                                        size="small"
+                                                    />
+                                                }
+                                                label={item?.skill}
+                                                labelPlacement="end"
+                                            />
+                                        </Grid>
+                                    );
+                                })}
+                        </FormGroup>
                         {inputFieldError?.skills && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "500" }}>{inputFieldError?.skills}</div>}
                     </Grid>
 
                     <Grid item lg={12} sm={12} md={12} xs={12}>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend" sx={{ fontWeight: 'bold' }}>
-                                {" "}
-                                Remedies <span style={{ color: "red" }}>*</span>
-                            </FormLabel>
-                            <FormGroup row>
-                                {remediesData &&
-                                    remediesData?.sort((a, b) => a.title.localeCompare(b.title))?.map((item, index) => {
-                                        return (
-                                            <Grid key={index} xs={12} md={3}>
-                                                <FormControlLabel
-                                                    value={item._id}
-                                                    className={classes.checkbox}
-                                                    control={
-                                                        <Checkbox
-                                                            checked={remedies && remedies.includes(item._id)}
-                                                            onChange={() => handleRemedies(item)}
-                                                            className={classes.smallCheckbox}
-                                                            style={{ fontSize: '14px' }}
-                                                            size="small"
-                                                        />
-                                                    }
-                                                    label={item.title}
-                                                    labelPlacement="end"
-                                                    sx={{ textWrap: 'nowrap' }}
-
+                        <FormLabel component="legend" sx={{ fontWeight: 'bold' }}>
+                            Remedies <span style={{ color: "red" }}>*</span>
+                        </FormLabel>
+                        <FormGroup row>
+                            {remediesData && remediesData?.sort((a, b) => a.title.localeCompare(b.title))?.map((item, index) => {
+                                return (
+                                    <Grid key={index} xs={12} md={3}>
+                                        <FormControlLabel
+                                            value={item._id}
+                                            className={classes.checkbox}
+                                            control={
+                                                <Checkbox
+                                                    checked={remedies && remedies.includes(item._id)}
+                                                    onChange={() => handleRemedies(item)}
+                                                    className={classes.smallCheckbox}
+                                                    style={{ fontSize: '14px' }}
+                                                    size="small"
                                                 />
-                                            </Grid>
-                                        );
-                                    })}
-                            </FormGroup>
-                        </FormControl>
+                                            }
+                                            label={item.title}
+                                            labelPlacement="end"
+                                            sx={{ textWrap: 'nowrap' }}
+
+                                        />
+                                    </Grid>
+                                );
+                            })}
+                        </FormGroup>
                         {inputFieldError?.remedies && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "500" }}>{inputFieldError?.remedies}</div>}
                     </Grid>
 
@@ -1743,39 +1735,36 @@ const AddAstrologer = ({ dispatch, skillsData, subSkillData, expertiesData, main
                     </Grid> */}
 
                     <Grid item lg={12} sm={12} md={12} xs={12}>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend" sx={{ fontWeight: 'bold' }}>
-                                {" "}
-                                Main Expertise <span style={{ color: "red" }}>*</span>
-                            </FormLabel>
-                            <FormGroup aria-label="position" row>
-                                {mainExpertiesData &&
-                                    mainExpertiesData?.sort((a, b) => a.mainExpertise.localeCompare(b.mainExpertise))?.map((item, index) => {
-                                        return (
-                                            <Grid key={index} xs={12} md={3}>
-                                                <FormControlLabel
-                                                    value={item._id}
-                                                    className={classes.checkbox}
-                                                    control={
-                                                        <Checkbox
-                                                            checked={
-                                                                mainExpertise &&
-                                                                mainExpertise.includes(item._id)
-                                                            }
-                                                            onChange={() => handleMainExpertise(item)}
-                                                            className={classes.smallCheckbox}
-                                                            style={{ fontSize: '14px' }}
-                                                            size="small"
-                                                        />
-                                                    }
-                                                    label={item.mainExpertise}
-                                                    labelPlacement="end"
-                                                />
-                                            </Grid>
-                                        );
-                                    })}
-                            </FormGroup>
-                        </FormControl>
+                        <FormLabel component="legend" sx={{ fontWeight: 'bold' }}>
+                            Main Expertise <span style={{ color: "red" }}>*</span>
+                        </FormLabel>
+                        <FormGroup aria-label="position" row>
+                            {mainExpertiesData &&
+                                mainExpertiesData?.sort((a, b) => a.mainExpertise.localeCompare(b.mainExpertise))?.map((item, index) => {
+                                    return (
+                                        <Grid key={index} xs={12} md={3}>
+                                            <FormControlLabel
+                                                value={item._id}
+                                                className={classes.checkbox}
+                                                control={
+                                                    <Checkbox
+                                                        checked={
+                                                            mainExpertise &&
+                                                            mainExpertise.includes(item._id)
+                                                        }
+                                                        onChange={() => handleMainExpertise(item)}
+                                                        className={classes.smallCheckbox}
+                                                        style={{ fontSize: '14px' }}
+                                                        size="small"
+                                                    />
+                                                }
+                                                label={item.mainExpertise}
+                                                labelPlacement="end"
+                                            />
+                                        </Grid>
+                                    );
+                                })}
+                        </FormGroup>
                         {inputFieldError?.mainExpertise && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "500" }}>{inputFieldError?.mainExpertise}</div>}
                     </Grid>
                     {/* Check Box End */}

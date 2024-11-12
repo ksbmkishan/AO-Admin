@@ -94,13 +94,8 @@ const AddSkill = ({ mode }) => {
             const { title } = skillDetail;
 
             if (stateData) {
-                let formData = new FormData()
-                formData.append("skillId", stateData?._id);
-                formData.append("skill", title);
-                formData.append("image", image?.bytes);
-
                 const payload = {
-                    data: formData,
+                    data: { skillId: stateData?._id, skill: title },
                     onComplete: () => navigate("/skill")
                 }
 
@@ -108,12 +103,8 @@ const AddSkill = ({ mode }) => {
                 dispatch(SkillActions.updateSkill(payload))
 
             } else {
-                let formData = new FormData()
-                formData.append("skill", title);
-                formData.append("image", image?.bytes);
-
                 const payload = {
-                    data: formData,
+                    data: { skill: title },
                     onComplete: () => navigate("/skill")
                 }
 

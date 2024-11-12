@@ -80,13 +80,13 @@ const WithdrawalRequest = () => {
     //* Datatable Column
     const columns = [
         { name: "S.No.", selector: row => filteredData.indexOf(row) + 1, width: "80px", },
-        { name: "Name", selector: (row) => row?.astrologerId?.astrologerName, },
-        { name: "Email", selector: (row) => row?.astrologerId?.email, width: "250px", },
-        { name: "Mobile", selector: (row) => row?.astrologerId?.phoneNumber, },
-        { name: "Total Wallet", selector: (row) => IndianRupee(row?.astrologerId?.wallet_balance) },
-        { name: "Req.amount", selector: (row) => IndianRupee(row?.amount) },
-        { name: "Status", selector: (row) => <div style={{ textTransform: "capitalize" }}>{row?.status}</div> },
-        { name: "Created Date", selector: (row) => moment(row?.createdAt).format("Do MMM YYYY"), width: "140px", },
+        { name: "Name", selector: (row) => row?.astrologerId?.astrologerName, width: "170px" },
+        { name: "Email", selector: (row) => row?.astrologerId?.email, width: "200px", },
+        { name: "Mobile", selector: (row) => row?.astrologerId?.phoneNumber, width: "120px" },
+        { name: "Total Wallet", selector: (row) => IndianRupee(row?.astrologerId?.wallet_balance), width: "120px" },
+        { name: "Req.amount", selector: (row) => IndianRupee(row?.amount), width: "120px" },
+        { name: "Status", selector: (row) => <div style={{ textTransform: "capitalize" }}>{row?.status}</div>, width: "110px" },
+        { name: "Created Date", selector: (row) => moment(row?.createdAt).format("Do MMM YYYY"), width: "120px", },
         {
             name: "Action",
             cell: (row) => (

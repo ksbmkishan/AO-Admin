@@ -108,16 +108,16 @@ const Astrologer = () => {
 
     //* Datatable Column
     const columns = [
-        { name: "S.No.", selector: (row, index) => filteredData.indexOf(row) + 1, width: "80px", },
-        { name: "Name", selector: (row) => row?.astrologerName, },
-        { name: "Email", selector: (row) => row.email, width: "250px", },
-        { name: "Mobile", selector: (row) => row.phoneNumber, },
+        { name: "S.No.", selector: (row, index) => filteredData.indexOf(row) + 1, width: "80px" },
+        { name: "Name", selector: (row) => row?.astrologerName, width: "170px" },
+        { name: "Email", selector: (row) => row.email, width: "200px" },
+        { name: "Mobile", selector: (row) => row.phoneNumber, width: "120px" },
         // { name: "Wallet", selector: (row) => row.wallet_balance.toFixed(2), width: '100px' },
         // { name: "Experience", selector: (row) => row.experience, },
         // { name: "Chat Price", selector: (row) => row.chat_price, },
         // { name: "Call Price", selector: (row) => row.call_price, },
-        { name: "Created Date", selector: (row) => moment(row.createdAt).format("Do MMM YYYY"), width: "140px", },
-        { name: 'Status', selector: row => <div style={{ cursor: 'pointer' }} onClick={() => dispatch(AstrologerActions?.verifyAstrologerProfile({ isVerified: row.isVerified ? "false" : "true", astrologerId: row?._id }))}>{row?.isVerified ? <SwitchOnSvg /> : <SwitchOffSvg />}</div>, width: "140px", center: true, },
+        { name: "Created Date", selector: (row) => moment(row.createdAt).format("Do MMM YYYY"), width: "120px", },
+        { name: 'Status', selector: row => <div style={{ cursor: 'pointer' }} onClick={() => dispatch(AstrologerActions?.verifyAstrologerProfile({ isVerified: row.isVerified ? "false" : "true", astrologerId: row?._id }))}>{row?.isVerified ? <SwitchOnSvg /> : <SwitchOffSvg />}</div>, width: "90px", center: true, },
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >
@@ -127,7 +127,7 @@ const Astrologer = () => {
                 <div style={{ cursor: "pointer" }} onClick={() => handleWalletModalOpen(row)} ><WalletSvg /></div>
                 <MoreVertIcon onClick={() => handleEdit(row)} sx={{ cursor: "pointer" }} />
             </div>,
-            width: "200px", centre: true,
+            center: true,
         },
     ];
 

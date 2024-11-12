@@ -18,13 +18,13 @@ const AstrologerEnquiry = () => {
     //* Datatable Column
     const columns = [
         { name: "S.No.", selector: (row, index) => filteredData.indexOf(row) + 1, width: "80px", },
-        { name: "Name", selector: (row) => row?.astrologerName, },
-        { name: "Email", selector: (row) => row?.email, width: "250px", },
-        { name: "Mobile", selector: (row) => row?.phoneNumber, },
+        { name: "Name", selector: (row) => row?.astrologerName, width: "170px" },
+        { name: "Email", selector: (row) => row?.email, width: "200px", },
+        { name: "Mobile", selector: (row) => row?.phoneNumber, width: "120px" },
         { name: "State", selector: (row) => row?.state ? row?.state : 'N/A', },
-        { name: "Experience", selector: (row) => row?.experience, },
-        { name: "DOB", selector: (row) => moment(row?.dateOfBirth).format("Do MMM YYYY"), width: "140px", },
-        { name: "Created Date", selector: (row) => moment(row?.createdAt).format("Do MMM YYYY"), width: "140px", },
+        { name: "Experience", selector: (row) => row?.experience, width: "110px" },
+        { name: "DOB", selector: (row) => moment(row?.dateOfBirth).format("Do MMM YYYY"), width: "120px", },
+        { name: "Created Date", selector: (row) => moment(row?.createdAt).format("Do MMM YYYY"), width: "120px", },
         {
             name: "Action",
             cell: (row) => (
@@ -33,7 +33,7 @@ const AstrologerEnquiry = () => {
                     {/* <div onClick={() => dispatch(AstrologerActions.deleteAstrologer({ astrologerId: row?._id, type: 'Enquiry' }))} style={{ cursor: "pointer" }}><DeleteSvg /></div> */}
                 </div>
             ),
-            centre: true,
+            center: true,
         },
     ];
 

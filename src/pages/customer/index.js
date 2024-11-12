@@ -91,14 +91,14 @@ const Customer = () => {
     //* Datatable Column
     const columns = [
         { name: "S.No.", selector: (row) => customerData.indexOf(row) + 1, width: "80px", },
-        { name: "Customer Name", selector: (row) => row?.customerName ? row?.customerName : 'N/A', },
-        { name: "Contact", selector: (row) => row?.phoneNumber, },
-        { name: "Wallet", selector: (row) => IndianRupee(row?.wallet_balance) || 'N/A', width: '150px' },
-        { name: "D.O.B", selector: (row) => row?.dateOfBirth ? moment(row?.dateOfBirth).format('DD MMM YYYY') : 'N/A' },
-        { name: "T.O.B", selector: (row) => moment(row?.timeOfBirth).format('hh:mm:ss') != 'Invalid date' ? moment(row?.timeOfBirth).format('hh:mm A') : row?.timeOfBirth ? moment(row?.timeOfBirth, "HH:mm").format("hh:mm A") : 'N/A' },
+        { name: "Customer Name", selector: (row) => row?.customerName ? row?.customerName : 'N/A', width: "160px" },
+        { name: "Contact", selector: (row) => row?.phoneNumber, width: "120px" },
+        { name: "Wallet", selector: (row) => IndianRupee(row?.wallet_balance) || 'N/A', width: '120px' },
+        { name: "D.O.B", selector: (row) => row?.dateOfBirth ? moment(row?.dateOfBirth).format('DD MMM YYYY') : 'N/A', width: "120px" },
+        { name: "T.O.B", selector: (row) => moment(row?.timeOfBirth).format('hh:mm:ss') != 'Invalid date' ? moment(row?.timeOfBirth).format('hh:mm A') : row?.timeOfBirth ? moment(row?.timeOfBirth, "HH:mm").format("hh:mm A") : 'N/A', width: "120px" },
         // { name: "Registration Time", selector: (row) => moment(row?.createdAt).format("DD-MM-YYYY"), width: "150px", centre: true },
         // { name: "Last Login Time", selector: (row) => moment(row?.updatedAt).format("DD-MM-YYYY"), width: "150px", centre: true },
-        { name: 'Status', selector: row => <div style={{ cursor: 'pointer' }} onClick={() => dispatch(CustomerActions.changeCustomerBannedUnbannedStatus({ customerId: row?._id, customerName: row?.customerName, status: row?.banned_status }))}>{!row?.banned_status ? <SwitchOnSvg /> : <SwitchOffSvg />}</div>, width: "140px", centre: true, },
+        { name: 'Status', selector: row => <div style={{ cursor: 'pointer' }} onClick={() => dispatch(CustomerActions.changeCustomerBannedUnbannedStatus({ customerId: row?._id, customerName: row?.customerName, status: row?.banned_status }))}>{!row?.banned_status ? <SwitchOnSvg /> : <SwitchOffSvg />}</div>, width: "120px", centre: true, },
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >
@@ -107,7 +107,7 @@ const Customer = () => {
                 <div style={{ cursor: "pointer" }} onClick={() => handleWalletModalOpen(row?._id)} ><WalletSvg /></div>
                 {/* <div onClick={() => dispatch(CustomerActions.deleteCustomerById({ customerId: row._id, customerName: row?.customerName }))} style={{ cursor: "pointer" }}><DeleteSvg /></div> */}
             </div>,
-            width: "150px", centre: true,
+            center: true,
         },
     ];
 
