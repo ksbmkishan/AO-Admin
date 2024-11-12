@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#E4E4E4',
     },
     logo: {
-        width: 150, // Set the width for the logo
-        height: 'auto', // Maintain aspect ratio
+        width: 50, 
+        height: 'auto',
     },
     invoiceDetails: {
         fontSize: 12,

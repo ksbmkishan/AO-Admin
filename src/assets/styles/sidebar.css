@@ -19,7 +19,7 @@ main {
 }
 
 .sidebar {
-    /* background: #F15F4B; */
+    /* background: #D56A14; */
     background: #fff;
     color: black;
     height: 100vh;
@@ -111,7 +111,7 @@ main {
 
 .link:hover {
     border-right: 4px solid white;
-    background: #F15F4B;
+    background: #D56A14;
     transition: 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
     color: #fff;
     border-radius: 8px;
@@ -133,7 +133,7 @@ main {
 
 .active {
     margin: 5px 10px 5px 0;
-    background: #F15F4B;
+    background: #D56A14;
     color: #fff !important;
     border-right: 4px solid white;
     border-radius: 8px;
@@ -158,7 +158,7 @@ main {
 
 .menu:hover {
     border-right: 4px solid white;
-    background: #F15F4B;
+    background: #D56A14;
     transition: 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
     color: #fff;
     border-radius: 8px;
