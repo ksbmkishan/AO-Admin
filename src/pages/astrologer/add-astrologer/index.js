@@ -1489,7 +1489,7 @@ const AddAstrologer = ({ dispatch, skillsData, subSkillData, expertiesData, main
 
                     <Grid item lg={4} sm={12} md={12} xs={12}>
                         <TextField
-                            label={<>Commission Call Price <span style={{ color: "red" }}>*</span></>} variant="outlined" fullWidth
+                            label={<>Call Platform Charge <span style={{ color: "red" }}>*</span></>} variant="outlined" fullWidth
                             type="number"
                             name='commissionCallPrice'
                             value={astrologerDetail?.commissionCallPrice}
@@ -1515,7 +1515,7 @@ const AddAstrologer = ({ dispatch, skillsData, subSkillData, expertiesData, main
 
                     <Grid item lg={4} sm={12} md={12} xs={12}>
                         <TextField
-                            label={<>Commission Chat Price <span style={{ color: "red" }}>*</span></>} variant="outlined" fullWidth
+                            label={<>Chat Platform Charge <span style={{ color: "red" }}>*</span></>} variant="outlined" fullWidth
                             type="number"
                             name='commissionChatPrice'
                             value={astrologerDetail?.commissionChatPrice}
@@ -1542,7 +1542,7 @@ const AddAstrologer = ({ dispatch, skillsData, subSkillData, expertiesData, main
 
                     <Grid item lg={4} sm={12} md={12} xs={12}>
                         <TextField
-                            label={<>Live Commission Price <span style={{ color: "red" }}>*</span></>} variant="outlined" fullWidth
+                            label={<>Live Platform Charge <span style={{ color: "red" }}>*</span></>} variant="outlined" fullWidth
                             type="number"
                             name='vCallComissionPrice'
                             value={astrologerDetail?.vCallComissionPrice}
@@ -1573,7 +1573,7 @@ const AddAstrologer = ({ dispatch, skillsData, subSkillData, expertiesData, main
 
                     <Grid item lg={4} sm={12} md={12} xs={12}>
                         <TextField
-                            label={<>Video Call Commission Price <span style={{ color: "red" }}>*</span></>} variant="outlined" fullWidth
+                            label={<>Video Call Platform Charge <span style={{ color: "red" }}>*</span></>} variant="outlined" fullWidth
                             type="number"
                             name='videoCallCommissionPrice'
                             value={astrologerDetail?.videoCallCommissionPrice}

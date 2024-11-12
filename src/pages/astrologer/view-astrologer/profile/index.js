@@ -73,13 +73,13 @@ const Profile = ({ astrologer }) => {
                             <Typography variant="body1"><strong>Chat Price:</strong> {IndianRupee(chat_price)}</Typography>
                             <Typography variant="body1"><strong>Call Price:</strong> {IndianRupee(call_price)}</Typography>
                             <Typography variant="body1"><strong>Video Call Price:</strong> {IndianRupee(normal_video_call_price)}</Typography>
-                            <Typography variant="body1"><strong>Live Call Price:</strong> {IndianRupee(video_call_price)}</Typography>
+                            <Typography variant="body1"><strong>Live Price:</strong> {IndianRupee(video_call_price)}</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography variant="body1"><strong>Chat Commission Price:</strong> {IndianRupee(commission_chat_price)}</Typography>
-                            <Typography variant="body1"><strong>Call Commission Price:</strong> {IndianRupee(commission_call_price)}</Typography>
-                            <Typography variant="body1"><strong>Video Call Commission Price:</strong> {IndianRupee(commission_normal_video_call_price)}</Typography>
-                            <Typography variant="body1"><strong>Live Call Commission Price:</strong> {IndianRupee(commission_video_call_price)}</Typography>
+                            <Typography variant="body1"><strong>Chat Platform Charge:</strong> {IndianRupee(commission_chat_price)}</Typography>
+                            <Typography variant="body1"><strong>Call Platform Charge:</strong> {IndianRupee(commission_call_price)}</Typography>
+                            <Typography variant="body1"><strong>Video Call Platform Charge:</strong> {IndianRupee(commission_normal_video_call_price)}</Typography>
+                            <Typography variant="body1"><strong>Live Platform Charge:</strong> {IndianRupee(commission_video_call_price)}</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
