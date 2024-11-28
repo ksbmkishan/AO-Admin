@@ -20,6 +20,8 @@ import PersonPinIcon from '@mui/icons-material/PersonPin';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
+import CategoryIcon from '@mui/icons-material/Category';
 import { FaHome, } from "react-icons/fa";
 import { BiAbacus, BiUser, BiUserPlus } from "react-icons/bi";
 
@@ -84,6 +86,23 @@ export const RouteName = [
                 name: "Order History",
                 icon: <FluorescentIcon />,
             },
+        ],
+    },
+    {
+        name: "Temple",
+        icon: <TempleBuddhistIcon />,
+        subRoutes: [
+            {
+                path: "/astro-mall/category",
+                name: "Category",
+                icon: <FluorescentIcon />,
+            },
+            {
+                path: "/astro-mall/product",
+                name: "Sub-Categroy",
+                icon: <CategoryIcon />,
+            },
+    
         ],
     },
     {

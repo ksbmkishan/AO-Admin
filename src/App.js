@@ -33,6 +33,9 @@ import AstroMallProduct from "./pages/astro-mall/product";
 import AstroMallAddProduct from "./pages/astro-mall/product/add-product";
 import AstroMallOrderHistory from "./pages/astro-mall/order-history";
 
+//! Temple
+import TempleCategory from "./pages/temple/category"
+
 //! Astro-Puja     
 import Puja from "./pages/astro-puja/puja";
 import AddPuja from "./pages/astro-puja/puja/add-puja";
@@ -168,6 +171,8 @@ function App() {
           <Route path="/recharge" element={<Recharge />} />
           <Route path="/recharge/add-recharge" element={<AddRecharge />} />
 
+
+
           {/* Astro-Mall */}
           <Route path="/astro-mall/category" element={<AstroMallCategory />} />
           <Route path="/astro-mall/category/add-category" element={<AstroMallAddCategory />} />
@@ -175,6 +180,10 @@ function App() {
           <Route path="/astro-mall/product/add-product" element={<AstroMallAddProduct mode={'Add'} />} />
           <Route path="/astro-mall/product/edit-product" element={<AstroMallAddProduct mode={'Edit'} />} />
           <Route path="/astro-mall/order-history" element={<AstroMallOrderHistory />} />
+
+
+          {/* Temple */}
+          <Route path="/temple/category" element={<TempleCategory/>}/>
 
           {/* Astro-Puja */}
           <Route path="/astro-puja/puja" element={<Puja />} />
