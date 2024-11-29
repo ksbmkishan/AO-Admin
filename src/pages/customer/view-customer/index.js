@@ -15,6 +15,7 @@ import FollowingHistory from './following-history';
 import ReviewHistory from './review-history';
 import * as CustomerActions from '../../../redux/actions/customerAction';
 import { IndianRupee } from '../../../utils/common-function';
+import MudraHistory from '../../mudra/mudra-history';
 
 const ViewCustomer = () => {
     const navigate = useNavigate();
@@ -26,7 +27,7 @@ const ViewCustomer = () => {
 
     const { customerName, image, email, phoneNumber, wallet_balance, dateOfBirth, timeOfBirth, address } = customerByIdData;
 
-    const tabHead = ['Profile', 'Chat', 'Call', 'Video Call', 'Live', 'Puja', 'Order', 'Review'];
+    const tabHead = ['Profile', 'Chat', 'Call', 'Video Call', 'Live', 'Puja', 'Order', 'Review', 'Mudra'];
     const [activeTabHead, setActiveTabHead] = useState(0);
     const handleChange = (event, newValue) => setActiveTabHead(newValue);
 
@@ -56,6 +57,7 @@ const ViewCustomer = () => {
                             <div>{email}</div>
                             <div>{address?.city ? address?.city + ',' : ''} {address?.state ? address?.state + ',' : ''} {address?.country} - {address?.zipCode}</div>
                             <div>Wallet : {IndianRupee(wallet_balance?.toFixed(2))}</div>
+                            <div>Mudra : N/A</div>
                         </div>
                     </Grid>
 
@@ -87,6 +89,7 @@ const ViewCustomer = () => {
                 {activeTabHead == 6 && <div><OrderHistory customerId={stateData?._id} /></div>}
                 {/* {activeTabHead == 7 && <div><FollowingHistory customerId={stateData?._id} /></div>} */}
                 {activeTabHead == 7 && <div><ReviewHistory customerId={stateData?._id} /></div>}
+                {/* {activeTabHead == 8 && <div><MudraHistory customerId={stateData?._id} /></div>} */}
             </div>
         </>
     )

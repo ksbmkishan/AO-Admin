@@ -27,7 +27,7 @@ const ViewAstrologer = () => {
 
     const { astrologerName, profileImage, email, phoneNumber, wallet_balance, city, state, country, zipCode, dateOfBirth } = astrologerByIdData;
 
-    const tabHead = ['Profile', 'Chat', 'Call', 'Video Call', 'Live', 'Gift', 'Review', 'Transaction', 'Puja'];
+    const tabHead = ['Profile', 'Chat', 'Call', 'Video Call', 'Live', 'Gift', 'Review', 'Transaction', 'Puja',];
     const [activeTabHead, setActiveTabHead] = useState(0);
     const handleChange = (event, newValue) => setActiveTabHead(newValue);
 

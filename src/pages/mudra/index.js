@@ -7,13 +7,13 @@ import { EditSvg, DeleteSvg } from "../../assets/svg/index.js";
 import MainDatatable from "../../components/common/MainDatatable.jsx";
 import * as GiftActions from "../../redux/actions/giftActions.js";
 
-const Gift = ({ giftData, dispatch }) => {
+const Mudra = ({ giftData, dispatch }) => {
     const navigate = useNavigate();
 
     //* Category DataTable Columns
     const categoryColumns = [
         { name: 'S.No.', selector: row => giftData.indexOf(row) + 1, style: { backGroundColor: "#000", paddingLeft: "20px" } },
-        { name: 'Gift', selector: row => row?.gift, },
+        { name: 'Mudra', selector: row => row?.gift, },
         { name: 'Amount', selector: row => row.amount, },
         { name: 'Icon', selector: row => <Avatar src={base_url + row.giftIcon} style={{ width: 50, height: 50 }} variant="rounded" />, centre: true },
         {
@@ -33,7 +33,7 @@ const Gift = ({ giftData, dispatch }) => {
 
     return (
         <>
-            <MainDatatable data={giftData} columns={categoryColumns} title={'Gift'} url={'/mudra/add-mudra'} />
+            <MainDatatable data={giftData} columns={categoryColumns} title={'Mudra'} url={'/mudra/add-mudra'} />
 
         </ >
     );
@@ -45,4 +45,4 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({ dispatch });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Gift);
+export default connect(mapStateToProps, mapDispatchToProps)(Mudra);

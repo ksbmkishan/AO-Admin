@@ -20,7 +20,7 @@ const Category = () => {
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >
-                <div onClick={() => navigate('/astro-mall/category/add-category', { state: { stateData: row } })} style={{ cursor: "pointer" }}><EditSvg /></div>
+                <div onClick={() => navigate('/temple/category/add-category', { state: { stateData: row } })} style={{ cursor: "pointer" }}><EditSvg /></div>
                 <div onClick={() => dispatch(AstromallActions.deleteAstromallCategory({ categoryId: row?._id }))} style={{ cursor: "pointer" }}><DeleteSvg /></div>
             </div >,
             width: "180px"
@@ -34,7 +34,7 @@ const Category = () => {
 
     return (
         <>
-            <MainDatatable data={categoryData} columns={categoryColumns} title={'Mall Category'} url={'/astro-mall/category/add-category'} />
+            <MainDatatable data={categoryData} columns={categoryColumns} title={'Temple'} url={'/temple/category/add-category'} />
 
         </ >
     );

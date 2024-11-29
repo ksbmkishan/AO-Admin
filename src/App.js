@@ -35,7 +35,10 @@ import AstroMallOrderHistory from "./pages/astro-mall/order-history";
 
 //! Temple
 import TempleCategory from "./pages/temple/category"
-
+import TempleAddCategory from "./pages/temple/category/add-category";
+import TempleProduct from "./pages/temple/product";
+import TempleAddProduct from "./pages/temple/product/add-product";
+// import TempleOrderHistory from "./pages/temple/order-history";
 //! Astro-Puja     
 import Puja from "./pages/astro-puja/puja";
 import AddPuja from "./pages/astro-puja/puja/add-puja";
@@ -73,6 +76,11 @@ import GiftHistory from "./pages/history/gift-history";
 //! Gift 
 import Gift from "./pages/gift";
 import AddGift from "./pages/gift/add-gift";
+
+//! Mudra
+import Mudra from "./pages/mudra"
+import AddMudra from "./pages/mudra/add-mudra"
+import MudraHistroy from "./pages/mudra/mudra-history";
 
 //!Review 
 import Review from "./pages/review";
@@ -183,7 +191,15 @@ function App() {
 
 
           {/* Temple */}
-          <Route path="/temple/category" element={<TempleCategory/>}/>
+          <Route path="/temple/category" element={<TempleCategory />} />
+          <Route path="/temple/category/add-category" element={<TempleAddCategory mode={'Add'} />} />
+          <Route path="/temple/category/edit-category" element={<TempleAddCategory mode={'Edit'} />} />
+          <Route path="/temple/product" element={<TempleProduct />} />
+          <Route path="/temple/product/add-product" element={<TempleAddProduct mode={'Add'} />} />
+          <Route path="/temple/edit-product" element={< TempleAddProduct mode={'Edit'} />} />
+          {/* <Route path="/temple/order-history" element={<TempleOrderHistory />} /> */}
+
+          
 
           {/* Astro-Puja */}
           <Route path="/astro-puja/puja" element={<Puja />} />
@@ -229,6 +245,12 @@ function App() {
           <Route path="/gift" element={<Gift />} />
           <Route path="/gift/add-gift" element={<AddGift mode="Add" />} />
           <Route path="/gift/edit-gift" element={<AddGift mode="Edit" />} />
+
+          {/* Mudra */}
+          <Route path="/mudra" element={<Mudra/>}/>
+          <Route path="/mudra/add-mudra" element={<AddMudra mode="Add"/>}/>
+          <Route path="/mudra/edit-mudra" element={<AddGift mode="Edit"/>}/>
+          <Route path="/mudra/histroy" element={<MudraHistroy/>}/>
 
           {/* Review */}
           <Route path="/review" element={<Review />} />

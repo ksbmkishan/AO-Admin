@@ -132,6 +132,10 @@ export const create_astro_mall_product = 'ecommerce/create_products';
 export const update_astro_mall_product = 'ecommerce/update_products';
 export const delete_astro_mall_product = 'ecommerce/delete_product';
 
+
+//! Temple
+export const create_temple = "admin/add_temple";
+
 //! All-Products
 export const get_all_products = 'ecommerce/get_all_products';
 

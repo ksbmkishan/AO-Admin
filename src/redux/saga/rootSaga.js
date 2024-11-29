@@ -21,6 +21,7 @@ import appAstrokunjSaga from "./appAstrokunjSaga";
 import astromallSaga from "./astromallSaga";
 import astropujaSaga from "./astropujaSaga";
 import astroBlogSaga from "./astroBlogSaga";
+import templeSaga from "./templeSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -43,6 +44,7 @@ export default function* rootSaga() {
     appAstrokunjSaga(),
     astromallSaga(),
     astropujaSaga(),
-    astroBlogSaga()
+    astroBlogSaga(),
+    templeSaga(),
   ]);
 }

@@ -93,12 +93,12 @@ export const RouteName = [
         icon: <TempleBuddhistIcon />,
         subRoutes: [
             {
-                path: "/astro-mall/category",
+                path: "/temple/category",
                 name: "Category",
                 icon: <FluorescentIcon />,
             },
             {
-                path: "/astro-mall/product",
+                path: "/temple/product",
                 name: "Sub-Categroy",
                 icon: <CategoryIcon />,
             },
@@ -213,6 +213,11 @@ export const RouteName = [
     {
         path: "/gift",
         name: "Gift",
+        icon: <RedeemIcon />,
+    },
+    {
+        path: "/mudra",
+        name: "Mudra",
         icon: <RedeemIcon />,
     },
     {

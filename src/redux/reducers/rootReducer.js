@@ -22,6 +22,7 @@ import appAstrokunj from "./appAstrokunj";
 import astromallReducer from "./astromallReducer";
 import astropujaReducer from "./astropujaReducer";
 import blogs from "./astroBlog";
+import templeReducer from "./templeReducer";
 
 const rootReducer = combineReducers({
   commonReducer,
@@ -45,7 +46,8 @@ const rootReducer = combineReducers({
   appAstrokunj,
   astromallReducer,
   astropujaReducer,
-  blogs
+  blogs,
+  templeReducer,
 });
 
 export default rootReducer;
