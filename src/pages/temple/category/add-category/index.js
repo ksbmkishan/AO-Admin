@@ -3,18 +3,18 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Grid, TextField, Avatar } from "@mui/material";
 import { UploadImageSvg } from "../../../../assets/svg";
-import * as TempleActions from '../../../../redux/actions/templeActions';
+// import * as AstromallActions from '../../../../redux/actions/astromallAction';
+import * as TempleActions from "../../../../redux/actions/templeActions";
 import { Color } from "../../../../assets/colors";
 import { img_url } from "../../../../utils/api-routes";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
 
-
-const AddCategory = () => {
+const AddCategory = ({ mode }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const stateData = location.state && location.state.stateData;
-    console.log("State Data ::: ", stateData);
+    // console.log("State Data ::: ", stateData);
 
     const [categoryDetail, setCategoryDetail] = useState({ title: stateData ? stateData?.categoryName : '' });
     const [inputFieldError, setInputFieldError] = useState({ title: '', image: '' });
@@ -92,8 +92,8 @@ const AddCategory = () => {
 
             if (stateData) {
                 let formData = new FormData()
-                formData.append("name", stateData?._id);
-                formData.append("categoryName", title)
+                formData.append("categoryId", stateData?._id);
+                formData.append("name", title)
                 formData.append("image", image?.bytes);
 
                 const payload = {
@@ -101,12 +101,12 @@ const AddCategory = () => {
                     onComplete: () => navigate("/temple/category")
                 }
 
-                //! Dispatching API for Creating Category
-                // dispatch(TempleActions.updateAstromallCategory(payload))
+                // ! Dispatching API for Updating Category
+                dispatch(TempleActions?.addTemple(payload))
 
             } else {
                 let formData = new FormData()
-                formData.append("categoryName", title)
+                formData.append("name", title)
                 formData.append("image", image?.bytes);
 
                 const payload = {
@@ -115,7 +115,7 @@ const AddCategory = () => {
                 }
 
                 //! Dispatching API for Creating Category
-                dispatch(TempleActions.addTemple(payload))
+                dispatch(TempleActions?.addTemple(payload))
             }
         }
     };
@@ -124,7 +124,7 @@ const AddCategory = () => {
         <>
             <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", fontFamily: 'Philosopher', backgroundColor: "#fff" }}>
-                    <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>Add Temple</div>
+                    <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Temple</div>
                     <div onClick={() => navigate("/temple/category")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
                 </div>
 

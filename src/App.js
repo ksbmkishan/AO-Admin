@@ -192,12 +192,12 @@ function App() {
 
           {/* Temple */}
           <Route path="/temple/category" element={<TempleCategory />} />
+          <Route path="/temple/category/add-category" element={<TempleAddCategory/>} />
           <Route path="/temple/category/add-category" element={<TempleAddCategory mode={'Add'} />} />
           <Route path="/temple/category/edit-category" element={<TempleAddCategory mode={'Edit'} />} />
           <Route path="/temple/product" element={<TempleProduct />} />
           <Route path="/temple/product/add-product" element={<TempleAddProduct mode={'Add'} />} />
           <Route path="/temple/edit-product" element={< TempleAddProduct mode={'Edit'} />} />
-          {/* <Route path="/temple/order-history" element={<TempleOrderHistory />} /> */}
 
           
 

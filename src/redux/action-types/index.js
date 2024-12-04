@@ -159,6 +159,12 @@ export const DELETE_ASTRO_MALL_PRODUCT = 'DELETE_ASTRO_MALL_PRODUCT';
 //! Temple Product
 export const GET_ADD_TEMPLE = 'GET_ADD_TEMPLE';
 export const SET_ADD_TEMPLE = 'SET_ADD_TEMPLE';
+export const DELETE_TEMPLE_CATEGORY = 'DELETE_TEMPLE_CATEGORY';
+
+export const GET_TEMPLE = 'GET_TEMPLE';
+export const SET_TEMPLE = 'SET_TEMPLE';
+
+
 
 //! All_Products
 export const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';

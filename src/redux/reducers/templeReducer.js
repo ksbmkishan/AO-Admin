@@ -1,7 +1,8 @@
 import * as actionTypes from "../action-types";
 
 const initialState = {
-    templedata:null
+    templedata:null,
+    templeget:null
 };
 
 const templeReducer = (state = initialState, actions) => {
@@ -14,6 +15,11 @@ const templeReducer = (state = initialState, actions) => {
                 templedata: payload 
             };
 
+        case actionTypes.SET_TEMPLE:
+            return { 
+                ...state, 
+                templeget: payload 
+            };
        
 
         default: {
