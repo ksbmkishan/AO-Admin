@@ -18,6 +18,11 @@ import Customer from "./pages/customer";
 import AddCustomer from "./pages/customer/add-customer";
 import ViewCustomer from "./pages/customer/view-customer";
 
+
+//! LiveDarshan
+import Live from "./pages/liveDarshan";
+import AddLive from "./pages/liveDarshan/add-live";
+
 //! Banner 
 import Banner from "./pages/banner";
 import AddBanner from "./pages/banner/add-banner";
@@ -170,6 +175,10 @@ function App() {
           <Route path="/customer/add-customer" element={<AddCustomer mode="Add" />} />
           <Route path="/customer/edit-customer" element={<AddCustomer mode="Edit" />} />
           <Route path="/customer/view-customer" element={<ViewCustomer />} />
+
+          {/* LiveDarshan */}
+          <Route path="/live" element={<Live />} />
+          <Route path="/liveDarshan/add-live" element={<AddLive />} />
 
           {/* Banner */}
           <Route path="/banner" element={<Banner />} />

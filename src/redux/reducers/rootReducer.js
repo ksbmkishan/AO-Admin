@@ -23,6 +23,7 @@ import astromallReducer from "./astromallReducer";
 import astropujaReducer from "./astropujaReducer";
 import blogs from "./astroBlog";
 import templeReducer from "./templeReducer";
+import liveReducer from "./liveReducer";
 
 const rootReducer = combineReducers({
   commonReducer,
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   expertiseReducer,
   historyReducer,
   staticPageReducer,
+  liveReducer,
 
   dashboard,
   review,

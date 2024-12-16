@@ -42,6 +42,13 @@ export const change_astrologer_video_call_status = 'api/admin/change_videocall_s
 export const get_astrologer_withdrawal_request = 'api/admin/get_withdraw_request';
 export const approve_astrologer_withdrawal_request_amount = 'api/admin/approve_withdraw_request';
 
+
+
+//! Live Darshan
+export const get_live_darshan = 'api/customers/get_AllDarshans';
+export const delete_live = 'api/admin/delete_Darshan';
+
+
 //! Customer
 export const get_customer = 'api/customers/get-all-customers';
 export const get_customer_by_id = 'api/admin/customer_details_by_id';

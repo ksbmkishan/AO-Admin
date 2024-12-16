@@ -8,6 +8,8 @@ import * as AstromallActions from '../../../../redux/actions/astromallAction';
 import { HideDateFromCurrent, YYYYMMDD } from "../../../../utils/common-function";
 import { Color } from "../../../../assets/colors";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const AddProduct = ({ mode }) => {
     const navigate = useNavigate();
@@ -15,11 +17,12 @@ const AddProduct = ({ mode }) => {
     const location = useLocation();
     const stateData = location.state && location.state.stateData;
     const { astromallCategoryData } = useSelector(state => state.astromallReducer);
+    const templeget = useSelector((state) => state.templeReducer.templeget);
+    console.log("humko:::::>>>>",templeget?.data)
 
     const [productDetail, setProductDetail] = useState({ categoryId: stateData ? stateData?.categoryId : '', productName: stateData ? stateData?.productName : '', description: stateData ? stateData?.description : '', mrp: stateData ? stateData?.mrp : '', offerPrice: stateData ? stateData?.price : '', purchasePrice: stateData ? stateData?.purchasePrice : '', refundDay: stateData ? stateData?.refundRequetDay : '', stockQuantity: stateData ? stateData?.quantity : '', inventory: stateData ? stateData?.inventory : '', manufactureDate: stateData ? YYYYMMDD(stateData?.manufactureDate) : '', expiryDate: stateData ? YYYYMMDD(stateData?.expiryDate) : '' });
     const [inputFieldError, setInputFieldError] = useState({ categoryId: '', subCategoryId: '', productName: '', description: '', mrp: '', offerPrice: '', purchasePrice: '', refundDay: '', stockQuantity: '', inventory: '', manufactureDate: '', expiryDate: '', image: '', bulkImage: '' });
     const [image, setImage] = useState({ file: stateData ? img_url + stateData?.image : '', bytes: '' });
-    // const [bulkImage, setBulkImage] = useState([]); //* Mutliple File 
     const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bannerImages.map(value => { return { file: base_url + value, bytes: '' } }) : []); //* Mutliple File 
 
     //* Handle Input Field : Error
@@ -60,7 +63,6 @@ const AddProduct = ({ mode }) => {
 
     // Handle Image :  //! Bulk Image
     const handleBulkImage = (e) => {
-        // console.log("Bulk Image length :: ", bulkImage?.length + 1)
         if (bulkImage.length + 1 <= 5) {
             setBulkImage([...bulkImage, {
                 file: URL.createObjectURL(e.target.files[0]),
@@ -105,34 +107,12 @@ const AddProduct = ({ mode }) => {
             handleInputFieldError("offerPrice", "Please Enter Offer Price Less Than Mrp")
             isValid = false;
         }
-        // if (!purchasePrice) {
-        //     handleInputFieldError("purchasePrice", "Please Enter Purchase Price")
-        //     isValid = false;
-        // }
-        // if (!refundDay) {
-        //     handleInputFieldError("refundDay", "Please Enter Refund Day")
-        //     isValid = false;
-        // }
+       
         if (!stockQuantity) {
             handleInputFieldError("stockQuantity", "Please Enter Stock Quantity")
             isValid = false;
         }
-        // if (!inventory) {
-        //     handleInputFieldError("inventory", "Please Enter Inventory")
-        //     isValid = false;
-        // }
-        // if (!manufactureDate) {
-        //     handleInputFieldError("manufactureDate", "Please Enter Manufacture Date")
-        //     isValid = false;
-        // }
-        // if (!expiryDate) {
-        //     handleInputFieldError("expiryDate", "Please Enter Expiry Date")
-        //     isValid = false;
-        // }
-        // if (new Date(expiryDate) <= new Date(manufactureDate)) {
-        //     handleInputFieldError("expiryDate", "Expiry date is greater than the manufacture date")
-        //     isValid = false;
-        // }
+        
         if (!description) {
             handleInputFieldError("description", "Please Enter Description")
             isValid = false;
@@ -166,13 +146,7 @@ const AddProduct = ({ mode }) => {
                 formData.append("description", description);
                 formData.append("mrp", mrp);
                 formData.append("price", offerPrice);
-                // formData.append("purchasePrice", purchasePrice);
                 formData.append("quantity", stockQuantity);
-                // formData.append("inventory", inventory);
-                // formData.append("refundRequetDay", refundDay);
-                // formData.append("manufactureDate", manufactureDate);
-                // formData.append("expiryDate", expiryDate);
-
                 formData.append("image", image?.bytes);
                 bulkImageArray.map((value, index) => (
                     formData.append(`bannerImages`, value)
@@ -192,13 +166,7 @@ const AddProduct = ({ mode }) => {
                 formData.append("description", description);
                 formData.append("mrp", mrp);
                 formData.append("price", offerPrice);
-                // formData.append("purchasePrice", purchasePrice);
                 formData.append("quantity", stockQuantity);
-                // formData.append("inventory", inventory);
-                // formData.append("refundRequetDay", refundDay);
-                // formData.append("manufactureDate", manufactureDate);
-                // formData.append("expiryDate", expiryDate);
-
                 formData.append("image", image?.bytes);
                 bulkImageArray.map((value, index) => (
                     formData.append(`bannerImages`, value)
@@ -218,7 +186,6 @@ const AddProduct = ({ mode }) => {
     };
 
     useEffect(() => {
-        //! Dispatching API for Getting Category
         dispatch(AstromallActions.getAstromallCategory())
     }, []);
 
@@ -252,7 +219,7 @@ const AddProduct = ({ mode }) => {
                         <FormControl fullWidth>
                             <InputLabel id="select-label">Select Category Name<span style={{ color: "red" }}>* </span></InputLabel>
                             <Select
-                                label="Select Category Name * " variant="outlined" fullWidth
+                                label="Select Bhagwan ji* " variant="outlined" fullWidth
                                 name='categoryId'
                                 value={productDetail?.categoryId?._id}
                                 onChange={handleInputField}
@@ -268,16 +235,22 @@ const AddProduct = ({ mode }) => {
                         {inputFieldError?.categoryId && <div style={{ color: "#D32F2F", fontSize: "10px", padding: "3px 15px 0 15px" }}>{inputFieldError?.categoryId}</div>}
                     </Grid>
 
-                    <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Product Nae <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='productName'
-                            value={productDetail?.productName}
-                            onChange={handleInputField}
-                            error={inputFieldError.productName ? true : false}
-                            helperText={inputFieldError.productName}
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <label>
+                            Product Name <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <CKEditor
+                            editor={ClassicEditor}
+                            data={productDetail?.productName || ''}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                handleInputField({ target: { name: 'productName', value: data } });
+                            }}
                             onFocus={() => handleInputFieldError("productName", null)}
                         />
+                        {inputFieldError.productName && (
+                            <p style={{ color: "red", marginTop: "8px" }}>{inputFieldError.productName}</p>
+                        )}
                     </Grid>
 
                     {/* <Grid item lg={6} md={6} sm={12} xs={12} >
@@ -318,108 +291,6 @@ const AddProduct = ({ mode }) => {
                             inputProps={{ min: 0 }}
                         />
                     </Grid> */}
-
-                    {/* <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Refund Day</>} variant='outlined' fullWidth
-                            name='refundDay' type="number"
-                            value={productDetail?.refundDay}
-                            onChange={handleInputField}
-                            error={inputFieldError.refundDay ? true : false}
-                            helperText={inputFieldError.refundDay}
-                            onFocus={() => handleInputFieldError("refundDay", null)}
-                            inputProps={{ min: 0 }}
-                        />
-                    </Grid> */}
-{/* 
-                    <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Stock Quantity <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='stockQuantity' type="number"
-                            value={productDetail?.stockQuantity}
-                            onChange={handleInputField}
-                            error={inputFieldError.stockQuantity ? true : false}
-                            helperText={inputFieldError.stockQuantity}
-                            onFocus={() => handleInputFieldError("stockQuantity", null)}
-                            inputProps={{ min: 0 }}
-                        />
-                    </Grid> */}
-
-                    {/* <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Inventory</>} variant='outlined' fullWidth
-                            name='inventory' type="number"
-                            value={productDetail?.inventory}
-                            onChange={handleInputField}
-                            error={inputFieldError.inventory ? true : false}
-                            helperText={inputFieldError.inventory}
-                            onFocus={() => handleInputFieldError("inventory", null)}
-                            inputProps={{ min: 0 }}
-                        />
-                    </Grid> */}
-
-                    {/* <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Manufacture Date</>} variant='outlined' fullWidth type="date"
-                            name='manufactureDate'
-                            value={productDetail?.manufactureDate}
-                            onChange={handleInputField}
-                            error={inputFieldError.manufactureDate ? true : false}
-                            helperText={inputFieldError.manufactureDate}
-                            onFocus={() => handleInputFieldError("manufactureDate", null)}
-                            InputLabelProps={{ shrink: true }}
-                            inputProps={{ max: HideDateFromCurrent(0) }}
-                        />
-                    </Grid> */}
-
-                    {/* <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Expiry Date</>} variant='outlined' fullWidth type="date"
-                            name='expiryDate'
-                            value={productDetail?.expiryDate}
-                            onChange={handleInputField}
-                            error={inputFieldError.expiryDate ? true : false}
-                            helperText={inputFieldError.expiryDate}
-                            onFocus={() => handleInputFieldError("expiryDate", null)}
-                            InputLabelProps={{ shrink: true }}
-                            inputProps={{ min: HideDateFromCurrent(0) }}
-                        />
-                    </Grid> */}
-
-                    {/* <Grid item lg={12} md={12} sm={12} xs={12} >
-                        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                            <label style={{ color: "#000", marginBottom: "#000", fontSize: "14.5px", color: "grey" }}>Description <span style={{ color: "red" }}>*</span></label>
-                            <textarea
-                                name='description'
-                                value={productDetail?.description}
-                                onChange={handleInputField}
-                                placeholder="Description"
-                                rows={8}
-                                onFocus={() => handleInputFieldError("description", null)}
-                                style={{ minWidth: "100%", maxWidth: "100%", minHeight: "50px", padding: "10px", outline: "none", border: `1px solid ${inputFieldError?.description ? 'red' : '#C4C4C4'}`, borderRadius: "3.5px", fontFamily: "Philosopher" }}
-                            />
-                        </div>
-                        {inputFieldError?.description && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px", }}>{inputFieldError?.description}</div>}
-                    </Grid>
-
-                    <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
-                        <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
-                            {bulkImage.length > 0 && bulkImage?.map((value, index) => (
-                                <div key={index} style={{ position: "relative" }}>
-                                    <Avatar src={value.file} style={{ height: '150px', width: "250px", borderRadius: "initial" }} />
-                                    <div onClick={() => setBulkImage(bulkImage.filter((curr, currIndex) => currIndex !== index))} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More Images(Max File Count : 5)</div>
-                        <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-bulk-image" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
-                            <UploadImageSvg h="25" w="25" color="#000" />
-                            <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
-                        </label>
-                        <input id="upload-bulk-image" multiple type="file" onChange={handleBulkImage} hidden />
-                    </Grid> */}
-
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <Grid container sx={{ justifyContent: "space-between" }}>
                             <div onClick={handleSubmit} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "10px 20px", borderRadius: "5px", cursor: "pointer", fontSize: "15px" }}>Submit</div>
