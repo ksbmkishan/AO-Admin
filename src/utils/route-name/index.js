@@ -73,6 +73,11 @@ export const RouteName = [
         icon: <TextSnippetIcon />,
     },
     {
+        path: "/referral",
+        name: "Referral",
+        icon: <TextSnippetIcon />,
+    },
+    {
         name: "Astro Mall",
         icon: <LightbulbCircleIcon />,
         subRoutes: [
