@@ -34,7 +34,8 @@ import AddRecharge from "./pages/recharge/add-recharge";
 
 //! Referral 
 import Referral from "./pages/referral";
-import AddReferral from "./pages/referral/add-referral";
+import ShowReferral from "./pages/referral/show-referral";
+// import AddReferral from "./pages/referral/add-referral";
 
 //! Astro-Mall
 import AstroMallCategory from "./pages/astro-mall/category";
@@ -195,7 +196,7 @@ function App() {
 
           {/* Referral */}
           <Route path="/referral" element={<Referral />} />
-          <Route path="/referral/add-referral" element={<AddReferral />} />
+          <Route path="/referral/show-referral" element={<ShowReferral />} />
 
 
 
