@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Grid, TextField, Avatar } from "@mui/material";
 import { UploadImageSvg } from "../../../../assets/svg";
 // import * as AstromallActions from '../../../../redux/actions/astromallAction';
-import * as TempleActions from "../../../../redux/actions/templeActions";
+import * as TempleActions from "../../../../redux/actions/templeAction";
 import { Color } from "../../../../assets/colors";
 import { img_url } from "../../../../utils/api-routes";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";

@@ -1,0 +1,46 @@
+import * as actionTypes from "../action-types";
+
+export const getTempleDarshan = payload => ({
+    type: actionTypes.GET_TEMPLE_DARSHAN, payload
+});
+
+export const setTempleDarshan = payload => ({
+    type: actionTypes.SET_TEMPLE_DARSHAN, payload
+});
+
+export const getTempleDarshanById = payload => ({
+    type: actionTypes.GET_TEMPLE_DARSHAN_BY_ID, payload
+});
+
+export const setTempleDarshanById = payload => ({
+    type: actionTypes.SET_TEMPLE_DARSHAN_BY_ID, payload
+});
+
+export const createTempleDarshan = payload => ({
+    type: actionTypes.CREATE_TEMPLE_DARSHAN, payload
+});
+
+export const updateTempleDarshan = payload => ({
+    type: actionTypes.UPDATE_TEMPLE_DARSHAN, payload
+});
+
+export const deleteTempleDarshan = payload => ({
+    type: actionTypes.DELETE_TEMPLE_DARSHAN, payload
+});
+
+export const addTemple = payload => ({
+    type: actionTypes.GET_ADD_TEMPLE, payload
+})
+
+export const getTemple = payload => ({
+    type: actionTypes.GET_TEMPLE, payload
+});
+
+export const setTemple = payload => ({
+    type: actionTypes.SET_TEMPLE, payload
+});
+
+export const deleteTempleCategory = (id) => ({
+    type: actionTypes.DELETE_TEMPLE_CATEGORY,
+    id,
+});

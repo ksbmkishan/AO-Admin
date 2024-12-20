@@ -3,9 +3,103 @@ import Swal from "sweetalert2";
 import { call, put, takeLeading } from "redux-saga/effects";
 import * as actionTypes from "../action-types";
 import { getAPI, postAPI } from "../../utils/api-function";
-import { api_url } from '../../utils/api-routes';
+import { api_url, create_temple_darshan, delete_temple_darshan, get_temple_darshan, get_temple_darshan_by_id, update_temple_darshan } from '../../utils/api-routes';
 import { create_temple, get_temple_data, delete_temple_data } from "../../utils/api-routes";
 import { Color } from '../../assets/colors';
+
+function* getTempleDarshan() {
+    try {
+        yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
+        const { data } = yield getAPI(get_temple_darshan);
+        console.log("Get Temple Darshan Saga Response ::: ", data);
+
+        if (data?.success) {
+            yield put({ type: actionTypes.SET_TEMPLE_DARSHAN, payload: data?.data?.reverse() });
+            yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+        }
+
+    } catch (error) {
+        yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+        console.log("Get Temple Darshan Saga Error ::: ", error);
+    }
+};
+
+function* getTempleDarshanById() {
+    try {
+        yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
+        const { data } = yield getAPI(get_temple_darshan_by_id);
+        console.log("Get Temple Darshan By ID Saga Response ::: ", data);
+
+        if (data?.success) {
+            yield put({ type: actionTypes.SET_TEMPLE_DARSHAN_BY_ID, payload: data?.data?.reverse() });
+            yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+        }
+
+    } catch (error) {
+        yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+        console.log("Get Temple Darshan By ID Saga Error ::: ", error);
+    }
+};
+
+function* createTempleDarshan(action) {
+    try {
+        const { payload } = action;
+        console.log("Payload ::: ", payload);
+
+        const { data } = yield postAPI(create_temple_darshan, payload?.data);
+        console.log("Create Temple Darshan Saga Response ::: ", data);
+
+        if (data?.success) {
+            Swal.fire({ icon: "success", title: 'Success', text: "Temple Darshan Created Successfully", showConfirmButton: false, timer: 2000 });
+            yield call(payload?.onComplete);
+        }
+
+    } catch (error) {
+        Swal.fire({ icon: "error", title: 'Failed', text: "Failed To Create", showConfirmButton: false, timer: 2000 });
+        console.log("Create Temple Darshan Saga Error ::: ", error);
+    }
+};
+
+function* updateTempleDarshan(action) {
+    try {
+        const { payload } = action;
+        console.log("Payload ::: ", payload);
+
+        const { data } = yield postAPI(update_temple_darshan, payload?.data);
+        console.log("Update Temple Darshan Saga Response ::: ", data);
+
+        if (data?.success) {
+            Swal.fire({ icon: "success", title: 'Success', text: "Temple Darshan Updated Successfully", showConfirmButton: false, timer: 2000 });
+            yield call(payload?.onComplete);
+        }
+
+    } catch (error) {
+        Swal.fire({ icon: "error", title: 'Failed', text: "Failed To Update", showConfirmButton: false, timer: 2000 });
+        console.log("Update Temple Darshan Saga Error ::: ", error);
+    }
+};
+
+function* deleteTempleDarshan(action) {
+    try {
+        const { payload } = action;
+
+        const result = yield Swal.fire({ icon: "warning", title: `Are you sure ?`, text: "You want to delete!!!", showCancelButton: true, confirmButtonColor: Color.primary, cancelButtonColor: 'grey', confirmButtonText: "Yes", cancelButtonText: "No" });
+
+        if (result.isConfirmed) {
+            const { data } = yield postAPI(delete_temple_darshan(payload?._id));
+            console.log("Delete Temple Darshan Saga Response ::: ", data);
+
+            if (data?.success) {
+                Swal.fire({ icon: "success", title: 'Success', text: "Temple Darshan Deleted Successfully", showConfirmButton: false, timer: 2000 });
+                yield put({ type: actionTypes?.GET_TEMPLE_DARSHAN, payload: null });
+            }
+        }
+
+    } catch (error) {
+        Swal.fire({ icon: "error", title: 'Failed', text: "Failed To Delete", showConfirmButton: false, timer: 2000 });
+        console.log("Delete Temple Darshan Saga Error ::: ", error);
+    }
+};
 
 function* createTemple(action) {
     try {
@@ -28,22 +122,22 @@ function* createTemple(action) {
 
 function* getTempleData() {
     try {
-      yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
-      const { data } = yield getAPI(get_temple_data);
-      console.log("Get temple Saga Response :: ", data);
-  
-      if (data?.success) {
-        yield put({ type: actionTypes.SET_TEMPLE, payload: data });
-        yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
-      }
-  
-    } catch (error) {
-      yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
-      console.log("Get temple Saga Error ::: ", error);
-    }
-  };
+        yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
+        const { data } = yield getAPI(get_temple_data);
+        console.log("Get temple Saga Response :: ", data);
 
-  function* deleteTempleCategory(action) {
+        if (data?.success) {
+            yield put({ type: actionTypes.SET_TEMPLE, payload: data });
+            yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+        }
+
+    } catch (error) {
+        yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+        console.log("Get temple Saga Error ::: ", error);
+    }
+};
+
+function* deleteTempleCategory(action) {
     try {
         const { id } = action; // Extract the ID
         console.log("Temple ID to delete :::", id);
@@ -87,8 +181,13 @@ function* getTempleData() {
 }
 
 export default function* templeSaga() {
+    yield takeLeading(actionTypes.GET_TEMPLE_DARSHAN, getTempleDarshan);
+    yield takeLeading(actionTypes.GET_TEMPLE_DARSHAN_BY_ID, getTempleDarshanById);
+    yield takeLeading(actionTypes.UPDATE_TEMPLE_DARSHAN, updateTempleDarshan);
+    yield takeLeading(actionTypes.CREATE_TEMPLE_DARSHAN, createTempleDarshan);
+    yield takeLeading(actionTypes.DELETE_TEMPLE_DARSHAN, deleteTempleDarshan);
+
     yield takeLeading(actionTypes.GET_ADD_TEMPLE, createTemple);
     yield takeLeading(actionTypes.GET_TEMPLE, getTempleData);
     yield takeLeading(actionTypes?.DELETE_TEMPLE_CATEGORY, deleteTempleCategory);
-
 };

@@ -5,7 +5,7 @@ import { img_url } from "../../../utils/api-routes";
 import logo from '../../../assets/images/logo.png';
 import { EditSvg, DeleteSvg } from "../../../assets/svg/index.js";
 import MainDatatable from "../../../components/common/MainDatatable.jsx";
-import * as templeActions from "../../../redux/actions/templeActions.js"
+import * as templeActions from "../../../redux/actions/templeAction";
 const Category = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();

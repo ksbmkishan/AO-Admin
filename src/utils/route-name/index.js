@@ -103,6 +103,11 @@ export const RouteName = [
         icon: <TempleBuddhistIcon />,
         subRoutes: [
             {
+                path: "/temple/darshan",
+                name: "Darshan",
+                icon: <FluorescentIcon />,
+            },
+            {
                 path: "/temple/category",
                 name: "Category",
                 icon: <FluorescentIcon />,
@@ -112,7 +117,7 @@ export const RouteName = [
                 name: "Sub-Categroy",
                 icon: <CategoryIcon />,
             },
-    
+
         ],
     },
     {

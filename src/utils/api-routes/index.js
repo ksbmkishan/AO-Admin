@@ -118,6 +118,17 @@ export const create_privacy_policy = 'api/admin/add-privacy-policy';
 export const get_about_us = 'api/admin/get-about-us';
 export const create_about_us = 'api/admin/add-about-us';
 
+//! Temple
+export const get_temple_darshan = 'api/admin/get-darshan';
+export const get_temple_darshan_by_id = (id) => `api/admin/getById/${id}`;
+export const create_temple_darshan = 'api/admin/create-darshan';
+export const update_temple_darshan = '';
+export const delete_temple_darshan = (id) => `api/admin/delete-darshan/${id}`;
+
+export const create_temple = 'api/admin/add_temple';
+export const get_temple_data = 'api/admin/get_temple';
+export const delete_temple_data = 'admin/temples_delete';
+
 //TODO---------------------Working-----------------------TODO// 
 
 //! Banner 
@@ -139,11 +150,6 @@ export const create_astro_mall_product = 'ecommerce/create_products';
 export const update_astro_mall_product = 'ecommerce/update_products';
 export const delete_astro_mall_product = 'ecommerce/delete_product';
 
-
-//! Temple
-export const create_temple = 'api/admin/add_temple';
-export const get_temple_data = 'api/admin/get_temple';
-export const delete_temple_data = 'admin/temples_delete';
 //! All-Products
 export const get_all_products = 'ecommerce/get_all_products';
 

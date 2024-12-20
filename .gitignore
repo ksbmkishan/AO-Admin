@@ -10,10 +10,8 @@
 
 # production
 /build
-astro-remedy-admin-build.zip
-astro-remedy-admin.zip
-Astro-Remedy-Admin-Build.zip
-Astro-Remedy-Admin.zip
+Astro-One-Admin-Build.zip
+Astro-One-Admin.zip
 
 # misc
 .DS_Store
