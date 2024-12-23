@@ -125,9 +125,20 @@ export const create_temple_darshan = 'api/admin/create-darshan';
 export const update_temple_darshan = '';
 export const delete_temple_darshan = (id) => `api/admin/delete-darshan/${id}`;
 
-export const create_temple = 'api/admin/add_temple';
-export const get_temple_data = 'api/admin/get_temple';
-export const delete_temple_data = 'admin/temples_delete';
+//? Asset Category
+export const get_temple_asset_category = 'api/admin/get_asset_category';
+export const create_temple_asset_category = 'api/admin/create_asset_category';
+export const update_temple_asset_category = 'api/admin/update_asset_category';
+export const delete_temple_asset_category = (id) => `api/admin/delete-darshan/${id}`;
+
+//? Asset Sub Category
+export const get_temple_asset_sub_category = 'api/admin/get_asset_sub_category';
+export const create_temple_asset_sub_category = 'api/admin/create_asset_sub_category';
+export const update_temple_asset_sub_category = 'api/admin/update_asset_sub_category';
+export const delete_temple_asset_sub_category = (id) => `api/admin/delete-darshan/${id}`;
+// export const create_temple = 'api/admin/add_temple';
+// export const get_temple_data = 'api/admin/get_temple';
+// export const delete_temple_data = 'admin/temples_delete';
 
 //TODO---------------------Working-----------------------TODO// 
 
