@@ -26,8 +26,21 @@ const ViewDarshan = () => {
                         <div>{templeDarshanByIdData?.description}</div>
                     </div>
                 </div>
+            </div>
 
+            <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px", display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '20px' }}>
+                {templeDarshanByIdData && templeDarshanByIdData?.bulkImageUpload?.map((value, index) => (
+                    <Avatar key={index} src={api_urls + value} style={{ borderRadius: 'initial', height: '150px', flexBasis: '150px' }} />
+                ))}
+            </div>
 
+            <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px", display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '20px' }}>
+                {templeDarshanByIdData && templeDarshanByIdData?.bulkAudioUpload?.map((value, index) => (
+                    <audio controls >
+                        <source src={api_urls + value} />
+                        Your browser does not support the audio element.
+                    </audio>
+                ))}
             </div>
         </>
     )
