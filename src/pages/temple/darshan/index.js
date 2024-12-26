@@ -28,7 +28,7 @@ const Darshan = () => {
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >
-                <div style={{ cursor: "pointer" }}><ViewSvg /></div>
+                <div onClick={() => navigate(`/temple/darshan/${row?._id}`)} style={{ cursor: "pointer" }}><ViewSvg /></div>
                 <div onClick={() => dispatch(TempleActions?.deleteTempleDarshan({ _id: row?._id }))} style={{ cursor: "pointer" }}><DeleteSvg /></div>
             </div >,
             width: "180px"

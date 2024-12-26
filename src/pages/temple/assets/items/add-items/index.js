@@ -8,16 +8,16 @@ import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../../utils/regex-p
 import * as TempleActions from '../../../../../redux/actions/templeAction';
 import { UploadImageSvg } from "../../../../../assets/svg";
 
-const AddSubCategory = ({ mode }) => {
+const AddItems = ({ mode }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const assetsId = location.state && location.state.assetsId;
     const stateData = location.state && location.state.stateData;
-    // console.log("State Data ::: ", stateData);
 
     const dispatch = useDispatch();
-    const { templeAssetCategoryData } = useSelector(state => state.templeReducer);
+    const { templeAssetsData } = useSelector(state => state.templeReducer);
 
-    const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: stateData ? stateData?.categoryId?._id : '', title: stateData ? stateData?.title : '', price: stateData ? stateData?.price : '' });
+    const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: assetsId, title: stateData ? stateData?.title : '', price: stateData ? stateData?.price : '' });
     const [inputFieldError, setInputFieldError] = useState({ categoryId: '', title: '', price: '', image: '' });
     const [image, setImage] = useState({ file: stateData ? img_url + stateData?.image : '', bytes: '' });
 
@@ -52,13 +52,9 @@ const AddSubCategory = ({ mode }) => {
     //! Handle Validation
     const handleValidation = () => {
         let isValid = true;
-        const { categoryId, title, price } = inputFieldDetail;
+        const { title, price } = inputFieldDetail;
         const { file } = image;
 
-        if (!categoryId) {
-            handleInputFieldError("categoryId", "Please Select Category")
-            isValid = false;
-        }
         if (!title) {
             handleInputFieldError("title", "Please Enter Title")
             isValid = false;
@@ -88,50 +84,39 @@ const AddSubCategory = ({ mode }) => {
             isValid = false;
         }
 
-
         return isValid;
     };
 
-    //! Handle Submit - Creating Sub Category
+    //! Handle Submit - Creating Items
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Sub Category Data :: ", { ...inputFieldDetail })
-        const { title } = inputFieldDetail;
+        console.log("Items Data :: ", { ...inputFieldDetail })
+        const { title, price } = inputFieldDetail;
 
-        if (handleValidation()) {
+        let formData = new FormData();
+        formData.append("items", JSON.stringify([{ itemName: title, itemPrice: price }]));
+        formData.append("itemImages", image?.bytes);
 
-            if (stateData) {
-                const payload = {
-                    data: {},
-                    onComplete: () => navigate("/temple/asset/sub-category")
-                }
-
-                //! Dispatching API for Updating Sub Category
-                dispatch(TempleActions.updateTempleAssetSubCategory(payload))
-
-            } else {
-                const payload = {
-                    data: { title },
-                    onComplete: () => navigate("/temple/asset/sub-category")
-                }
-
-                //! Dispatching API for Creating Sub Category
-                dispatch(TempleActions.createTempleAssetSubCategory(payload))
-            }
+        const payload = {
+            assetsId, data: formData,
+            onComplete: () => navigate(-1)
         }
+
+        //! Dispatching API for Creating Items
+        handleValidation() && dispatch(TempleActions.createTempleAssetsItems(payload))
     };
 
     useEffect(() => {
-        //! Dispatching API for Getting Category
-        dispatch(TempleActions.getTempleAssetCategory())
+        //! Dispatching API
+        dispatch(TempleActions.getTempleAssets())
     }, []);
 
     return (
         <>
             <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", fontFamily: 'Philosopher', backgroundColor: "#fff" }}>
-                    <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Sub Category</div>
-                    <div onClick={() => navigate("/temple/asset/sub-category")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
+                    <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Items</div>
+                    <div onClick={() => navigate(-1)} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
                 </div>
 
                 <Grid container sx={{ alignItems: "center" }} spacing={3}>
@@ -155,7 +140,7 @@ const AddSubCategory = ({ mode }) => {
                     <Grid item lg={4} md={12} sm={12} xs={12} >
                         <FormControl fullWidth>
                             <InputLabel id="select-label">Select Category Name<span style={{ color: "red" }}>* </span></InputLabel>
-                            <Select
+                            <Select disabled
                                 label="Select Category Name * " variant="outlined" fullWidth
                                 name='categoryId'
                                 value={inputFieldDetail?.categoryId}
@@ -164,7 +149,7 @@ const AddSubCategory = ({ mode }) => {
                                 onFocus={() => handleInputFieldError("categoryId", null)}
                             >
                                 <MenuItem disabled>---Select Category Name---</MenuItem>
-                                {templeAssetCategoryData.map((value, index) => {
+                                {templeAssetsData.map((value, index) => {
                                     return <MenuItem key={index} value={value?._id}>{value?.title}</MenuItem>
                                 })}
                             </Select>
@@ -207,4 +192,4 @@ const AddSubCategory = ({ mode }) => {
     )
 };
 
-export default AddSubCategory;
+export default AddItems;

@@ -28,62 +28,44 @@ export const deleteTempleDarshan = payload => ({
     type: actionTypes.DELETE_TEMPLE_DARSHAN, payload
 });
 
-//! Asset Category
-export const getTempleAssetCategory = payload => ({
-    type: actionTypes.GET_TEMPLE_ASSET_CATEGORY, payload
+//! Asset
+export const getTempleAssets = payload => ({
+    type: actionTypes.GET_TEMPLE_ASSETS, payload
 });
 
-export const setTempleAssetCategory = payload => ({
-    type: actionTypes.SET_TEMPLE_ASSET_CATEGORY, payload
+export const setTempleAssets = payload => ({
+    type: actionTypes.SET_TEMPLE_ASSETS, payload
 });
 
-export const createTempleAssetCategory = payload => ({
-    type: actionTypes.CREATE_TEMPLE_ASSET_CATEGORY, payload
+export const createTempleAssets = payload => ({
+    type: actionTypes.CREATE_TEMPLE_ASSETS, payload
 });
 
-export const updateTempleAssetCategory = payload => ({
-    type: actionTypes.UPDATE_TEMPLE_ASSET_CATEGORY, payload
+export const updateTempleAssets = payload => ({
+    type: actionTypes.UPDATE_TEMPLE_ASSETS, payload
 });
 
-export const deleteTempleAssetCategory = payload => ({
-    type: actionTypes.DELETE_TEMPLE_ASSET_CATEGORY, payload
+export const deleteTempleAssets = payload => ({
+    type: actionTypes.DELETE_TEMPLE_ASSETS, payload
 });
 
-//! Asset Sub Category
-export const getTempleAssetSubCategory = payload => ({
-    type: actionTypes.GET_TEMPLE_ASSET_SUB_CATEGORY, payload
+//! Assets Items
+export const getTempleAssetsItemsByAssetsId = payload => ({
+    type: actionTypes.GET_TEMPLE_ASSETS_ITEMS_BY_ASSETS_ID, payload
 });
 
-export const setTempleAssetSubCategory = payload => ({
-    type: actionTypes.SET_TEMPLE_ASSET_SUB_CATEGORY, payload
+export const setTempleAssetsItemsByAssetsId = payload => ({
+    type: actionTypes.SET_TEMPLE_ASSETS_ITEMS_BY_ASSETS_ID, payload
 });
 
-export const createTempleAssetSubCategory = payload => ({
-    type: actionTypes.CREATE_TEMPLE_ASSET_SUB_CATEGORY, payload
+export const createTempleAssetsItems = payload => ({
+    type: actionTypes.CREATE_TEMPLE_ASSETS_ITEMS, payload
 });
 
-export const updateTempleAssetSubCategory = payload => ({
-    type: actionTypes.UPDATE_TEMPLE_ASSET_SUB_CATEGORY, payload
+export const updateTempleAssetsItems = payload => ({
+    type: actionTypes.UPDATE_TEMPLE_ASSETS_ITEMS, payload
 });
 
-export const deleteTempleAssetSubCategory = payload => ({
-    type: actionTypes.DELETE_TEMPLE_ASSET_SUB_CATEGORY, payload
+export const deleteTempleAssetsItems = payload => ({
+    type: actionTypes.DELETE_TEMPLE_ASSETS_ITEMS, payload
 });
-
-
-// export const addTemple = payload => ({
-//     type: actionTypes.GET_ADD_TEMPLE, payload
-// })
-
-// export const getTemple = payload => ({
-//     type: actionTypes.GET_TEMPLE, payload
-// });
-
-// export const setTemple = payload => ({
-//     type: actionTypes.SET_TEMPLE, payload
-// });
-
-// export const deleteTempleCategory = (id) => ({
-//     type: actionTypes.DELETE_TEMPLE_CATEGORY,
-//     id,
-// });

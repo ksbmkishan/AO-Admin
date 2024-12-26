@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Grid, TextField } from "@mui/material";
-import { Color } from "../../../../../assets/colors";
-import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../../utils/regex-pattern";
-import * as TempleActions from '../../../../../redux/actions/templeAction';
+import { Color } from "../../../../assets/colors";
+import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
+import * as TempleActions from '../../../../redux/actions/templeAction';
 
-const AddCategory = ({ mode }) => {
+const AddAssets = ({ mode }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
@@ -46,35 +46,21 @@ const AddCategory = ({ mode }) => {
         console.log("Darshan Data :: ", { ...inputFieldDetail })
         const { title } = inputFieldDetail;
 
-        if (handleValidation()) {
-
-            if (stateData) {
-                const payload = {
-                    data: {},
-                    onComplete: () => navigate("/temple/asset/category")
-                }
-
-                //! Dispatching API for Updating Category
-                dispatch(TempleActions.updateTempleAssetCategory(payload))
-
-            } else {
-                const payload = {
-                    data: { title },
-                    onComplete: () => navigate("/temple/asset/category")
-                }
-
-                //! Dispatching API for Creating Category
-                dispatch(TempleActions.createTempleAssetCategory(payload))
-            }
+        const payload = {
+            data: { title },
+            onComplete: () => navigate("/temple/assets")
         }
+
+        //! Dispatching API for Creating 
+        handleValidation() && dispatch(TempleActions.createTempleAssets(payload))
     };
 
     return (
         <>
             <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", fontFamily: 'Philosopher', backgroundColor: "#fff" }}>
-                    <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Category</div>
-                    <div onClick={() => navigate("/temple/asset/category")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
+                    <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Assets</div>
+                    <div onClick={() => navigate("/temple/assets")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
                 </div>
 
                 <Grid container sx={{ alignItems: "center" }} spacing={3}>
@@ -101,4 +87,4 @@ const AddCategory = ({ mode }) => {
     )
 };
 
-export default AddCategory;
+export default AddAssets;

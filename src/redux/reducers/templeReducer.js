@@ -3,8 +3,8 @@ import * as actionTypes from "../action-types";
 const initialState = {
     templeDarshanData: [],
     templeDarshanByIdData: [],
-    templeAssetCategoryData: [],
-    templeAssetSubCategoryData: [],
+    templeAssetsData: [],
+    templeAssetsItemsByAssetsIdData: [],
 
 };
 
@@ -18,11 +18,11 @@ const templeReducer = (state = initialState, actions) => {
         case actionTypes.SET_TEMPLE_DARSHAN_BY_ID:
             return { ...state, templeDarshanByIdData: payload };
 
-        case actionTypes.SET_TEMPLE_ASSET_CATEGORY:
-            return { ...state, templeAssetCategoryData: payload };
+        case actionTypes.SET_TEMPLE_ASSETS:
+            return { ...state, templeAssetsData: payload };
 
-        case actionTypes.SET_TEMPLE_ASSET_SUB_CATEGORY:
-            return { ...state, templeAssetSubCategoryData: payload };
+        case actionTypes.SET_TEMPLE_ASSETS_ITEMS_BY_ASSETS_ID:
+            return { ...state, templeAssetsItemsByAssetsIdData: payload };
 
         default: {
             return state;

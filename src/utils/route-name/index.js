@@ -108,13 +108,8 @@ export const RouteName = [
                 icon: <FluorescentIcon />,
             },
             {
-                path: "/temple/asset/category",
-                name: "Asset Category",
-                icon: <FluorescentIcon />,
-            },
-            {
-                path: "/temple/asset/sub-category",
-                name: "Asset Sub Category",
+                path: "/temple/assets",
+                name: "Assets",
                 icon: <FluorescentIcon />,
             },
         ],

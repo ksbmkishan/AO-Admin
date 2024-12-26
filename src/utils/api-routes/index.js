@@ -126,19 +126,14 @@ export const update_temple_darshan = '';
 export const delete_temple_darshan = (id) => `api/admin/delete-darshan/${id}`;
 
 //? Asset Category
-export const get_temple_asset_category = 'api/admin/get_asset_category';
-export const create_temple_asset_category = 'api/admin/create_asset_category';
-export const update_temple_asset_category = 'api/admin/update_asset_category';
-export const delete_temple_asset_category = (id) => `api/admin/delete-darshan/${id}`;
+export const get_temple_assets = 'api/admin/get-pooja-items';
+export const create_temple_assets = 'api/admin/create-pooja-title';
+export const delete_temple_assets = (id) => `api/admin/delete-pooja-item/${id}`;
 
-//? Asset Sub Category
-export const get_temple_asset_sub_category = 'api/admin/get_asset_sub_category';
-export const create_temple_asset_sub_category = 'api/admin/create_asset_sub_category';
-export const update_temple_asset_sub_category = 'api/admin/update_asset_sub_category';
-export const delete_temple_asset_sub_category = (id) => `api/admin/delete-darshan/${id}`;
-// export const create_temple = 'api/admin/add_temple';
-// export const get_temple_data = 'api/admin/get_temple';
-// export const delete_temple_data = 'admin/temples_delete';
+//? Assets Items
+export const get_temple_assets_items_by_assets_id = (assetsId) => `api/admin/get-pooja-item/${assetsId}`;
+export const create_temple_assets_items = (assetsId) => `api/admin/add-items-to-pooja-title/${assetsId}`;
+export const delete_temple_assets_items = (assetsId, itemId) => `api/admin/delete-item-from-pooja-title/${assetsId}/${itemId}`;
 
 //TODO---------------------Working-----------------------TODO// 
 

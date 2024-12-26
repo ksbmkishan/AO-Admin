@@ -47,16 +47,12 @@ import AstroMallOrderHistory from "./pages/astro-mall/order-history";
 //! Temple
 import TempleDarshan from "./pages/temple/darshan";
 import TempleAddDarshan from "./pages/temple/darshan/add-darshan";
-import TempleCategory from "./pages/temple/assets/category";
-import TempleAddCategory from "./pages/temple/assets/category/add-category";
-import TempleSubCategory from "./pages/temple/assets/sub-category";
-import TempleAddSubCategory from "./pages/temple/assets/sub-category/add-sub-category";
+import TempleViewDarshan from "./pages/temple/darshan/view-darshan";
+import TempleAssets from "./pages/temple/assets";
+import TempleAddAssets from "./pages/temple/assets/add-assets";
+import TempleAssetsItems from "./pages/temple/assets/items";
+import TempleAddAssetsItems from "./pages/temple/assets/items/add-items";
 
-// import TempleCategory from "./pages/temple/category";
-// import TempleAddCategory from "./pages/temple/category/add-category";
-// import TempleProduct from "./pages/temple/product";
-// import TempleAddProduct from "./pages/temple/product/add-product";
-// import TempleOrderHistory from "./pages/temple/order-history";
 //! Astro-Puja     
 import Puja from "./pages/astro-puja/puja";
 import AddPuja from "./pages/astro-puja/puja/add-puja";
@@ -218,23 +214,17 @@ function App() {
 
           {/* Temple */}
           <Route path="/temple/darshan" element={<TempleDarshan />} />
+          <Route path="/temple/darshan/:darshanId" element={<TempleViewDarshan />} />
           <Route path="/temple/darshan/add-darshan" element={<TempleAddDarshan mode={'Add'} />} />
           <Route path="/temple/darshan/edit-darshan" element={<TempleAddDarshan mode={'Edit'} />} />
 
-          <Route path="/temple/asset/category" element={<TempleCategory />} />
-          <Route path="/temple/asset/category/add-category" element={<TempleAddCategory mode={'Add'} />} />
-          <Route path="/temple/asset/category/edit-category" element={<TempleAddCategory mode={'Edit'} />} />
+          <Route path="/temple/assets" element={<TempleAssets />} />
+          <Route path="/temple/assets/add-assets" element={<TempleAddAssets mode={'Add'} />} />
+          <Route path="/temple/assets/edit-assets" element={<TempleAddAssets mode={'Edit'} />} />
 
-          <Route path="/temple/asset/sub-category" element={<TempleSubCategory />} />
-          <Route path="/temple/asset/sub-category/add-sub-category" element={<TempleAddSubCategory mode={'Add'} />} />
-          <Route path="/temple/asset/sub-category/edit-sub-category" element={<TempleAddSubCategory mode={'Edit'} />} />
-
-          {/* <Route path="/temple/category" element={<TempleCategory />} />
-          <Route path="/temple/category/add-category" element={<TempleAddCategory mode={'Add'} />} />
-          <Route path="/temple/category/edit-category" element={<TempleAddCategory mode={'Edit'} />} />
-          <Route path="/temple/product" element={<TempleProduct />} />
-          <Route path="/temple/product/add-product" element={<TempleAddProduct mode={'Add'} />} />
-          <Route path="/temple/edit-product" element={< TempleAddProduct mode={'Edit'} />} /> */}
+          <Route path="/temple/assets/items" element={<TempleAssetsItems />} />
+          <Route path="/temple/assets/items/add-items" element={<TempleAddAssetsItems mode={'Add'} />} />
+          <Route path="/temple/assets/items/edit-items" element={<TempleAddAssetsItems mode={'Edit'} />} />
 
           {/* Astro-Puja */}
           <Route path="/astro-puja/puja" element={<Puja />} />
