@@ -112,6 +112,11 @@ export const RouteName = [
                 name: "Assets",
                 icon: <FluorescentIcon />,
             },
+            {
+                path: "/temple/live-link",
+                name: "Live Link",
+                icon: <FluorescentIcon />,
+            },
         ],
     },
     {

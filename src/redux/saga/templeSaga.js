@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 import { call, put, takeLeading } from "redux-saga/effects";
 import * as actionTypes from "../action-types";
 import { getAPI, postAPI } from "../../utils/api-function";
-import { create_temple_assets, create_temple_assets_items, create_temple_darshan, delete_temple_assets, delete_temple_assets_items, delete_temple_darshan, get_temple_assets, get_temple_assets_items_by_assets_id, get_temple_darshan, get_temple_darshan_by_id, update_temple_darshan } from '../../utils/api-routes';
+import { create_temple_assets, create_temple_assets_items, create_temple_darshan, create_temple_live_link, delete_temple_assets, delete_temple_assets_items, delete_temple_darshan, delete_temple_live_link, get_temple_assets, get_temple_assets_items_by_assets_id, get_temple_darshan, get_temple_darshan_by_id, get_temple_live_link, update_temple_darshan, update_temple_live_link } from '../../utils/api-routes';
 import { Color } from '../../assets/colors';
 
 function* getTempleDarshan() {
@@ -101,7 +101,7 @@ function* deleteTempleDarshan(action) {
     }
 };
 
-//! Asset s
+//! Assets
 function* getTempleAssets() {
     try {
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
@@ -223,6 +223,84 @@ function* deleteTempleAssetsItems(action) {
     }
 };
 
+//! Live Link
+function* getTempleLiveLink() {
+    try {
+        yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
+        const { data } = yield getAPI(get_temple_live_link);
+        console.log("Get Temple Live Link Saga Response ::: ", data);
+
+        if (data?.success) {
+            yield put({ type: actionTypes.SET_TEMPLE_LIVE_LINK, payload: data?.data?.reverse() });
+        }
+        yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+
+    } catch (error) {
+        yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+        console.log("Get Temple Live Link Saga Error ::: ", error);
+    }
+};
+
+function* createTempleLiveLink(action) {
+    try {
+        const { payload } = action;
+        console.log("Payload ::: ", payload);
+
+        const { data } = yield postAPI(create_temple_live_link, payload?.data);
+        console.log("Create Temple Live Link Saga Response ::: ", data);
+
+        if (data?.success) {
+            Swal.fire({ icon: "success", title: 'Success', text: "Live Link Created Successfully", showConfirmButton: false, timer: 2000 });
+            yield call(payload?.onComplete);
+        }
+
+    } catch (error) {
+        Swal.fire({ icon: "error", title: 'Failed', text: "Failed To Create", showConfirmButton: false, timer: 2000 });
+        console.log("Create Temple Live Link Saga Error ::: ", error);
+    }
+};
+
+function* updateTempleLiveLink(action) {
+    try {
+        const { payload } = action;
+        console.log("Payload ::: ", payload);
+
+        const { data } = yield postAPI(update_temple_live_link(payload?._id), payload?.data);
+        console.log("Update Temple Live Link Saga Response ::: ", data);
+
+        if (data?.success) {
+            Swal.fire({ icon: "success", title: 'Success', text: "Live Link Updated Successfully", showConfirmButton: false, timer: 2000 });
+            yield call(payload?.onComplete);
+        }
+
+    } catch (error) {
+        Swal.fire({ icon: "error", title: 'Failed', text: "Failed To Update", showConfirmButton: false, timer: 2000 });
+        console.log("Update Temple Live Link Saga Error ::: ", error);
+    }
+};
+
+function* deleteTempleLiveLink(action) {
+    try {
+        const { payload } = action;
+
+        const result = yield Swal.fire({ icon: "warning", title: `Are you sure ?`, text: "You want to delete!!!", showCancelButton: true, confirmButtonColor: Color.primary, cancelButtonColor: 'grey', confirmButtonText: "Yes", cancelButtonText: "No" });
+
+        if (result.isConfirmed) {
+            const { data } = yield postAPI(delete_temple_live_link(payload?._id));
+            console.log("Delete Temple Live Link Saga Response ::: ", data);
+
+            if (data?.success) {
+                Swal.fire({ icon: "success", title: 'Success', text: "Live Link Deleted Successfully", showConfirmButton: false, timer: 2000 });
+                yield put({ type: actionTypes?.GET_TEMPLE_LIVE_LINK, payload: null });
+            }
+        }
+
+    } catch (error) {
+        Swal.fire({ icon: "error", title: 'Failed', text: "Failed To Delete", showConfirmButton: false, timer: 2000 });
+        console.log("Delete Temple Live Link Saga Error ::: ", error);
+    }
+};
+
 export default function* templeSaga() {
     yield takeLeading(actionTypes.GET_TEMPLE_DARSHAN, getTempleDarshan);
     yield takeLeading(actionTypes.GET_TEMPLE_DARSHAN_BY_ID, getTempleDarshanById);
@@ -239,4 +317,10 @@ export default function* templeSaga() {
     yield takeLeading(actionTypes.GET_TEMPLE_ASSETS_ITEMS_BY_ASSETS_ID, getTempleAssetsItemsByAssetsId);
     yield takeLeading(actionTypes.CREATE_TEMPLE_ASSETS_ITEMS, createTempleAssetsItems);
     yield takeLeading(actionTypes.DELETE_TEMPLE_ASSETS_ITEMS, deleteTempleAssetsItems);
+
+    //! Live Link
+    yield takeLeading(actionTypes.GET_TEMPLE_LIVE_LINK, getTempleLiveLink);
+    yield takeLeading(actionTypes.CREATE_TEMPLE_LIVE_LINK, createTempleLiveLink);
+    yield takeLeading(actionTypes.UPDATE_TEMPLE_LIVE_LINK, updateTempleLiveLink);
+    yield takeLeading(actionTypes.DELETE_TEMPLE_LIVE_LINK, deleteTempleLiveLink);
 };

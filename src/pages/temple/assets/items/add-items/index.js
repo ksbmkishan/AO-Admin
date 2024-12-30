@@ -17,8 +17,8 @@ const AddItems = ({ mode }) => {
     const dispatch = useDispatch();
     const { templeAssetsData } = useSelector(state => state.templeReducer);
 
-    const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: assetsId, title: stateData ? stateData?.title : '', price: stateData ? stateData?.price : '' });
-    const [inputFieldError, setInputFieldError] = useState({ categoryId: '', title: '', price: '', image: '' });
+    const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: assetsId, title: stateData ? stateData?.title : '', price: stateData ? stateData?.price : '', paymentType: stateData ? stateData?.payment : '' });
+    const [inputFieldError, setInputFieldError] = useState({ image: '', categoryId: '', title: '', price: '', paymentType: '' });
     const [image, setImage] = useState({ file: stateData ? img_url + stateData?.image : '', bytes: '' });
 
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
@@ -52,7 +52,7 @@ const AddItems = ({ mode }) => {
     //! Handle Validation
     const handleValidation = () => {
         let isValid = true;
-        const { title, price } = inputFieldDetail;
+        const { title, price, paymentType } = inputFieldDetail;
         const { file } = image;
 
         if (!title) {
@@ -83,6 +83,10 @@ const AddItems = ({ mode }) => {
             handleInputFieldError("image", "Please Upload Image")
             isValid = false;
         }
+        if (!paymentType) {
+            handleInputFieldError("paymentType", "Please Select Payment Type")
+            isValid = false;
+        }
 
         return isValid;
     };
@@ -91,10 +95,10 @@ const AddItems = ({ mode }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Items Data :: ", { ...inputFieldDetail })
-        const { title, price } = inputFieldDetail;
+        const { title, price, paymentType } = inputFieldDetail;
 
         let formData = new FormData();
-        formData.append("items", JSON.stringify([{ itemName: title, itemPrice: price }]));
+        formData.append("items", JSON.stringify([{ itemName: title, itemPrice: price, payment: paymentType }]));
         formData.append("itemImages", image?.bytes);
 
         const payload = {
@@ -137,7 +141,7 @@ const AddItems = ({ mode }) => {
                         {inputFieldError?.image && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px", }}>{inputFieldError?.image}</div>}
                     </Grid>
 
-                    <Grid item lg={4} md={12} sm={12} xs={12} >
+                    <Grid item lg={6} md={12} sm={12} xs={12} >
                         <FormControl fullWidth>
                             <InputLabel id="select-label">Select Category Name<span style={{ color: "red" }}>* </span></InputLabel>
                             <Select disabled
@@ -157,7 +161,7 @@ const AddItems = ({ mode }) => {
                         {inputFieldError?.categoryId && <div style={{ color: "#D32F2F", fontSize: "10px", padding: "3px 15px 0 15px" }}>{inputFieldError?.categoryId}</div>}
                     </Grid>
 
-                    <Grid item lg={4} md={12} sm={12} xs={12} >
+                    <Grid item lg={6} md={12} sm={12} xs={12} >
                         <TextField
                             label={<>Title <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
                             name='title'
@@ -169,7 +173,7 @@ const AddItems = ({ mode }) => {
                         />
                     </Grid>
 
-                    <Grid item lg={4} md={12} sm={12} xs={12} >
+                    <Grid item lg={6} md={12} sm={12} xs={12} >
                         <TextField
                             label={<>Price <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
                             name='price'
@@ -179,6 +183,25 @@ const AddItems = ({ mode }) => {
                             helperText={inputFieldError.price}
                             onFocus={() => handleInputFieldError("price", null)}
                         />
+                    </Grid>
+
+                    <Grid item lg={6} md={12} sm={12} xs={12} >
+                        <FormControl fullWidth>
+                            <InputLabel id="select-label">Select Payment Type<span style={{ color: "red" }}>* </span></InputLabel>
+                            <Select
+                                label="Select Payment Type * " variant="outlined" fullWidth
+                                name='paymentType'
+                                value={inputFieldDetail?.paymentType}
+                                onChange={handleInputField}
+                                error={inputFieldError?.paymentType ? true : false}
+                                onFocus={() => handleInputFieldError("paymentType", null)}
+                            >
+                                <MenuItem disabled>---Select Payment Type---</MenuItem>
+                                <MenuItem value={'add'}>Add</MenuItem>
+                                <MenuItem value={'deduct'}>Deduct</MenuItem>
+                            </Select>
+                        </FormControl>
+                        {inputFieldError?.paymentType && <div style={{ color: "#D32F2F", fontSize: "10px", padding: "3px 15px 0 15px" }}>{inputFieldError?.paymentType}</div>}
                     </Grid>
 
                     <Grid item lg={12} md={12} sm={12} xs={12}>

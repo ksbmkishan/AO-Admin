@@ -52,6 +52,8 @@ import TempleAssets from "./pages/temple/assets";
 import TempleAddAssets from "./pages/temple/assets/add-assets";
 import TempleAssetsItems from "./pages/temple/assets/items";
 import TempleAddAssetsItems from "./pages/temple/assets/items/add-items";
+import TempleLiveLink from "./pages/temple/live-link";
+import TempleAddLiveLink from "./pages/temple/live-link/add-live-link";
 
 //! Astro-Puja     
 import Puja from "./pages/astro-puja/puja";
@@ -225,6 +227,10 @@ function App() {
           <Route path="/temple/assets/items" element={<TempleAssetsItems />} />
           <Route path="/temple/assets/items/add-items" element={<TempleAddAssetsItems mode={'Add'} />} />
           <Route path="/temple/assets/items/edit-items" element={<TempleAddAssetsItems mode={'Edit'} />} />
+
+          <Route path="/temple/live-link" element={<TempleLiveLink />} />
+          <Route path="/temple/live-link/add-live-link" element={<TempleAddLiveLink mode={'Add'} />} />
+          <Route path="/temple/live-link/edit-live-link" element={<TempleAddLiveLink mode={'Edit'} />} />
 
           {/* Astro-Puja */}
           <Route path="/astro-puja/puja" element={<Puja />} />

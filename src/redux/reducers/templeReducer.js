@@ -5,6 +5,7 @@ const initialState = {
     templeDarshanByIdData: [],
     templeAssetsData: [],
     templeAssetsItemsByAssetsIdData: [],
+    templeLiveLinkData: []
 
 };
 
@@ -23,6 +24,9 @@ const templeReducer = (state = initialState, actions) => {
 
         case actionTypes.SET_TEMPLE_ASSETS_ITEMS_BY_ASSETS_ID:
             return { ...state, templeAssetsItemsByAssetsIdData: payload };
+
+        case actionTypes.SET_TEMPLE_LIVE_LINK:
+            return { ...state, templeLiveLinkData: payload };
 
         default: {
             return state;

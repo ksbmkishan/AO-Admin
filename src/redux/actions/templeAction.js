@@ -69,3 +69,24 @@ export const updateTempleAssetsItems = payload => ({
 export const deleteTempleAssetsItems = payload => ({
     type: actionTypes.DELETE_TEMPLE_ASSETS_ITEMS, payload
 });
+
+//! Live Link
+export const getTempleLiveLink = payload => ({
+    type: actionTypes.GET_TEMPLE_LIVE_LINK, payload
+});
+
+export const setTempleLiveLink = payload => ({
+    type: actionTypes.SET_TEMPLE_LIVE_LINK, payload
+});
+
+export const createTempleLiveLink = payload => ({
+    type: actionTypes.CREATE_TEMPLE_LIVE_LINK, payload
+});
+
+export const updateTempleLiveLink = payload => ({
+    type: actionTypes.UPDATE_TEMPLE_LIVE_LINK, payload
+});
+
+export const deleteTempleLiveLink = payload => ({
+    type: actionTypes.DELETE_TEMPLE_LIVE_LINK, payload
+});
