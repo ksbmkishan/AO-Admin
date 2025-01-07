@@ -66,7 +66,7 @@ export const get_order_history_by_customer_id = 'api/customers/getCustomerOrder'
 export const get_following_history_by_customer_id = 'api/admin/customer_followed_list';
 export const get_review_history_by_customer_id = 'api/admin/get-customer-review';
 export const get_mudra_history_by_customer_id = (customerId) => `api/customers/gift-wallet-history/${customerId}`;
-export const get_mudra_history_history_by_customer_id = (customerId) => `api/customers/get-wallet-request/${customerId}`;
+export const get_mudra_request_history_by_customer_id = (customerId) => `api/customers/get-wallet-request/${customerId}`;
 
 //! Astro-Puja
 export const get_puja = 'api/ecommerce/get_puja';
@@ -85,6 +85,8 @@ export const get_call_history = 'api/admin/get_call_history';
 export const get_video_call_history = 'api/admin/all_videocall_history';
 export const get_live_history = 'api/admin/all_live_videocall_history';
 export const get_gift_history = 'api/admin/get_all_gift_history';
+export const get_mudra_history = 'api/customers/get-All-wallet-history';
+export const get_mudra_request_history = 'api/customers/get-All-request-history';
 
 //! Skill
 export const get_skill = 'api/admin/get-skill';

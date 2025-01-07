@@ -88,6 +88,8 @@ import CallHistory from "./pages/history/call-history";
 import VideoCallHistory from "./pages/history/video-call-history";
 import LiveHistory from "./pages/history/live-history";
 import GiftHistory from "./pages/history/gift-history";
+import MudraHistory from "./pages/history/mudra-history";
+import MudraRequestHistory from "./pages/history/mudra-request-history";
 
 //! Gift 
 import Gift from "./pages/gift";
@@ -262,6 +264,8 @@ function App() {
           <Route path="/history/video-call-history" element={<VideoCallHistory />} />
           <Route path="/history/live-history" element={<LiveHistory />} />
           <Route path="/history/gift-history" element={<GiftHistory />} />
+          <Route path="/history/mudra-history" element={<MudraHistory />} />
+          <Route path="/history/mudra-request-history" element={<MudraRequestHistory />} />
 
           {/* Expertise */}
           {/* <Route path="/expertise" element={<Expertise />} />

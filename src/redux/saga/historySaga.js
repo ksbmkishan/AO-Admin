@@ -1,6 +1,6 @@
 import * as actionTypes from "../action-types";
 import { call, put, takeLeading } from "redux-saga/effects";
-import { get_call_history, get_chat_history, get_gift_history, get_live_history, get_video_call_history, } from "../../utils/api-routes";
+import { get_call_history, get_chat_history, get_gift_history, get_live_history, get_mudra_history, get_mudra_request_history, get_video_call_history, } from "../../utils/api-routes";
 import { getAPI } from "../../utils/api-function";
 
 function* getChatHistory() {
@@ -88,10 +88,51 @@ function* getGiftHistory() {
   }
 }
 
+
+function* getMudraHistory() {
+  try {
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
+    const { data } = yield getAPI(get_mudra_history);
+    console.log("Get Mudra History Saga Response ::: ", data);
+
+    if (data?.success) {
+      yield put({ type: actionTypes.SET_MUDRA_HISTORY, payload: data?.transactions?.reverse() });
+    } else {
+      yield put({ type: actionTypes.SET_MUDRA_HISTORY, payload: [] });
+    }
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+
+  } catch (error) {
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+    console.log("Get Mudra History Saga Error ::: ", error);
+  }
+}
+
+function* getMudraRequestHistory(action) {
+  try {
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
+    const { data } = yield getAPI(get_mudra_request_history);
+    console.log("Get Mudra Request History Saga Response ::: ", data);
+
+    if (data?.success) {
+      yield put({ type: actionTypes.SET_MUDRA_REQUEST_HISTORY, payload: data?.requests?.reverse() });
+    } else {
+      yield put({ type: actionTypes.SET_MUDRA_REQUEST_HISTORY, payload: [] });
+    }
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+
+  } catch (error) {
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+    console.log("Get Mudra Request History Saga Error ::: ", error);
+  }
+}
+
 export default function* historySaga() {
   yield takeLeading(actionTypes.GET_CHAT_HISTORY, getChatHistory);
   yield takeLeading(actionTypes.GET_CALL_HISTORY, getCallHistory);
   yield takeLeading(actionTypes.GET_VIDEO_CALL_HISTORY, getVideoCallHistory);
   yield takeLeading(actionTypes.GET_LIVE_HISTORY, getLiveHistory);
   yield takeLeading(actionTypes.GET_GIFT_HISTORY, getGiftHistory);
-}
+  yield takeLeading(actionTypes.GET_MUDRA_HISTORY, getMudraHistory);
+  yield takeLeading(actionTypes.GET_MUDRA_REQUEST_HISTORY, getMudraRequestHistory);
+};

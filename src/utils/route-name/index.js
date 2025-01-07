@@ -217,6 +217,16 @@ export const RouteName = [
                 name: "Gift History",
                 icon: <RedeemIcon />,
             },
+            {
+                path: "/history/mudra-history",
+                name: "Mudra History",
+                icon: <RedeemIcon />,
+            },
+            {
+                path: "/history/mudra-request-history",
+                name: "Mudra Request History",
+                icon: <RedeemIcon />,
+            },
         ],
     },
     {

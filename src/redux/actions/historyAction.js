@@ -39,3 +39,19 @@ export const getGiftHistory = payload => ({
 export const setGiftHistory = payload => ({
     type: actionTypes.SET_GIFT_HISTORY, payload
 });
+
+export const getMudraHistory = payload => ({
+    type: actionTypes.GET_MUDRA_HISTORY, payload
+});
+
+export const setMudraHistory = payload => ({
+    type: actionTypes.SET_MUDRA_HISTORY, payload
+});
+
+export const getMudraRequestHistory = payload => ({
+    type: actionTypes.GET_MUDRA_REQUEST_HISTORY, payload
+});
+
+export const setMudraRequestHistory = payload => ({
+    type: actionTypes.SET_MUDRA_REQUEST_HISTORY, payload
+});

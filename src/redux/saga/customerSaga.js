@@ -4,7 +4,7 @@ import { call, put, takeLeading } from "redux-saga/effects";
 import { Color } from "../../assets/colors";
 import * as actionTypes from "../action-types";
 import { getAPI, postAPI } from "../../utils/api-function";
-import { change_customer_banned_unbanned_status, create_customer, delete_customer_by_id, get_call_history_by_customer_id, get_chat_history_by_customer_id, get_customer, get_customer_by_id, get_following_history_by_customer_id, get_live_history_by_customer_id, get_mudra_history_by_customer_id, get_mudra_history_history_by_customer_id, get_order_history_by_customer_id, get_puja_history_by_customer_id, get_review_history_by_customer_id, get_video_call_history_by_customer_id, update_customer_by_id, update_wallet_by_customer_id } from "../../utils/api-routes";
+import { change_customer_banned_unbanned_status, create_customer, delete_customer_by_id, get_call_history_by_customer_id, get_chat_history_by_customer_id, get_customer, get_customer_by_id, get_following_history_by_customer_id, get_live_history_by_customer_id, get_mudra_history_by_customer_id, get_mudra_request_history_by_customer_id, get_order_history_by_customer_id, get_puja_history_by_customer_id, get_review_history_by_customer_id, get_video_call_history_by_customer_id, update_customer_by_id, update_wallet_by_customer_id } from "../../utils/api-routes";
 
 function* getCustomer() {
   try {
@@ -345,7 +345,7 @@ function* getMudraRequestHistoryByCustomerId(action) {
     console.log("Payload ::: ", payload);
 
     yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
-    const { data } = yield postAPI(get_mudra_history_history_by_customer_id(payload?.customerId));
+    const { data } = yield postAPI(get_mudra_request_history_by_customer_id(payload?.customerId));
     console.log("Get Mudra Request History By Customer Id Saga Response ::: ", data);
 
     if (data?.success) {

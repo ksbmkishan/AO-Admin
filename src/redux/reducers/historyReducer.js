@@ -5,7 +5,9 @@ const initialState = {
     callHistoryData: [],
     videoCallHistoryData: [],
     liveHistoryData: [],
-    giftHistoryData: []
+    giftHistoryData: [],
+    mudraHistoryData: [],
+    mudraRequestHistoryData: [],
 }
 
 const historyReducer = (state = initialState, action) => {
@@ -26,6 +28,12 @@ const historyReducer = (state = initialState, action) => {
 
         case actionTypes.SET_GIFT_HISTORY:
             return { ...state, giftHistoryData: payload };
+
+        case actionTypes.SET_MUDRA_HISTORY:
+            return { ...state, mudraHistoryData: payload };
+
+        case actionTypes.SET_MUDRA_REQUEST_HISTORY:
+            return { ...state, mudraRequestHistoryData: payload };
 
         default:
             return state;
