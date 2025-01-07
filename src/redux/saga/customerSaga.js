@@ -4,7 +4,7 @@ import { call, put, takeLeading } from "redux-saga/effects";
 import { Color } from "../../assets/colors";
 import * as actionTypes from "../action-types";
 import { getAPI, postAPI } from "../../utils/api-function";
-import { change_customer_banned_unbanned_status, create_customer, delete_customer_by_id, get_call_history_by_customer_id, get_chat_history_by_customer_id, get_customer, get_customer_by_id, get_following_history_by_customer_id, get_live_history_by_customer_id, get_order_history_by_customer_id, get_puja_history_by_customer_id, get_review_history_by_customer_id, get_video_call_history_by_customer_id, update_customer_by_id, update_wallet_by_customer_id } from "../../utils/api-routes";
+import { change_customer_banned_unbanned_status, create_customer, delete_customer_by_id, get_call_history_by_customer_id, get_chat_history_by_customer_id, get_customer, get_customer_by_id, get_following_history_by_customer_id, get_live_history_by_customer_id, get_mudra_history_by_customer_id, get_mudra_history_history_by_customer_id, get_order_history_by_customer_id, get_puja_history_by_customer_id, get_review_history_by_customer_id, get_video_call_history_by_customer_id, update_customer_by_id, update_wallet_by_customer_id } from "../../utils/api-routes";
 
 function* getCustomer() {
   try {
@@ -317,6 +317,50 @@ function* getReviewHistoryByCustomerId(action) {
   }
 }
 
+function* getMudraHistoryByCustomerId(action) {
+  try {
+    const { payload } = action;
+    console.log("Payload ::: ", payload);
+
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
+    const { data } = yield postAPI(get_mudra_history_by_customer_id(payload?.customerId));
+    console.log("Get Mudra History By Customer Id Saga Response ::: ", data);
+
+    if (data?.success) {
+      yield put({ type: actionTypes.SET_MUDRA_HISTORY_BY_CUSTOMER_ID, payload: data?.transactions?.reverse() });
+    } else {
+      yield put({ type: actionTypes.SET_MUDRA_HISTORY_BY_CUSTOMER_ID, payload: [] });
+    }
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+
+  } catch (error) {
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+    console.log("Get Mudra History By Customer Id Saga Error ::: ", error);
+  }
+}
+
+function* getMudraRequestHistoryByCustomerId(action) {
+  try {
+    const { payload } = action;
+    console.log("Payload ::: ", payload);
+
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
+    const { data } = yield postAPI(get_mudra_history_history_by_customer_id(payload?.customerId));
+    console.log("Get Mudra Request History By Customer Id Saga Response ::: ", data);
+
+    if (data?.success) {
+      yield put({ type: actionTypes.SET_MUDRA_REQUEST_HISTORY_BY_CUSTOMER_ID, payload: data?.requests?.reverse() });
+    } else {
+      yield put({ type: actionTypes.SET_MUDRA_REQUEST_HISTORY_BY_CUSTOMER_ID, payload: [] });
+    }
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+
+  } catch (error) {
+    yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
+    console.log("Get Mudra Request History By Customer Id Saga Error ::: ", error);
+  }
+}
+
 export default function* customerSaga() {
   yield takeLeading(actionTypes?.GET_CUSTOMER, getCustomer);
   yield takeLeading(actionTypes?.GET_CUSTOMER_BY_ID, getCustomerById);
@@ -333,4 +377,6 @@ export default function* customerSaga() {
   yield takeLeading(actionTypes?.GET_ORDER_HISTORY_BY_CUSTOMER_ID, getOrderHistoryByCustomerId);
   yield takeLeading(actionTypes?.GET_FOLLOWING_HISTORY_BY_CUSTOMER_ID, getFollowingHistoryByCustomerId);
   yield takeLeading(actionTypes?.GET_REVIEW_HISTORY_BY_CUSTOMER_ID, getReviewHistoryByCustomerId);
-}
+  yield takeLeading(actionTypes?.GET_MUDRA_HISTORY_BY_CUSTOMER_ID, getMudraHistoryByCustomerId);
+  yield takeLeading(actionTypes?.GET_MUDRA_REQUEST_HISTORY_BY_CUSTOMER_ID, getMudraRequestHistoryByCustomerId);
+};

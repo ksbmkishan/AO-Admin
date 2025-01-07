@@ -11,6 +11,8 @@ const initialState = {
     orderHistoryByCustomerIdData: [],
     followingHistoryByCustomerIdData: [],
     reviewHistoryByCustomerIdData: [],
+    mudraHistoryByCustomerIdData: [],
+    mudraRequestHistoryByCustomerIdData: [],
 };
 
 export const customerReducer = (state = initialState, action) => {
@@ -46,6 +48,12 @@ export const customerReducer = (state = initialState, action) => {
 
         case actionTypes.SET_REVIEW_HISTORY_BY_CUSTOMER_ID:
             return { ...state, reviewHistoryByCustomerIdData: payload }
+
+        case actionTypes.SET_MUDRA_HISTORY_BY_CUSTOMER_ID:
+            return { ...state, mudraHistoryByCustomerIdData: payload }
+
+        case actionTypes.SET_MUDRA_REQUEST_HISTORY_BY_CUSTOMER_ID:
+            return { ...state, mudraRequestHistoryByCustomerIdData: payload }
 
         default:
             return state;

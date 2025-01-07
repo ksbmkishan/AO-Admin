@@ -3,36 +3,31 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IndianRupee, secondsToHMS } from "../../../../utils/common-function/index.js";
 import MainDatatable from "../../../../components/common/MainDatatable.jsx";
-import InvoiceOne from "../../../history/download-invoice/invoice-one";
+import * as CommonActions from '../../../../redux/actions/commonAction';
 import * as CustomerActions from '../../../../redux/actions/customerAction';
 
 const MudraHistory = ({ customerId }) => {
     const dispatch = useDispatch();
-    const { callHistoryByCustomerIdData } = useSelector(state => state?.customerReducer);
+    const { mudraHistoryByCustomerIdData } = useSelector(state => state?.customerReducer);
 
     //* Data-Table Column
     const columns = [
-        { name: 'S.No.', selector: (row) => callHistoryByCustomerIdData.indexOf(row) + 1, width: '80px' },
-        { name: 'Astrologer', selector: row => row?.astrologerId?.astrologerName ? row?.astrologerId?.astrologerName : 'N/A' },
-        { name: 'Customers', selector: row => row?.customerId?.customerName ? row?.customerId?.customerName : 'N/A' },
-        { name: 'Total Price', selector: row => row?.totalPrice && IndianRupee(row?.totalPrice) },
-        { name: 'Admin Share', selector: row => row?.adminPrice && IndianRupee(row?.adminPrice) },
-        { name: 'Astrologer Share', selector: row => row?.partnerPrice && IndianRupee(row?.partnerPrice) },
-        { name: 'Duration', selector: row => row?.duration ? secondsToHMS(row?.duration) : 'N/A' },
-        { name: 'Start Time', selector: row => row?.startTime ? moment(row?.startTime).format('hh:mm:ss a') : 'N/A' },
-        { name: 'End Time', selector: row => row?.endTime ? moment(Number(row?.endTime)).format('hh:mm:ss a') : 'N/A' },
-        { name: 'Date', selector: row => row?.endTime ? moment(row?.createdAt).format('DD MMMM YYYY') : 'N/A', width: "180px" },
-        { name: 'Invoice', cell: row => <InvoiceOne data={row} type={'Call'} />, centre: true }
+        { name: 'S.No.', selector: (row) => mudraHistoryByCustomerIdData?.indexOf(row) + 1, width: '80px' },
+        { name: 'Customers', selector: row => row?.customerId?.customerName ? row?.customerId?.customerName : 'N/A', width: '200px' },
+        { name: 'Amount', selector: row => row?.amount && IndianRupee(row?.amount), width: '150px' },
+        { name: 'Description', selector: row => row?.description ? <div onClick={() => dispatch(CommonActions?.openTextModal({ title: 'Description', text: row?.description }))} style={{ cursor: 'pointer' }}>{row?.description}</div> : 'N/A' },
+        { name: 'Type', selector: row => row?.type && row?.type, width: '150px' },
+        { name: 'Date', selector: row => row?.createdAt ? moment(row?.createdAt).format('DD MMMM YYYY') : 'N/A', width: '200px' },
     ];
 
     useEffect(function () {
-        //! Dispatching API for Getting Call History
-        dispatch(CustomerActions.getCallHistoryByCustomerId({ customerId, type: 'call' }));
+        //! Dispatching API
+        dispatch(CustomerActions.getMudraHistoryByCustomerId({ customerId }));
     }, []);
 
     return (
         <>
-            <MainDatatable data={callHistoryByCustomerIdData} columns={columns} title={'Mudra History'} />
+            <MainDatatable data={mudraHistoryByCustomerIdData} columns={columns} title={'Mudra History'} />
 
         </>
     )

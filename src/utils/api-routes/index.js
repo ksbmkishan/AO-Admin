@@ -65,6 +65,8 @@ export const get_puja_history_by_customer_id = 'api/admin/';
 export const get_order_history_by_customer_id = 'api/customers/getCustomerOrder';
 export const get_following_history_by_customer_id = 'api/admin/customer_followed_list';
 export const get_review_history_by_customer_id = 'api/admin/get-customer-review';
+export const get_mudra_history_by_customer_id = (customerId) => `api/customers/gift-wallet-history/${customerId}`;
+export const get_mudra_history_history_by_customer_id = (customerId) => `api/customers/get-wallet-request/${customerId}`;
 
 //! Astro-Puja
 export const get_puja = 'api/ecommerce/get_puja';

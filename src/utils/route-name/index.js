@@ -58,11 +58,6 @@ export const RouteName = [
         icon: <PersonPinIcon />,
     },
     {
-        path: "/live",
-        name: "Live Darshan",
-        icon: <PersonPinIcon />,
-    },
-    {
         path: "/banner",
         name: "Banner",
         icon: <ViewCarouselIcon />,
