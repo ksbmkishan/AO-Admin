@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Grid, TextField, Avatar } from "@mui/material";
+import { Grid, TextField, Avatar, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { Color } from "../../../../assets/colors";
 import { img_url } from "../../../../utils/api-routes";
 import { CrossSvg, UploadImageSvg } from "../../../../assets/svg";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
 import * as TempleActions from '../../../../redux/actions/templeAction';
+import { api_urls } from "../../../../utils/api-urls";
 
 const AddDarshan = ({ mode }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const stateData = location.state && location.state.stateData;
-    // console.log("State Data ::: ", stateData);
+    console.log("State Data ::: ", stateData);
 
-    const [inputFieldDetail, setInputFieldDetail] = useState({ title: stateData ? stateData?.title : '', description: stateData ? stateData?.description : '' });
-    const [inputFieldError, setInputFieldError] = useState({ image: '', title: '', description: '', bulkImage: '', bulkAudio: '' });
-    const [image, setImage] = useState({ file: stateData ? img_url + stateData?.image : '', bytes: '' });
+    const [inputFieldDetail, setInputFieldDetail] = useState({ title: stateData ? stateData?.title : '', temple: stateData ? stateData?.temple : '', description: stateData ? stateData?.description : '' });
+    const [inputFieldError, setInputFieldError] = useState({ image: '', temple: '', title: '', description: '', bulkImage: '', bulkAudio: '' });
+    const [image, setImage] = useState({ file: stateData ? api_urls + stateData?.image : '', bytes: '' });
     const [bulkImage, setBulkImage] = useState([]);
     const [bulkAudio, setBulkAudio] = useState([]);
 
@@ -115,13 +116,14 @@ const AddDarshan = ({ mode }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Darshan Data :: ", { ...inputFieldDetail, image, bulkImage, bulkAudio })
-        const { title, description } = inputFieldDetail;
+        const { title, description, temple } = inputFieldDetail;
 
         if (handleValidation()) {
 
             if (stateData) {
-                let formData = new FormData()
+                let formData = new FormData();
                 formData.append("id", stateData?._id);
+                formData.append("temple", temple);
                 formData.append("title", title);
                 formData.append("description", description);
                 formData.append("image", image?.bytes);
@@ -135,11 +137,12 @@ const AddDarshan = ({ mode }) => {
                 }
 
                 //! Dispatching API for Updating Darshan
-                dispatch(TempleActions.updateTempleDarshan(payload))
+                dispatch(TempleActions.createTempleDarshan(payload))
 
             } else {
-                let formData = new FormData()
-                formData.append("title", title)
+                let formData = new FormData();
+                formData.append("temple", temple);
+                formData.append("title", title);
                 formData.append("description", description);
                 formData.append("image", image?.bytes);
                 bulkImage.forEach(image => { formData.append(`bulkImageUpload`, image?.bytes); });
@@ -181,7 +184,26 @@ const AddDarshan = ({ mode }) => {
                         {inputFieldError?.image && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px", }}>{inputFieldError?.image}</div>}
                     </Grid>
 
-                    <Grid item lg={6} md={12} sm={12} xs={12} >
+                    <Grid item lg={4} md={12} sm={12} xs={12} >
+                        <FormControl fullWidth>
+                            <InputLabel id="select-label">Select Temple <span style={{ color: "red" }}>*</span></InputLabel>
+                            <Select
+                                label="Select Temple *" variant="outlined" fullWidth
+                                name='temple'
+                                value={inputFieldDetail?.temple}
+                                onChange={handleInputField}
+                                error={inputFieldError?.temple ? true : false}
+                                onFocus={() => handleInputFieldError("temple", null)}
+                            >
+                                <MenuItem disabled>---Select Temple---</MenuItem>
+                                <MenuItem value="Sanatan">Sanatan</MenuItem>
+                                <MenuItem value="Navgrah">Navgrah</MenuItem>
+                            </Select>
+                        </FormControl>
+                        {inputFieldError?.temple && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "500" }}>{inputFieldError?.temple}</div>}
+                    </Grid>
+
+                    <Grid item lg={4} md={12} sm={12} xs={12} >
                         <TextField
                             label={<>Title <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
                             name='title'
@@ -193,7 +215,7 @@ const AddDarshan = ({ mode }) => {
                         />
                     </Grid>
 
-                    <Grid item lg={6} md={12} sm={12} xs={12} >
+                    <Grid item lg={4} md={12} sm={12} xs={12} >
                         <TextField
                             label={<>Description <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
                             name='description'

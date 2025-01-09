@@ -50,7 +50,7 @@ function* createTempleDarshan(action) {
         console.log("Create Temple Darshan Saga Response ::: ", data);
 
         if (data?.success) {
-            Swal.fire({ icon: "success", title: 'Success', text: "Temple Darshan Created Successfully", showConfirmButton: false, timer: 2000 });
+            Swal.fire({ icon: "success", title: 'Success', text: data?.message, showConfirmButton: false, timer: 2000 });
             yield call(payload?.onComplete);
         }
 
