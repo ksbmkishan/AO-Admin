@@ -8,6 +8,8 @@ import { CrossSvg, UploadImageSvg } from "../../../../assets/svg";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
 import * as TempleActions from '../../../../redux/actions/templeAction';
 import { api_urls } from "../../../../utils/api-urls";
+import ReactQuill from 'react-quill'; // import the Quill component
+import 'react-quill/dist/quill.snow.css';
 
 const AddDarshan = ({ mode }) => {
     const navigate = useNavigate();
@@ -184,7 +186,7 @@ const AddDarshan = ({ mode }) => {
                         {inputFieldError?.image && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px", }}>{inputFieldError?.image}</div>}
                     </Grid>
 
-                    <Grid item lg={4} md={12} sm={12} xs={12} >
+                    <Grid item lg={6} md={12} sm={12} xs={12} >
                         <FormControl fullWidth>
                             <InputLabel id="select-label">Select Temple <span style={{ color: "red" }}>*</span></InputLabel>
                             <Select
@@ -203,7 +205,7 @@ const AddDarshan = ({ mode }) => {
                         {inputFieldError?.temple && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "500" }}>{inputFieldError?.temple}</div>}
                     </Grid>
 
-                    <Grid item lg={4} md={12} sm={12} xs={12} >
+                    <Grid item lg={6} md={12} sm={12} xs={12} >
                         <TextField
                             label={<>Title <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
                             name='title'
@@ -215,17 +217,26 @@ const AddDarshan = ({ mode }) => {
                         />
                     </Grid>
 
-                    <Grid item lg={4} md={12} sm={12} xs={12} >
-                        <TextField
-                            label={<>Description <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='description'
-                            value={inputFieldDetail?.description}
-                            onChange={handleInputField}
-                            error={inputFieldError.description ? true : false}
-                            helperText={inputFieldError.description}
-                            onFocus={() => handleInputFieldError("description", null)}
-                        />
-                    </Grid>
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+            <label>
+                Description <span style={{ color: "red" }}>*</span>
+            </label>
+                <ReactQuill
+                    value={inputFieldDetail?.description}
+                    onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, description: value })}
+                    placeholder="Type your description here..."
+                    error={inputFieldError.description ? true : false}
+                    helperText={inputFieldError.description}
+                    onFocus={() => handleInputFieldError("description", null)}
+                />
+            {/* Optionally, display error */}
+            {inputFieldError.description && (
+                <span style={{ color: "red" }}>
+                    {inputFieldError.description}
+                </span>
+            )}
+        </Grid>
+
 
                     <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
                         <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
