@@ -138,6 +138,7 @@ export const delete_temple_assets = (id) => `api/admin/delete-pooja-item/${id}`;
 export const get_temple_assets_items_by_assets_id = (assetsId) => `api/admin/get-pooja-item/${assetsId}`;
 export const create_temple_assets_items = (assetsId) => `api/admin/add-items-to-pooja-title/${assetsId}`;
 export const delete_temple_assets_items = (assetsId, itemId) => `api/admin/delete-item-from-pooja-title/${assetsId}/${itemId}`;
+export const update_temple_assets_items = (assetsId, itemId) => `api/admin/update-items-to-pooja-title/${assetsId}/${itemId}`;
 
 //? Live Link
 export const get_temple_live_link = 'api/admin/get_Darshan';

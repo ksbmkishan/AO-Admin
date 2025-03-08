@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
-import { DeleteSvg } from "../../../../assets/svg/index.js";
+import { DeleteSvg, EditSvg } from "../../../../assets/svg/index.js";
 import DownloadIcon from '@mui/icons-material/Download';
 import { Color } from "../../../../assets/colors/index.js";
 import { api_urls } from "../../../../utils/api-urls/index.js";
@@ -31,6 +31,7 @@ const Items = () => {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >
                 <div onClick={() => dispatch(TempleActions?.deleteTempleAssetsItems({ assetsId, itemId: row?._id }))} style={{ cursor: "pointer" }}><DeleteSvg /></div>
+                <div onClick={() => navigate(`/temple/assets/items/add-items`, { state: { assetsId, stateData: row,update: `update` } })} style={{ cursor: "pointer" }}><EditSvg /></div>
             </div >,
         },
     ];

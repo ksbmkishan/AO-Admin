@@ -3,23 +3,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Avatar, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Color } from "../../../../../assets/colors";
-import { img_url } from "../../../../../utils/api-routes";
+import { api_url, base_url, img_url } from "../../../../../utils/api-routes";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../../utils/regex-pattern";
 import * as TempleActions from '../../../../../redux/actions/templeAction';
 import { UploadImageSvg } from "../../../../../assets/svg";
+import { duration } from "moment/moment";
 
 const AddItems = ({ mode }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const assetsId = location.state && location.state.assetsId;
     const stateData = location.state && location.state.stateData;
+    const updateRoute = location.state && location.state.update
+
+    
 
     const dispatch = useDispatch();
     const { templeAssetsData } = useSelector(state => state.templeReducer);
 
-    const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: assetsId, title: stateData ? stateData?.title : '', price: stateData ? stateData?.price : '', paymentType: stateData ? stateData?.payment : '' });
-    const [inputFieldError, setInputFieldError] = useState({ image: '', categoryId: '', title: '', price: '', paymentType: '' });
-    const [image, setImage] = useState({ file: stateData ? img_url + stateData?.image : '', bytes: '' });
+    const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: assetsId, title: stateData ? stateData?.itemName : '', price: stateData ? stateData?.itemPrice : '', paymentType: stateData ? stateData?.payment : '', duration: stateData ? stateData?.duration : '',_id: stateData ? stateData?._id : '' });
+    const [inputFieldError, setInputFieldError] = useState({ image: '', categoryId: '', title: '', price: '', paymentType: '' ,duration:''});
+    const [image, setImage] = useState({ file: stateData ? base_url + stateData?.itemImage : '', bytes: '' });
 
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value })); //* Handle Input Field : Error
@@ -52,7 +56,7 @@ const AddItems = ({ mode }) => {
     //! Handle Validation
     const handleValidation = () => {
         let isValid = true;
-        const { title, price, paymentType } = inputFieldDetail;
+        const { title, price, paymentType,duration } = inputFieldDetail;
         const { file } = image;
 
         if (!title) {
@@ -67,14 +71,14 @@ const AddItems = ({ mode }) => {
             handleInputFieldError("title", "Please Enter Title Less Than 70 Letter")
             isValid = false;
         }
-        if (!price) {
-            handleInputFieldError("price", "Please Enter Price")
-            isValid = false;
-        }
-        if (price <= 0) {
-            handleInputFieldError("price", "Please Enter Valid Price")
-            isValid = false;
-        }
+        // if (!price) {
+        //     handleInputFieldError("price", "Please Enter Price")
+        //     isValid = false;
+        // }
+        // if (price < 0) {
+        //     handleInputFieldError("price", "Please Enter Valid Price")
+        //     isValid = false;
+        // }
         if (price > 100000) {
             handleInputFieldError("price", "Please Enter Valid Price (Max 100000)")
             isValid = false;
@@ -95,15 +99,22 @@ const AddItems = ({ mode }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Items Data :: ", { ...inputFieldDetail })
-        const { title, price, paymentType } = inputFieldDetail;
+        const { title, price, paymentType, duration,_id } = inputFieldDetail;
 
         let formData = new FormData();
-        formData.append("items", JSON.stringify([{ itemName: title, itemPrice: price, payment: paymentType }]));
+        formData.append("items", JSON.stringify([{ itemName: title, itemPrice: price, payment: paymentType, duration: duration }]));
         formData.append("itemImages", image?.bytes);
-
-        const payload = {
-            assetsId, data: formData,
-            onComplete: () => navigate(-1)
+        let payload;
+        if(updateRoute) {
+            payload = {
+                assetsId, data: formData,updateRoute,_id,
+                onComplete: () => navigate(-1)
+            }
+        } else {
+            payload = {
+                assetsId, data: formData,
+                onComplete: () => navigate(-1)
+            }
         }
 
         //! Dispatching API for Creating Items
@@ -182,6 +193,18 @@ const AddItems = ({ mode }) => {
                             error={inputFieldError.price ? true : false}
                             helperText={inputFieldError.price}
                             onFocus={() => handleInputFieldError("price", null)}
+                        />
+                    </Grid>
+
+                    <Grid item lg={6} md={12} sm={12} xs={12} >
+                        <TextField
+                            label={<>Duration (In Sec) <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='duration'
+                            value={inputFieldDetail?.duration}
+                            onChange={handleInputField}
+                            error={inputFieldError.duration ? true : false}
+                            helperText={inputFieldError.duration}
+                            onFocus={() => handleInputFieldError("duration", null)}
                         />
                     </Grid>
 
