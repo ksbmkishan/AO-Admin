@@ -5,15 +5,16 @@ import { Grid, TextField } from "@mui/material";
 import { Color } from "../../../../assets/colors";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
 import * as TempleActions from '../../../../redux/actions/templeAction';
+import moment from "moment";
 
 const AddLiveLink = ({ mode }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const stateData = location.state && location.state.stateData;
-    // console.log("State Data ::: ", stateData);
+    console.log("State Data ::: ", stateData);
 
-    const [inputFieldDetail, setInputFieldDetail] = useState({ templeName: stateData ? stateData?.TempleName : '', description: stateData ? stateData?.Description : '', videoLink: stateData ? stateData?.VideoLink : '', startTime: stateData ? stateData?.fromTimeOfArti : '', endTime: stateData ? stateData?.toTimeOfArti : '' });
+    const [inputFieldDetail, setInputFieldDetail] = useState({ templeName: stateData ? stateData?.TempleName : '', description: stateData ? stateData?.Description : '', videoLink: stateData ? stateData?.VideoLink : '', startTime: stateData ? moment.utc(stateData?.fromTimeOfArti).format("YYYY-MM-DD HH:mm") : '', endTime: stateData ? moment.utc(stateData?.toTimeOfArti).format("YYYY-MM-DD HH:mm") : '' });
     const [inputFieldError, setInputFieldError] = useState({ templeName: '', description: '', videoLink: '', startTime: '', endTime: '', });
 
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
@@ -50,6 +51,11 @@ const AddLiveLink = ({ mode }) => {
         }
         if (!endTime) {
             handleInputFieldError("endTime", "Please Enter End Time")
+            isValid = false;
+        }
+
+        if (startTime >= endTime) {
+            handleInputFieldError("startTime", "Start Time should be less than or equal to End Time")
             isValid = false;
         }
 
@@ -116,7 +122,7 @@ const AddLiveLink = ({ mode }) => {
                     <Grid item lg={6} md={12} sm={12} xs={12} >
                         <TextField
                             label={<>Start Time <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='startTime' type="time"
+                            name='startTime' type="datetime-local"
                             value={inputFieldDetail?.startTime}
                             onChange={handleInputField}
                             error={inputFieldError.startTime ? true : false}
@@ -129,7 +135,7 @@ const AddLiveLink = ({ mode }) => {
                     <Grid item lg={6} md={12} sm={12} xs={12} >
                         <TextField
                             label={<>End Time <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='endTime' type="time"
+                            name='endTime' type="datetime-local"
                             value={inputFieldDetail?.endTime}
                             onChange={handleInputField}
                             error={inputFieldError.endTime ? true : false}

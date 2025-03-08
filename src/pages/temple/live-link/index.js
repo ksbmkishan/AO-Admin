@@ -21,8 +21,8 @@ const LiveLink = () => {
         { name: 'S.No.', selector: row => templeLiveLinkData.indexOf(row) + 1, width: '80px' },
         { name: 'Temple Name', selector: row => row?.TempleName || 'N/A' },
         { name: 'Description', selector: row => row?.Description ? <div onClick={() => dispatch(CommonActions?.openTextModal({ title: 'Description', text: row?.Description }))} style={{ cursor: 'pointer' }}>{row?.Description}</div> : 'N/A' },
-        { name: 'Start Time', selector: row => moment(row?.fromTimeOfArti, "HH:mm")?.format('hh:mm A') || 'N/A' },
-        { name: 'End Time', selector: row => moment(row?.toTimeOfArti, "HH:mm").format("hh:mm A") || 'N/A' },
+        { name: 'Start Time', selector: row => moment.utc(row?.fromTimeOfArti)?.format('DD-MMM-YYYY @ hh:mm A') || 'N/A', width: '200px' },
+        { name: 'End Time', selector: row => moment.utc(row?.toTimeOfArti).format("DD-MMM-YYYY @ hh:mm A") || 'N/A', width: '200px' },
         { name: 'Link', selector: row => row?.VideoLink || 'N/A' },
         { name: 'Created Date', selector: row => moment(row?.createdAt)?.format('DD-MMM-YYYY') || 'N/A' },
         {
