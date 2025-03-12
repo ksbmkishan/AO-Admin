@@ -72,27 +72,27 @@ export const RouteName = [
         name: "Referral",
         icon: <TextSnippetIcon />,
     },
-    {
-        name: "Astro Mall",
-        icon: <LightbulbCircleIcon />,
-        subRoutes: [
-            {
-                path: "/astro-mall/category",
-                name: "Category",
-                icon: <FluorescentIcon />,
-            },
-            {
-                path: "/astro-mall/product",
-                name: "Product",
-                icon: <FluorescentIcon />,
-            },
-            {
-                path: "/astro-mall/order-history",
-                name: "Order History",
-                icon: <FluorescentIcon />,
-            },
-        ],
-    },
+    // {
+    //     name: "Astro Mall",
+    //     icon: <LightbulbCircleIcon />,
+    //     subRoutes: [
+    //         {
+    //             path: "/astro-mall/category",
+    //             name: "Category",
+    //             icon: <FluorescentIcon />,
+    //         },
+    //         {
+    //             path: "/astro-mall/product",
+    //             name: "Product",
+    //             icon: <FluorescentIcon />,
+    //         },
+    //         {
+    //             path: "/astro-mall/order-history",
+    //             name: "Order History",
+    //             icon: <FluorescentIcon />,
+    //         },
+    //     ],
+    // },
     {
         name: "Temple",
         icon: <TempleBuddhistIcon />,
@@ -223,21 +223,21 @@ export const RouteName = [
                 name: "Call History",
                 icon: <CallIcon />,
             },
-            {
-                path: "/history/video-call-history",
-                name: "V.Call History",
-                icon: <RedeemIcon />,
-            },
-            {
-                path: "/history/live-history",
-                name: "Live History",
-                icon: <VideocamIcon />,
-            },
-            {
-                path: "/history/gift-history",
-                name: "Gift History",
-                icon: <RedeemIcon />,
-            },
+            // {
+            //     path: "/history/video-call-history",
+            //     name: "V.Call History",
+            //     icon: <RedeemIcon />,
+            // },
+            // {
+            //     path: "/history/live-history",
+            //     name: "Live History",
+            //     icon: <VideocamIcon />,
+            // },
+            // {
+            //     path: "/history/gift-history",
+            //     name: "Gift History",
+            //     icon: <RedeemIcon />,
+            // },
             {
                 path: "/history/mudra-history",
                 name: "Mudra History",
