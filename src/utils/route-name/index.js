@@ -162,6 +162,27 @@ export const RouteName = [
         icon: <AddLinkIcon />,
     },
     {
+        path: "/testimonial",
+        name: "Testimonial",
+        icon: <AddLinkIcon />,
+    },
+    {
+        name: "Religious",
+        icon: <LightbulbCircleIcon />,
+        subRoutes: [
+            {
+                path: "/religious/category",
+                name: "Category",
+                icon: <FluorescentIcon />,
+            },
+            {
+                path: "/religious/sub-category",
+                name: "Sub-Category",
+                icon: <FluorescentIcon />,
+            }
+        ],
+    },
+    {
         path: "/remedies",
         name: "Remedies",
         icon: <MedicationIcon />,

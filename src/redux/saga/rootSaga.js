@@ -23,6 +23,8 @@ import astropujaSaga from "./astropujaSaga";
 import astroBlogSaga from "./astroBlogSaga";
 import templeSaga from "./templeSaga";
 import liveSaga from "./liveSaga";
+import testimonialSaga from "./testimonialSaga";
+import religiousSaga from "./religiousSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -48,5 +50,7 @@ export default function* rootSaga() {
     astroBlogSaga(),
     templeSaga(),
     liveSaga(),
+    testimonialSaga(),
+    religiousSaga(),
   ]);
 }

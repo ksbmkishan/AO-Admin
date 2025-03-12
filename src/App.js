@@ -132,6 +132,12 @@ import AddHowToUse from "./pages/pages/AddHowToUse";
 import ReceiptSummary from "./pages/reports/ReceiptSummary";
 import SaleSummary from "./pages/reports/SaleSummary";
 import ViewTextModal from "./components/modal/ViewTextModal";
+import Testimonial from "./pages/Testimonial";
+import AddTestimonial from "./pages/Testimonial/add-testimonial";
+import ReligiousCategory from "./pages/religious/category";
+import AddReligiousCategory from "./pages/religious/category/add-category";
+import ReligiouSubcategory from "./pages/religious/subCategory";
+import AddReligiousSubCategory from "./pages/religious/subCategory/add-subCategory";
 
 function App() {
 
@@ -251,6 +257,20 @@ function App() {
           <Route path="/skill" element={<Skill />} />
           <Route path="/skill/add-skill" element={<AddSkill mode="Add" />} />
           <Route path="/skill/edit-skill" element={<AddSkill mode="Edit" />} />
+
+          {/* Testimonial  */}
+          <Route path="/testimonial" element={<Testimonial />} />
+          <Route path="/testimonial/add-testimonial" element={<AddTestimonial mode="Add" />} />
+          <Route path="/testimonial/edit-testimonial" element={<AddTestimonial mode="Edit" />} />
+
+
+          {/* Religious */}
+          <Route path="/religious/category" element={<ReligiousCategory />} />
+          <Route path="/religious/category/add-category" element={<AddReligiousCategory mode={'Add'} />} />
+          <Route path="/religious/category/edit-category" element={<AddReligiousCategory mode={'Edit'} />} />
+          <Route path="/religious/sub-category" element={<ReligiouSubcategory />} />
+          <Route path="/religious/sub-category/add-sub-category" element={<AddReligiousSubCategory mode={'Add'} />} />
+          <Route path="/religious/sub-category/edit-sub-category" element={<AddReligiousSubCategory mode={'Edit'} />} />
 
           {/* Remedies */}
           <Route path="/remedies" element={<Remedies />} />

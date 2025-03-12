@@ -24,6 +24,8 @@ import astropujaReducer from "./astropujaReducer";
 import blogs from "./astroBlog";
 import templeReducer from "./templeReducer";
 import liveReducer from "./liveReducer";
+import testimonialReducer from "./testimonialReducer";
+import religiousReducer from "./religiousReducer";
 
 const rootReducer = combineReducers({
   commonReducer,
@@ -50,6 +52,8 @@ const rootReducer = combineReducers({
   astropujaReducer,
   blogs,
   templeReducer,
+  testimonialReducer,
+  religiousReducer
 });
 
 export default rootReducer;

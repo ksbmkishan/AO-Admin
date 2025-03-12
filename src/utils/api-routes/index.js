@@ -94,6 +94,24 @@ export const create_skill = 'api/admin/skill';
 export const update_skill = 'api/admin/update-skill';
 export const delete_skill = 'api/admin/delete-skill';
 
+//! Testimonial
+export const get_testimonial = 'api/admin/get-all-testimonial';
+export const create_testimonial = 'api/admin/add-testimonial';
+export const update_testimonial = 'api/admin/update-testimonial';
+export const delete_testimonial = 'api/admin/delete-testimonial';
+
+//! Religious
+export const get_religious_category = 'api/admin//get_all_religious_categories';
+export const create_religious_category = 'api/admin/create_religious_category';
+export const update_religious_category = 'api/admin/update_religious_category';
+export const delete_religious_category = 'api/admin/delete_religious_category';
+
+export const get_religious_sub_category = 'api/admin//get_all_religious_subcategories';
+export const create_religious_sub_category = 'api/admin/create_religious_subcategory';
+export const update_religious_sub_category = 'api/admin/update_religious_subcategory';
+export const delete_religious_sub_category = 'api/admin/delete_religious_subcategory';
+
+
 //! Remedies
 export const get_remedies = 'api/admin/view-remedy';
 export const create_remedies = 'api/admin/add-remedy';
