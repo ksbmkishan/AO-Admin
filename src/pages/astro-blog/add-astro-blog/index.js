@@ -15,6 +15,8 @@ const AddAstroblog = ({ mode }) => {
     const dispatch = useDispatch();
     const stateData = location.state?.stateData;
 
+    console.log('state ::: ', stateData)
+
     const [astroblogDetail, setAstroblogDetail] = useState({
         title: stateData ? stateData.title : '',
         created_by: stateData ? stateData.created_by : '',
@@ -25,12 +27,19 @@ const AddAstroblog = ({ mode }) => {
     const [error, setError] = useState('');
     const [description, setDescription] = useState(RichTextEditor.createEmptyValue());
     const [inputFieldError, setInputFieldError] = useState({
-        title: '', created_by: '', category: '', description: '', image: ''
+        title: '', created_by: '', category: '', description: '', image: '', images: ''
     });
     const [image, setImage] = useState({
         file: stateData ? img_url + stateData.image : '',
         bytes: ''
     });
+
+    const [images, setImages] = useState({
+        files: stateData && Array.isArray(stateData.images) ? stateData.images.map(img => img_url + img) : [],
+        bytes: ''
+    });
+
+    console.log('Images :: ', images.bytes)
 
 
     useEffect(() => {
@@ -50,6 +59,7 @@ const AddAstroblog = ({ mode }) => {
     };
 
     const handleImage = (e) => {
+        console.log('adsgas')
         if (e.target.files && e.target.files.length > 0) {
             setImage({
                 file: URL.createObjectURL(e.target.files[0]),
@@ -57,6 +67,16 @@ const AddAstroblog = ({ mode }) => {
             });
         }
         handleInputFieldError("image", null);
+    };
+
+    const handleImageMultiple = (event) => {
+        const files = event.target.files;
+
+        if (files.length > 0) {
+            const newImages = [...images.files, ...Array.from(files).map(file => URL.createObjectURL(file))];
+            const bytesImages = [...images.bytes, ...Array.from(files).map(file => file)];
+            setImages({ files: newImages, bytes: bytesImages });
+        }
     };
 
     const handleDrop = (e) => {
@@ -68,6 +88,17 @@ const AddAstroblog = ({ mode }) => {
             });
         }
         handleInputFieldError("image", null);
+    };
+
+    const handleDropMultiple = (event) => {
+        event.preventDefault();
+        const files = event.target.files;
+        if (files.length > 0) {
+            const newImages = [...images.files, ...Array.from(files).map(file => URL.createObjectURL(file))];
+            const bytesImages = [...images.bytes, ...Array.from(files).map(file => file)];
+
+            setImages({ files: newImages, bytes: bytesImages });
+        }
     };
 
     const handleCategoryChange = (event) => {
@@ -131,6 +162,8 @@ const AddAstroblog = ({ mode }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        console.log('images.bytes ',images.bytes, image.bytes)
+
         if (handleValidation()) {
             const { title, category, created_by } = astroblogDetail;
             const formData = new FormData();
@@ -139,7 +172,19 @@ const AddAstroblog = ({ mode }) => {
             formData.append("blogCategory", 'Category');
             // formData.append("blogCategory", category === 'Others' ? customCategory : category);
             formData.append("description", description.toString('html'));
-            formData.append("image", image.bytes);
+            // ✅ Single Image Append करें
+            if (image.bytes) {
+                formData.append("image", image.bytes);
+            }
+
+            // ✅ Multiple Images Append करें
+            if (images.bytes && images.bytes.length > 0) {
+                images.bytes.forEach((file, index) => {
+                    formData.append(`images`, file);  // ✅ Same key `images` for multiple files
+                });
+            }
+
+            console.log('images files :: ', images.bytes);
 
             if (stateData) {
                 formData.append("blogId", stateData._id);
@@ -180,6 +225,8 @@ const AddAstroblog = ({ mode }) => {
                     </div>
                     {inputFieldError.image && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px" }}>{inputFieldError.image}</div>}
                 </Grid>
+
+
 
                 <Grid item lg={6} md={6} sm={12} xs={12}>
                     <TextField
@@ -258,6 +305,29 @@ const AddAstroblog = ({ mode }) => {
                         onFocus={() => handleInputFieldError("description", null)}
                     />
                     {inputFieldError.description && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "400" }}>{inputFieldError.description}</div>}
+                </Grid>
+
+                <Grid item lg={12} sm={12} md={12} xs={12}>
+                    <div style={{ color: "#000", border: "1px solid #C4C4C4", borderRadius: "3px", padding: "20px" }}>
+                        <label onDragOver={(e) => e.preventDefault()} onDrop={handleDropMultiple} htmlFor="upload-images"
+                            style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px", cursor: "pointer" }}>
+                            {Array.isArray(images.files) && images.files.length > 0 ? (
+                                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
+                                    {images.files.map((img, index) => (
+                                        <Avatar key={index} src={img} style={{ height: '100px', width: '100px', borderRadius: "initial" }} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <>
+                                    <UploadImageSvg h="80" w="80" color="#C4C4C4" />
+                                    <div style={{ fontWeight: "600", fontSize: "18px" }}>Choose Multiple Images to Upload</div>
+                                    <div style={{ fontWeight: "500", fontSize: "16px", color: 'grey' }}>Or Drop Your Images Here</div>
+                                </>
+                            )}
+                        </label>
+                        <input id="upload-images" onChange={handleImageMultiple} hidden accept="images/*" type="file" multiple />
+                    </div>
+                    {inputFieldError.images && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px" }}>{inputFieldError.images}</div>}
                 </Grid>
 
                 <Grid item lg={12} md={12} sm={12} xs={12}>
