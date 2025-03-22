@@ -24,20 +24,16 @@ const OrderHistory = () => {
   const orderHistoryColumns = [
     { name: 'S.No.', selector: row => orderHistoryData.indexOf(row) + 1, width: '80px' },
     { name: 'Customer Name', selector: row => row?.customerId?.customerName || 'N/A' },
-    { name: 'Image', cell: row => <img src={row?.customerId?.image ? img_url + row?.customerId?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
-    { name: 'Status', selector: row => row?.status },
+    { name: 'Invoice Number', selector: row => row?.invoice_number },
+    { name: 'Order Date', selector: row => row?.order_date },
     {
       name: "Change Status",
       cell: (row) => (
         <select value={row?.status} onChange={(e) => dispatch(EcommerceActions.changeOrderStatus({ orderId: row?._id, status: e.target.value }))} style={{ outline: "none", padding: "5px 8px", border: "1px solid #666666", color: "#666666", borderRadius: "5px", fontFamily: "Philosopher" }}>
           <option value="">---Select---</option>
-          <option value={'INITIATED'}>Initiated</option>
-          <option value={'ACCEPTED'}>Accepted</option>
-          <option value={'PACKED'}>Packed</option>
-          <option value={'REJECTED'}>Rejected</option>
-          <option value={'OUT_FOR_DELIVERY'}>Out for delivery</option>
-          <option value={'DELIVERED'}>Delivered</option>
-          <option value={'CANCELLED'}>Cancelled</option>
+          <option value={'Pending'}>Pending</option>
+          <option value={'In-Progress'}>In-Progress</option>
+          <option value={'Complete'}>Complete</option>
         </select>
       ), width: '250px'
     },
@@ -55,12 +51,12 @@ const OrderHistory = () => {
 
   useEffect(() => {
     //! Dispatching API for Getting Order History
-    dispatch(EcommerceActions.getOrderHistory());
+    // dispatch(EcommerceActions.getOrderHistory());
   }, [dispatch]);
 
   return (
     <>
-      {orderHistoryData && <MainDatatable data={orderHistoryData} columns={orderHistoryColumns} title={'Mall Order History'} />}
+      {orderHistoryData && <MainDatatable data={orderHistoryData} columns={orderHistoryColumns} title={'Ecommerce Order History'} />}
 
 
       {/* Product Modal */}

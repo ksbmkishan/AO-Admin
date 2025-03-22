@@ -118,6 +118,7 @@ import EcommerceCategory from "./pages/ecommerce/category";
 import AddEcommerceCategory from "./pages/ecommerce/category/add-category";
 import EcommerceProduct from "./pages/ecommerce/product";
 import AddEcommerceProduct from "./pages/ecommerce/product/add-product";
+import AddEcommerceOrderHistory from "./pages/ecommerce/order-history";
 
 function App() {
 
@@ -240,6 +241,7 @@ function App() {
           <Route path="/ecommerce/product" element={<EcommerceProduct />} />
           <Route path="/ecommerce/product/add-product" element={<AddEcommerceProduct mode={'Add'} />} />
           <Route path="/ecommerce/product/edit-product" element={<AddEcommerceProduct mode={'Edit'} />} />
+          <Route path="/ecommerce/order-history" element={<AddEcommerceOrderHistory />} />
 
           {/* Remedies */}
           <Route path="/remedies" element={<Remedies />} />

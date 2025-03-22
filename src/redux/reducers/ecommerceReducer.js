@@ -3,7 +3,7 @@ import * as actionTypes from "../action-types";
 const initialState = {
     ecommerceCategoryData: [],
     ecommerceProductData: [],
-    orderHistoryData: [],
+    orderHistoryData: [{ id: 1 }],
 };
 
 const ecommerceReducer = (state = initialState, actions) => {
