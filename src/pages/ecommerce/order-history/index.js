@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Dialog, DialogContent, Divider, Grid, Typography } from '@mui/material';
-import { img_url } from '../../../utils/api-routes/index.js';
-import logo from '../../../assets/images/logo.png';
 import { Color } from '../../../assets/colors/index.js';
 import { api_urls } from '../../../utils/api-urls/index.js';
 import { IndianRupee } from '../../../utils/common-function/index.js';
@@ -57,7 +55,6 @@ const OrderHistory = () => {
   return (
     <>
       {orderHistoryData && <MainDatatable data={orderHistoryData} columns={orderHistoryColumns} title={'Ecommerce Order History'} />}
-
 
       {/* Product Modal */}
       <Dialog open={productModal?.isOpen} PaperProps={{ sx: { maxWidth: { xs: '90vw', sm: '50vw' }, minWidth: { xs: '90vw', sm: '50vw' } } }}>
