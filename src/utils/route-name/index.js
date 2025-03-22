@@ -49,7 +49,7 @@ export const RouteName = [
     },
     {
         name: "Ecommerce",
-        icon: <PoojaRouteSvg />,
+        icon: <GiftRouteSvg />,
         subRoutes: [
             {
                 path: "/ecommerce/category",
@@ -70,7 +70,7 @@ export const RouteName = [
     },
     {
         name: "Temple",
-        icon: <OtherRouteSvg />,
+        icon: <PoojaRouteSvg />,
         subRoutes: [
             {
                 path: "/temple/darshan",
@@ -167,16 +167,6 @@ export const RouteName = [
                 icon: <OtherRouteSvg />,
             },
         ],
-    },
-    {
-        path: "/gift",
-        name: "Gift",
-        icon: <GiftRouteSvg />,
-    },
-    {
-        path: "/mudra",
-        name: "Mudra",
-        icon: <OtherRouteSvg />,
     },
     {
         path: "/review",

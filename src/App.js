@@ -59,8 +59,6 @@ import Remedies from "./pages/remedies";
 import AddRemedies from "./pages/remedies/add-remedies";
 
 //! Expertise 
-import Expertise from "./pages/expertise";
-import AddExpertiseNew from "./pages/expertise/add-expertise";
 import MainExpertise from "./pages/expertise/main-expertise";
 import AddMainExpertiseNew from "./pages/expertise/main-expertise/add-main-expertise";
 
@@ -73,15 +71,6 @@ import LiveHistory from "./pages/history/live-history";
 import GiftHistory from "./pages/history/gift-history";
 import MudraHistory from "./pages/history/mudra-history";
 import MudraRequestHistory from "./pages/history/mudra-request-history";
-
-//! Gift 
-import Gift from "./pages/gift";
-import AddGift from "./pages/gift/add-gift";
-
-//! Mudra
-import Mudra from "./pages/mudra"
-import AddMudra from "./pages/mudra/add-mudra"
-import MudraHistroy from "./pages/mudra/mudra-history";
 
 //!Review 
 import Review from "./pages/review";
@@ -270,17 +259,6 @@ function App() {
           <Route path="/main-expertise" element={<MainExpertise />} />
           <Route path="/main-expertise/add-main-expertise" element={<AddMainExpertiseNew mode="Add" />} />
           <Route path="/main-expertise/edit-main-expertise" element={<AddMainExpertiseNew mode="Edit" />} />
-
-          {/* Gift */}
-          <Route path="/gift" element={<Gift />} />
-          <Route path="/gift/add-gift" element={<AddGift mode="Add" />} />
-          <Route path="/gift/edit-gift" element={<AddGift mode="Edit" />} />
-
-          {/* Mudra */}
-          <Route path="/mudra" element={<Mudra />} />
-          <Route path="/mudra/add-mudra" element={<AddMudra mode="Add" />} />
-          <Route path="/mudra/edit-mudra" element={<AddGift mode="Edit" />} />
-          <Route path="/mudra/histroy" element={<MudraHistroy />} />
 
           {/* Review */}
           <Route path="/review" element={<Review />} />
