@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { put, call, takeLeading, delay } from 'redux-saga/effects';
 import * as actionTypes from '../action-types';
-import { api_url, change_order_status, create_ecommerce_category, create_ecommerce_product, delete_ecommerce_category, delete_ecommerce_product, get_all_products, get_ecommerce_category, get_ecommerce_product, get_order_history, update_ecommerce_category, update_ecommerce_product } from '../../utils/api-routes';
+import { api_url, change_order_status, create_ecommerce_category, create_ecommerce_product, delete_ecommerce_category, delete_ecommerce_product, get_ecommerce_category, get_ecommerce_product, get_order_history, update_ecommerce_category, update_ecommerce_product } from '../../utils/api-routes';
 import Swal from "sweetalert2";
 import { Color } from '../../assets/colors';
-import { deleteAPI, putAPI } from '../../utils/api-function';
+import { deleteAPI, getAPI, putAPI } from '../../utils/api-function';
 
 function* getEcommerceCategory() {
     try {
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
-        const { data } = yield call(axios.get, `${api_url + get_ecommerce_category}`);
+        const { data } = yield getAPI(get_ecommerce_category);
         console.log("Get ecommerce Category Saga Response ::: ", data)
 
         if (data?.success) {
@@ -84,12 +84,12 @@ function* deleteEcommerceCategory(action) {
 function* getEcommerceProduct() {
     try {
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
-        const { data } = yield call(axios.post, `${api_url + get_ecommerce_product}`, { categoryId: "66694b268dc54bbd7fbc3743" });
-        // const { data } = yield call(axios.get, `${api_url + get_ecommerce_product}`);
+
+        const { data } = yield getAPI(get_ecommerce_product);
         console.log("Get ecommerce Product Saga Response ::: ", data)
 
         if (data?.success) {
-            yield put({ type: actionTypes.SET_ECOMMERCE_PRODUCT, payload: data?.products });
+            yield put({ type: actionTypes.SET_ECOMMERCE_PRODUCT, payload: data?.data });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
     } catch (error) {
@@ -124,7 +124,7 @@ function* updateEcommerceProduct(action) {
         const { payload } = action;
         console.log("Payload ::: ", payload)
 
-        const { data } = yield call(axios.post, `${api_url + update_ecommerce_product}`, payload?.data);
+        const { data } = yield putAPI(update_ecommerce_product(payload?.id), payload?.data);
         console.log("Update Product Saga Response ::: ", data)
 
         if (data?.success) {
@@ -145,33 +145,17 @@ function* deleteEcommerceProduct(action) {
         const result = yield Swal.fire({ text: `Are You Sure ?`, text: "You Want To Delete!!!", icon: "warning", showCancelButton: true, confirmButtonColor: Color.primary, cancelButtonColor: "grey", confirmButtonText: "Delete", })
 
         if (result.isConfirmed) {
-            const { data } = yield call(axios.post, `${api_url + delete_ecommerce_product}`, payload);
+            const { data } = yield deleteAPI(delete_ecommerce_product(payload?.id));
+
             console.log("Delete Product Saga Response ::: ", data)
             if (data?.success) {
                 Swal.fire({ icon: "success", text: "Deleted Successfully", showConfirmButton: false, timer: 2000, });
-                yield put({ type: actionTypes.GET_ALL_PRODUCTS, payload: null })
+                yield put({ type: actionTypes.GET_ECOMMERCE_PRODUCT, payload: null })
             }
         }
     } catch (error) {
         Swal.fire({ icon: "error", text: "Server Error", text: "Failed To Delete", showConfirmButton: false, timer: 2000, });
         console.log("Delete Product Saga Error ::: ", error?.response?.data)
-    }
-}
-
-// ALL_PRODUCTS
-function* getAllProducts() {
-    try {
-        yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
-        const { data } = yield call(axios.get, `${api_url + get_all_products}`, { categoryId: "66694b268dc54bbd7fbc3743" });
-        console.log("Get ecommerce Product Saga Response ::: ", data)
-
-        if (data?.success) {
-            yield put({ type: actionTypes.SET_ALL_PRODUCTS, payload: data?.products });
-        }
-        yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
-    } catch (error) {
-        yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
-        console.log("Get ecommerce Product Saga Error ::: ", error)
     }
 }
 
@@ -222,7 +206,6 @@ export default function* ecommerceSaga() {
     yield takeLeading(actionTypes?.UPDATE_ECOMMERCE_PRODUCT, updateEcommerceProduct);
     yield takeLeading(actionTypes?.DELETE_ECOMMERCE_PRODUCT, deleteEcommerceProduct);
 
-    yield takeLeading(actionTypes?.GET_ALL_PRODUCTS, getAllProducts);
     yield takeLeading(actionTypes?.GET_ORDER_HISTORY, getOrderHistory);
     yield takeLeading(actionTypes?.CHANGE_ORDER_STATUS, changeOrderStatus);
 }

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { img_url } from "../../../utils/api-routes";
+import { useSelector, useDispatch } from "react-redux";
 import logo from '../../../assets/images/logo.png';
+import { base_url, img_url } from "../../../utils/api-routes";
+import ViewModal from "../../../components/modal/ViewModal.jsx";
 import { EditSvg, DeleteSvg } from "../../../assets/svg/index.js";
 import MainDatatable from "../../../components/common/MainDatatable.jsx";
 import * as EcommerceActions from '../../../redux/actions/ecommerceAction.js';
-import ViewModal from "../../../components/modal/ViewModal.jsx";
+import { Color } from "../../../assets/colors/index.js";
 
 const Product = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { allProductData: ProductData } = useSelector(state => state.ecommerceReducer);
+    const { ecommerceProductData: ProductData } = useSelector(state => state.ecommerceReducer);
 
     const [text, setText] = useState("");
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -24,35 +25,31 @@ const Product = () => {
     //* Category DataTable Columns
     const productColumns = [
         { name: 'S.No.', selector: row => ProductData.indexOf(row) + 1, width: '80px' },
-        { name: 'Title', selector: row => row?.productName },
+        { name: 'Category', selector: row => row?.category?.categoryName },
+        { name: 'name', selector: row => row?.name },
         { name: 'Description', selector: row => row?.description ? <div style={{ cursor: "pointer" }} onClick={() => openModal(row?.description)}>{row.description}</div> : 'N/A' },
-        { name: 'Mrp', selector: row => row?.mrp },
-        { name: 'Offer Price', selector: row => row?.price },
-        // { name: 'Purchase Price', selector: row => row?.purchasePrice},
-        { name: 'Quantity', selector: row => row?.quantity },
-        // { name: 'Inventory', selector: row => row?.inventory},
-        // { name: 'Refund Day', selector: row => row?.refundRequetDay},
-        // { name: 'Manufacture Date', selector: row => row?.manufactureDate ? DayMonthYear(row?.manufactureDate) : 'N/A' },
-        // { name: 'Expiry Date', selector: row => row?.expiryDate ? DayMonthYear(row?.expiryDate) : 'N/A' },
-        { name: 'Image', cell: row => <img src={row?.image ? img_url + row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
+        { name: 'Price', selector: row => row?.price },
+        { name: 'Commission(%)', selector: row => row?.adminCommissionPercentage || 'N/A' },
+        { name: 'Image', cell: row => <img src={row?.image ? base_url + row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
+        { name: 'Bulk Image', cell: row => <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>{row?.bannerImage && row?.bannerImage?.length > 0 && row?.bannerImage?.map((value, index) => <img key={index} src={base_url + value} alt="Profile" style={{ width: '40px', height: '40px', borderRadius: '50%', border: `1px solid ${Color?.primary}` }} />)}</div>, width: '250px', center: true },
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >
-                <div onClick={() => navigate('/astro-mall/product/edit-product', { state: { stateData: row } })} style={{ cursor: "pointer" }}><EditSvg /></div>
-                <div onClick={() => dispatch(EcommerceActions.deleteEcommerceProduct({ productId: row?._id }))} style={{ cursor: "pointer" }}><DeleteSvg /></div>
+                <div onClick={() => navigate('/ecommerce/product/edit-product', { state: { stateData: row } })} style={{ cursor: "pointer" }}><EditSvg /></div>
+                <div onClick={() => dispatch(EcommerceActions.deleteEcommerceProduct({ id: row?._id }))} style={{ cursor: "pointer" }}><DeleteSvg /></div>
             </div>,
             width: "180px"
         },
     ];
 
     useEffect(() => {
-        //! Dispatching API for Getting Category
-        dispatch(EcommerceActions.getAllProducts())
+        //! Dispatching API
+        dispatch(EcommerceActions.getEcommerceProduct())
     }, []);
 
     return (
         <>
-            <MainDatatable data={ProductData} columns={productColumns} title={'Mall Product'} url={'/astro-mall/product/add-product'} />
+            <MainDatatable data={ProductData} columns={productColumns} title={'Ecommerce Product'} url={'/ecommerce/product/add-product'} />
 
             <ViewModal openModal={modalIsOpen} text={text} title={'Description'} handleCloseModal={closeModal} />
         </>

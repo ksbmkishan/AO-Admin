@@ -248,7 +248,7 @@ function App() {
           <Route path="/ecommerce/category" element={<EcommerceCategory />} />
           <Route path="/ecommerce/category/add-category" element={<AddEcommerceCategory mode={'Add'} />} />
           <Route path="/ecommerce/category/edit-category" element={<AddEcommerceCategory mode={'Edit'} />} />
-          <Route path="/ecommerce/product" element={<ecommerceubcategory />} />
+          <Route path="/ecommerce/product" element={<EcommerceProduct />} />
           <Route path="/ecommerce/product/add-product" element={<AddEcommerceProduct mode={'Add'} />} />
           <Route path="/ecommerce/product/edit-product" element={<AddEcommerceProduct mode={'Edit'} />} />
 

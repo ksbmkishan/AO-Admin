@@ -50,18 +50,6 @@ export const deleteEcommerceProduct = (payload) => ({
     payload,
 });
 
-//! All Product Api 
-export const getAllProducts = (payload) => ({
-    type: actionTypes.GET_ALL_PRODUCTS,
-    payload,
-});
-
-export const setAllProducts = (payload) => ({
-    type: actionTypes.SET_ALL_PRODUCTS,
-    payload,
-});
-
-
 export const getOrderHistory = (payload) => ({
     type: actionTypes.GET_ORDER_HISTORY,
     payload,

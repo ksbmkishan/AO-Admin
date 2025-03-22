@@ -175,15 +175,15 @@ export const get_banners = 'admin/get-banners'
 export const change_banner_status = 'api/admin/update_banner_status';
 
 //! Astro-Mall
-export const get_ecommerce_category = 'ecommerce/get_all_categories';
+export const get_ecommerce_category = 'api/ecommerce/get_all_categories';
 export const create_ecommerce_category = 'ecommerce/create_category';
 export const update_ecommerce_category = 'api/ecommerce/update-category';
 export const delete_ecommerce_category = (id) => `api/ecommerce/delete-category/${id}`;
 
-export const get_ecommerce_product = 'ecommerce/get_all_products';
+export const get_ecommerce_product = 'api/ecommerce/get_all_products';
 export const create_ecommerce_product = 'ecommerce/add_product';
-export const update_ecommerce_product = 'ecommerce/update_products';
-export const delete_ecommerce_product = 'ecommerce/delete_product';
+export const update_ecommerce_product = (id) => `api/ecommerce/update_products/${id}`;
+export const delete_ecommerce_product = (id) => `api/ecommerce/delete_products/${id}`;
 
 //! All-Products
 export const get_all_products = 'ecommerce/get_all_products';

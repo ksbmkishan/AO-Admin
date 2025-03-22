@@ -14,23 +14,21 @@ const AddProduct = ({ mode }) => {
     const dispatch = useDispatch();
     const location = useLocation();
     const stateData = location.state && location.state.stateData;
+    console.log(stateData);
     const { ecommerceCategoryData } = useSelector(state => state.ecommerceReducer);
 
-    const [productDetail, setProductDetail] = useState({ categoryId: stateData ? stateData?.categoryId : '', productName: stateData ? stateData?.productName : '', description: stateData ? stateData?.description : '', mrp: stateData ? stateData?.mrp : '', offerPrice: stateData ? stateData?.price : '', purchasePrice: stateData ? stateData?.purchasePrice : '', refundDay: stateData ? stateData?.refundRequetDay : '', stockQuantity: stateData ? stateData?.quantity : '', inventory: stateData ? stateData?.inventory : '', manufactureDate: stateData ? YYYYMMDD(stateData?.manufactureDate) : '', expiryDate: stateData ? YYYYMMDD(stateData?.expiryDate) : '' });
-    const [inputFieldError, setInputFieldError] = useState({ categoryId: '', subCategoryId: '', productName: '', description: '', mrp: '', offerPrice: '', purchasePrice: '', refundDay: '', stockQuantity: '', inventory: '', manufactureDate: '', expiryDate: '', image: '', bulkImage: '' });
-    const [image, setImage] = useState({ file: stateData ? img_url + stateData?.image : '', bytes: '' });
-    // const [bulkImage, setBulkImage] = useState([]); //* Mutliple File 
-    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bannerImages.map(value => { return { file: base_url + value, bytes: '' } }) : []); //* Mutliple File 
+    const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: stateData ? stateData?.category?._id : '', productName: stateData ? stateData?.name : '', description: stateData ? stateData?.description : '', price: stateData ? stateData?.price : '', commission: stateData ? stateData?.adminCommissionPercentage : '' });
+    const [inputFieldError, setInputFieldError] = useState({ categoryId: '', productName: '', description: '', price: '', image: '', bulkImage: '' });
+    const [image, setImage] = useState({ file: stateData ? base_url + stateData?.image : '', bytes: '' });
+    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bannerImage?.map(value => { return { file: base_url + value, bytes: '' } }) : []); //* Mutliple File 
 
     //* Handle Input Field : Error
-    const handleInputFieldError = (input, value) => {
-        setInputFieldError((prev) => ({ ...prev, [input]: value }))
-    }
+    const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value }))
 
     //* Handle Input Field : Data
     const handleInputField = (e) => {
         const { name, value } = e.target;
-        setProductDetail({ ...productDetail, [name]: value });
+        setInputFieldDetail({ ...inputFieldDetail, [name]: value });
     };
 
     //! Handle Image : Normally
@@ -74,9 +72,9 @@ const AddProduct = ({ mode }) => {
     //* Handle Validation
     const handleValidation = () => {
         let isValid = true;
-        const { categoryId, productName, mrp, purchasePrice, offerPrice, refundDay, stockQuantity, inventory, manufactureDate, expiryDate, description } = productDetail;
+        const { categoryId, productName, price, description } = inputFieldDetail;
+
         const { file } = image;
-        console.log({ manufactureDate, expiryDate })
         if (!categoryId) {
             handleInputFieldError("categoryId", "Please Select Category Name")
             isValid = false;
@@ -93,20 +91,8 @@ const AddProduct = ({ mode }) => {
             handleInputFieldError("productName", "Please Enter Product Name Less Than 70 Letter")
             isValid = false;
         }
-        if (!mrp) {
-            handleInputFieldError("mrp", "Please Enter Mrp")
-            isValid = false;
-        }
-        if (!offerPrice) {
-            handleInputFieldError("offerPrice", "Please Enter Offer Price")
-            isValid = false;
-        }
-        if (parseFloat(offerPrice) >= parseFloat(mrp)) {
-            handleInputFieldError("offerPrice", "Please Enter Offer Price Less Than Mrp")
-            isValid = false;
-        }
-        if (!stockQuantity) {
-            handleInputFieldError("stockQuantity", "Please Enter Stock Quantity")
+        if (!price) {
+            handleInputFieldError("price", "Please Enter price")
             isValid = false;
         }
         if (!description) {
@@ -128,29 +114,27 @@ const AddProduct = ({ mode }) => {
     //! Handle Submit - Creating Ecommerce Product
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Product Data :: ", { ...productDetail, image, bulkImage: bulkImage?.map((value) => value?.bytes) })
         const bulkImageArray = bulkImage?.map((value) => value?.bytes);
 
-        const { categoryId, productName, description, mrp, offerPrice, purchasePrice, stockQuantity, inventory, refundDay, manufactureDate, expiryDate } = productDetail;
+        const { categoryId, productName, description, price, commission } = inputFieldDetail;
 
         if (handleValidation()) {
             if (stateData) {
                 let formData = new FormData();
-                formData.append("productId", stateData?._id);
-                formData.append("categoryId", categoryId);
-                formData.append("productName", productName);
+                formData.append("category", categoryId);
+                formData.append("name", productName);
                 formData.append("description", description);
-                formData.append("mrp", mrp);
-                formData.append("price", offerPrice);
-                formData.append("quantity", stockQuantity);
+                formData.append("price", price);
+                formData.append("adminCommissionPercentage", commission);
 
                 formData.append("image", image?.bytes);
                 bulkImageArray.map((value, index) => (
-                    formData.append(`bannerImages`, value)
+                    formData.append(`bannerImage`, value)
                 ))
                 const payload = {
                     data: formData,
-                    onComplete: () => navigate('/astro-mall/product')
+                    id: stateData?._id,
+                    onComplete: () => navigate('/ecommerce/product')
                 }
 
                 //! Dispatching API for Updating Products
@@ -158,21 +142,20 @@ const AddProduct = ({ mode }) => {
 
             } else {
                 let formData = new FormData();
-                formData.append("categoryId", categoryId);
-                formData.append("productName", productName);
+                formData.append("category", categoryId);
+                formData.append("name", productName);
                 formData.append("description", description);
-                formData.append("mrp", mrp);
-                formData.append("price", offerPrice);
-                formData.append("quantity", stockQuantity);
+                formData.append("price", price);
+                formData.append("adminCommissionPercentage", commission);
 
                 formData.append("image", image?.bytes);
                 bulkImageArray.map((value, index) => (
-                    formData.append(`bannerImages`, value)
+                    formData.append(`bannerImage`, value)
                 ))
 
                 const payload = {
                     data: formData,
-                    onComplete: () => navigate('/astro-mall/product')
+                    onComplete: () => navigate('/ecommerce/product')
                 }
 
                 //! Dispatching API for Creating Products
@@ -192,8 +175,8 @@ const AddProduct = ({ mode }) => {
         <>
             <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", fontFamily: 'Philosopher', backgroundColor: "#fff" }}>
-                    <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Mall Product</div>
-                    <div onClick={() => navigate("/astro-mall/product")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
+                    <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Ecommerce Product</div>
+                    <div onClick={() => navigate("/ecommerce/product")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
                 </div>
 
                 <Grid container sx={{ alignItems: "center" }} spacing={3}>
@@ -220,7 +203,7 @@ const AddProduct = ({ mode }) => {
                             <Select
                                 label="Select Category Name * " variant="outlined" fullWidth
                                 name='categoryId'
-                                value={productDetail?.categoryId?._id}
+                                value={inputFieldDetail?.categoryId}
                                 onChange={handleInputField}
                                 error={inputFieldError?.categoryId ? true : false}
                                 onFocus={() => handleInputFieldError("categoryId", null)}
@@ -238,7 +221,7 @@ const AddProduct = ({ mode }) => {
                         <TextField
                             label={<>Product Name <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
                             name='productName'
-                            value={productDetail?.productName}
+                            value={inputFieldDetail?.productName}
                             onChange={handleInputField}
                             error={inputFieldError.productName ? true : false}
                             helperText={inputFieldError.productName}
@@ -248,49 +231,36 @@ const AddProduct = ({ mode }) => {
 
                     <Grid item lg={6} md={6} sm={12} xs={12} >
                         <TextField
-                            label={<>MRP <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='mrp' type="number"
-                            value={productDetail?.mrp}
+                            label={<>Price <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='price' type="number"
+                            value={inputFieldDetail?.price}
                             onChange={handleInputField}
-                            error={inputFieldError.mrp ? true : false}
-                            helperText={inputFieldError.mrp}
-                            onFocus={() => handleInputFieldError("mrp", null)}
+                            error={inputFieldError.price ? true : false}
+                            helperText={inputFieldError.price}
+                            onFocus={() => handleInputFieldError("price", null)}
                             inputProps={{ min: 0 }}
                         />
                     </Grid>
 
-                    <Grid item lg={6} md={6} sm={12} xs={12} >
+                    {inputFieldDetail?.categoryId == "67de7a2dc85bfe89e5cfc012" && <Grid item lg={6} md={6} sm={12} xs={12} >
                         <TextField
-                            label={<>Offer Price <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth type="number"
-                            name='offerPrice'
-                            value={productDetail?.offerPrice}
+                            label={<>Commission <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='commission' type="number"
+                            value={inputFieldDetail?.commission}
                             onChange={handleInputField}
-                            error={inputFieldError.offerPrice ? true : false}
-                            helperText={inputFieldError.offerPrice}
-                            onFocus={() => handleInputFieldError("offerPrice", null)}
+                            error={inputFieldError.commission ? true : false}
+                            helperText={inputFieldError.commission}
+                            onFocus={() => handleInputFieldError("commission", null)}
                             inputProps={{ min: 0 }}
                         />
-                    </Grid>
-
-                    <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Stock Quantity <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='stockQuantity' type="number"
-                            value={productDetail?.stockQuantity}
-                            onChange={handleInputField}
-                            error={inputFieldError.stockQuantity ? true : false}
-                            helperText={inputFieldError.stockQuantity}
-                            onFocus={() => handleInputFieldError("stockQuantity", null)}
-                            inputProps={{ min: 0 }}
-                        />
-                    </Grid>
+                    </Grid>}
 
                     <Grid item lg={12} md={12} sm={12} xs={12} >
                         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                             <label style={{ color: "#000", marginBottom: "#000", fontSize: "14.5px", color: "grey" }}>Description <span style={{ color: "red" }}>*</span></label>
                             <textarea
                                 name='description'
-                                value={productDetail?.description}
+                                value={inputFieldDetail?.description}
                                 onChange={handleInputField}
                                 placeholder="Description"
                                 rows={8}

@@ -7,6 +7,7 @@ import * as EcommerceActions from '../../../../redux/actions/ecommerceAction';
 import { Color } from "../../../../assets/colors";
 import { base_url } from "../../../../utils/api-routes";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
+import Swal from "sweetalert2";
 
 const AddCategory = ({ mode }) => {
     const navigate = useNavigate();
@@ -100,8 +101,12 @@ const AddCategory = ({ mode }) => {
                     onComplete: () => navigate("/ecommerce/category")
                 }
 
-                //! Dispatching API for Creating Category
-                dispatch(EcommerceActions.updateEcommerceCategory(payload))
+                if (title !== 'E_Puja') {
+                    //! Dispatching API for Creating Category
+                    dispatch(EcommerceActions.updateEcommerceCategory(payload))
+                } else {
+                    Swal.fire({ icon: "info", text: "We can't update E-Puja", showConfirmButton: false, timer: 2000, });
+                }
 
             } else {
                 let formData = new FormData()
