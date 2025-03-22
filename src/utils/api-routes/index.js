@@ -1,14 +1,13 @@
 export let base_url, img_url, api_url;
-// https://astrooneapi.ksdelhi.net/\
 
 if (window.location.protocol === 'http:') {
-    base_url = "http://192.168.29.16:5018/";
-    img_url = "http://192.168.29.16:5018/uploads/";
-    api_url = "http://192.168.29.16:5018/api/";
+    base_url = "https://astrooneapi.ksdelhi.net/";
+    img_url = "https://astrooneapi.ksdelhi.net/uploads/";
+    api_url = "https://astrooneapi.ksdelhi.net/api/";
 } else if (window.location.protocol === 'https:') {
-    base_url = "http://192.168.29.16:5018/";
-    img_url = "http://192.168.29.16:5018/uploads/";
-    api_url = "http://192.168.29.16:5018/api/";
+    base_url = "https://astrooneapi.ksdelhi.net/";
+    img_url = "https://astrooneapi.ksdelhi.net/uploads/";
+    api_url = "https://astrooneapi.ksdelhi.net/api/";
 } else {
     console.log('Unknown protocol');
 };
