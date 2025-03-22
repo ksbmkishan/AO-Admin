@@ -345,7 +345,7 @@ const AddAstrologer = ({ dispatch, skillsData, subSkillData, expertiesData, main
         const disallowedTypes = ['application/pdf', 'application/msword'];  // Disallowed file types
         const regex = /^[a-zA-Z\s]+$/;
 
-        if (image?.file.length == 0 || image?.file == 'https://astrooneapi.ksdelhi.net/') {
+        if (image?.file.length == 0 || image?.file == 'http://192.168.29.16:5018/') {
             handleInputFieldError("image", "Please Select a Profile Picture");
             isValid = false;
             handleClickOpenSnack("Please Select a Profile Picture");

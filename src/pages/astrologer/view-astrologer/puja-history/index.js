@@ -3,13 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { EditSvg, DeleteSvg } from "../../../../assets/svg/index.js";
 import MainDatatable from "../../../../components/common/MainDatatable.jsx";
-import * as AstromallActions from '../../../../redux/actions/astromallAction.js';
+import * as EcommerceActions from '../../../../redux/actions/ecommerceAction.js';
 import { DayMonthYear } from "../../../../utils/common-function";
 
 const PujaHistory = ({ astrologerId }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { astromallProductData: pujaHistoryData } = useSelector(state => state.astromallReducer);
+    const { ecommerceProductData: pujaHistoryData } = useSelector(state => state.ecommerceReducer);
 
     //* Order History DataTable Columns
     const pujaHistoryColumns = [
@@ -23,7 +23,7 @@ const PujaHistory = ({ astrologerId }) => {
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center", paddingRight: "15px" }} >
-                <div onClick={() => dispatch(AstromallActions.deleteAstromallProduct({ productId: row?._id }))} style={{ cursor: "pointer" }}><DeleteSvg /></div>
+                <div onClick={() => dispatch(EcommerceActions.deleteEcommerceProduct({ productId: row?._id }))} style={{ cursor: "pointer" }}><DeleteSvg /></div>
             </div >,
             right: true
         },
@@ -31,7 +31,7 @@ const PujaHistory = ({ astrologerId }) => {
 
     useEffect(() => {
         //! Dispatching API for Getting Order History
-        dispatch(AstromallActions.getAstromallProduct())
+        dispatch(EcommerceActions.getEcommerceProduct())
     }, []);
 
     return (

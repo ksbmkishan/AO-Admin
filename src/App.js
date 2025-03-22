@@ -18,7 +18,6 @@ import Customer from "./pages/customer";
 import AddCustomer from "./pages/customer/add-customer";
 import ViewCustomer from "./pages/customer/view-customer";
 
-
 //! LiveDarshan
 import Live from "./pages/liveDarshan";
 import AddLive from "./pages/liveDarshan/add-live";
@@ -31,18 +30,9 @@ import AddBanner from "./pages/banner/add-banner";
 import Recharge from "./pages/recharge";
 import AddRecharge from "./pages/recharge/add-recharge";
 
-
 //! Referral 
 import Referral from "./pages/referral";
 import ShowReferral from "./pages/referral/show-referral";
-// import AddReferral from "./pages/referral/add-referral";
-
-//! Astro-Mall
-import AstroMallCategory from "./pages/astro-mall/category";
-import AstroMallAddCategory from "./pages/astro-mall/category/add-category";
-import AstroMallProduct from "./pages/astro-mall/product";
-import AstroMallAddProduct from "./pages/astro-mall/product/add-product";
-import AstroMallOrderHistory from "./pages/astro-mall/order-history";
 
 //! Temple
 import TempleDarshan from "./pages/temple/darshan";
@@ -54,13 +44,6 @@ import TempleAssetsItems from "./pages/temple/assets/items";
 import TempleAddAssetsItems from "./pages/temple/assets/items/add-items";
 import TempleLiveLink from "./pages/temple/live-link";
 import TempleAddLiveLink from "./pages/temple/live-link/add-live-link";
-
-//! Astro-Puja     
-import Puja from "./pages/astro-puja/puja";
-import AddPuja from "./pages/astro-puja/puja/add-puja";
-import PujaRequest from "./pages/astro-puja/puja-request";
-import PujaBooked from "./pages/astro-puja/puja-booked";
-import PujaHistory from "./pages/astro-puja/puja-history";
 
 //! Notification 
 import CustomerNotification from "./pages/notification/customer-notification";
@@ -134,10 +117,18 @@ import SaleSummary from "./pages/reports/SaleSummary";
 import ViewTextModal from "./components/modal/ViewTextModal";
 import Testimonial from "./pages/Testimonial";
 import AddTestimonial from "./pages/Testimonial/add-testimonial";
+
+//! Religious
 import ReligiousCategory from "./pages/religious/category";
 import AddReligiousCategory from "./pages/religious/category/add-category";
 import ReligiouSubcategory from "./pages/religious/subCategory";
 import AddReligiousSubCategory from "./pages/religious/subCategory/add-subCategory";
+
+//! Ecommerce
+import EcommerceCategory from "./pages/ecommerce/category";
+import AddEcommerceCategory from "./pages/ecommerce/category/add-category";
+import EcommerceProduct from "./pages/ecommerce/product";
+import AddEcommerceProduct from "./pages/ecommerce/product/add-product";
 
 function App() {
 
@@ -211,17 +202,6 @@ function App() {
           <Route path="/referral" element={<Referral />} />
           <Route path="/referral/show-referral" element={<ShowReferral />} />
 
-
-
-          {/* Astro-Mall */}
-          <Route path="/astro-mall/category" element={<AstroMallCategory />} />
-          <Route path="/astro-mall/category/add-category" element={<AstroMallAddCategory />} />
-          <Route path="/astro-mall/product" element={<AstroMallProduct />} />
-          <Route path="/astro-mall/product/add-product" element={<AstroMallAddProduct mode={'Add'} />} />
-          <Route path="/astro-mall/product/edit-product" element={<AstroMallAddProduct mode={'Edit'} />} />
-          <Route path="/astro-mall/order-history" element={<AstroMallOrderHistory />} />
-
-
           {/* Temple */}
           <Route path="/temple/darshan" element={<TempleDarshan />} />
           <Route path="/temple/darshan/:darshanId" element={<TempleViewDarshan />} />
@@ -240,13 +220,6 @@ function App() {
           <Route path="/temple/live-link/add-live-link" element={<TempleAddLiveLink mode={'Add'} />} />
           <Route path="/temple/live-link/edit-live-link" element={<TempleAddLiveLink mode={'Edit'} />} />
 
-          {/* Astro-Puja */}
-          <Route path="/astro-puja/puja" element={<Puja />} />
-          <Route path="/astro-puja/puja/add-puja" element={<AddPuja />} />
-          <Route path="/astro-puja/puja-request" element={<PujaRequest />} />
-          <Route path="/astro-puja/puja-booked" element={<PujaBooked />} />
-          <Route path="/astro-puja/puja-history" element={<PujaHistory />} />
-
           {/* Notification */}
           <Route path="/customer-notification" element={<CustomerNotification />} />
           <Route path="/customer-notification/add-notification" element={<AddNotification type="Customer" />} />
@@ -263,7 +236,6 @@ function App() {
           <Route path="/testimonial/add-testimonial" element={<AddTestimonial mode="Add" />} />
           <Route path="/testimonial/edit-testimonial" element={<AddTestimonial mode="Edit" />} />
 
-
           {/* Religious */}
           <Route path="/religious/category" element={<ReligiousCategory />} />
           <Route path="/religious/category/add-category" element={<AddReligiousCategory mode={'Add'} />} />
@@ -271,6 +243,14 @@ function App() {
           <Route path="/religious/sub-category" element={<ReligiouSubcategory />} />
           <Route path="/religious/sub-category/add-sub-category" element={<AddReligiousSubCategory mode={'Add'} />} />
           <Route path="/religious/sub-category/edit-sub-category" element={<AddReligiousSubCategory mode={'Edit'} />} />
+
+          {/* Ecommerce */}
+          <Route path="/ecommerce/category" element={<EcommerceCategory />} />
+          <Route path="/ecommerce/category/add-category" element={<AddEcommerceCategory mode={'Add'} />} />
+          <Route path="/ecommerce/category/edit-category" element={<AddEcommerceCategory mode={'Edit'} />} />
+          <Route path="/ecommerce/product" element={<ecommerceubcategory />} />
+          <Route path="/ecommerce/product/add-product" element={<AddEcommerceProduct mode={'Add'} />} />
+          <Route path="/ecommerce/product/edit-product" element={<AddEcommerceProduct mode={'Edit'} />} />
 
           {/* Remedies */}
           <Route path="/remedies" element={<Remedies />} />
@@ -286,11 +266,6 @@ function App() {
           <Route path="/history/gift-history" element={<GiftHistory />} />
           <Route path="/history/mudra-history" element={<MudraHistory />} />
           <Route path="/history/mudra-request-history" element={<MudraRequestHistory />} />
-
-          {/* Expertise */}
-          {/* <Route path="/expertise" element={<Expertise />} />
-          <Route path="/expertise/add-expertise" element={<AddExpertiseNew mode="Add" />} />
-          <Route path="/expertise/edit-expertise" element={<AddExpertiseNew mode="Edit" />} /> */}
 
           <Route path="/main-expertise" element={<MainExpertise />} />
           <Route path="/main-expertise/add-main-expertise" element={<AddMainExpertiseNew mode="Add" />} />

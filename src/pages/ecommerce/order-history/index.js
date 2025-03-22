@@ -3,19 +3,19 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Dialog, DialogContent, Divider, Grid, Typography } from '@mui/material';
-import { img_url } from '../../../utils/api-routes';
+import { img_url } from '../../../utils/api-routes/index.js';
 import logo from '../../../assets/images/logo.png';
 import { Color } from '../../../assets/colors/index.js';
 import { api_urls } from '../../../utils/api-urls/index.js';
-import { IndianRupee } from '../../../utils/common-function';
+import { IndianRupee } from '../../../utils/common-function/index.js';
 import { ViewSvg, CrossSvg } from '../../../assets/svg/index.js';
 import MainDatatable from '../../../components/common/MainDatatable.jsx';
-import * as AstromallActions from '../../../redux/actions/astromallAction.js';
+import * as EcommerceActions from '../../../redux/actions/ecommerceAction.js';
 
 const OrderHistory = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const orderHistoryData = useSelector(state => state.astromallReducer.orderHistoryData);
+  const orderHistoryData = useSelector(state => state.ecommerceReducer.orderHistoryData);
 
   const [productModal, setProductModal] = useState({ isOpen: false, productData: [] });
   console.log('ProductModal ::: ', productModal);
@@ -29,7 +29,7 @@ const OrderHistory = () => {
     {
       name: "Change Status",
       cell: (row) => (
-        <select value={row?.status} onChange={(e) => dispatch(AstromallActions.changeOrderStatus({ orderId: row?._id, status: e.target.value }))} style={{ outline: "none", padding: "5px 8px", border: "1px solid #666666", color: "#666666", borderRadius: "5px", fontFamily: "Philosopher" }}>
+        <select value={row?.status} onChange={(e) => dispatch(EcommerceActions.changeOrderStatus({ orderId: row?._id, status: e.target.value }))} style={{ outline: "none", padding: "5px 8px", border: "1px solid #666666", color: "#666666", borderRadius: "5px", fontFamily: "Philosopher" }}>
           <option value="">---Select---</option>
           <option value={'INITIATED'}>Initiated</option>
           <option value={'ACCEPTED'}>Accepted</option>
@@ -55,7 +55,7 @@ const OrderHistory = () => {
 
   useEffect(() => {
     //! Dispatching API for Getting Order History
-    dispatch(AstromallActions.getOrderHistory());
+    dispatch(EcommerceActions.getOrderHistory());
   }, [dispatch]);
 
   return (

@@ -3,9 +3,9 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Grid, TextField, Avatar } from "@mui/material";
 import { UploadImageSvg } from "../../../../assets/svg";
-import * as AstromallActions from '../../../../redux/actions/astromallAction';
+import * as EcommerceActions from '../../../../redux/actions/ecommerceAction';
 import { Color } from "../../../../assets/colors";
-import { img_url } from "../../../../utils/api-routes";
+import { base_url } from "../../../../utils/api-routes";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
 
 const AddCategory = ({ mode }) => {
@@ -18,7 +18,7 @@ const AddCategory = ({ mode }) => {
     const [categoryDetail, setCategoryDetail] = useState({ title: stateData ? stateData?.categoryName : '' });
     const [inputFieldError, setInputFieldError] = useState({ title: '', image: '' });
     // const [image, setImage] = useState({ file: '', bytes: '' });
-    const [image, setImage] = useState({ file: stateData ? img_url + stateData?.image : '', bytes: '' });
+    const [image, setImage] = useState({ file: stateData ? base_url + stateData?.image : '', bytes: '' });
 
     //* Handle Input Field : Error
     const handleInputFieldError = (input, value) => {
@@ -92,29 +92,29 @@ const AddCategory = ({ mode }) => {
             if (stateData) {
                 let formData = new FormData()
                 formData.append("categoryId", stateData?._id);
-                formData.append("name", title)
+                formData.append("categoryName", title)
                 formData.append("image", image?.bytes);
 
                 const payload = {
                     data: formData,
-                    onComplete: () => navigate("/astro-mall/category")
+                    onComplete: () => navigate("/ecommerce/category")
                 }
 
                 //! Dispatching API for Creating Category
-                dispatch(AstromallActions.updateAstromallCategory(payload))
+                dispatch(EcommerceActions.updateEcommerceCategory(payload))
 
             } else {
                 let formData = new FormData()
-                formData.append("name", title)
+                formData.append("categoryName", title)
                 formData.append("image", image?.bytes);
 
                 const payload = {
                     data: formData,
-                    onComplete: () => navigate("/astro-mall/category")
+                    onComplete: () => navigate("/ecommerce/category")
                 }
 
                 //! Dispatching API for Creating Category
-                dispatch(AstromallActions.createAstromallCategory(payload))
+                dispatch(EcommerceActions.createEcommerceCategory(payload))
             }
         }
     };
@@ -124,7 +124,7 @@ const AddCategory = ({ mode }) => {
             <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", fontFamily: 'Philosopher', backgroundColor: "#fff" }}>
                     <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Mall Category</div>
-                    <div onClick={() => navigate("/astro-mall/category")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
+                    <div onClick={() => navigate("/ecommerce/category")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
                 </div>
 
                 <Grid container sx={{ alignItems: "center" }} spacing={3}>

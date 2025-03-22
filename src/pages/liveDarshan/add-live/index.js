@@ -67,7 +67,7 @@ const handleImage = (e) => {
     };
 
     try {
-      const response = await fetch("https://astrooneapi.ksdelhi.net/api/admin/add_Darshan", {
+      const response = await fetch("http://192.168.29.16:5018/api/admin/add_Darshan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

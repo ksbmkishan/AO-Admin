@@ -19,8 +19,7 @@ import recharge from "./recharge";
 import gift from "./gift";
 import pages from "./pages";
 import appAstrokunj from "./appAstrokunj";
-import astromallReducer from "./astromallReducer";
-import astropujaReducer from "./astropujaReducer";
+import ecommerceReducer from "./ecommerceReducer";
 import blogs from "./astroBlog";
 import templeReducer from "./templeReducer";
 import liveReducer from "./liveReducer";
@@ -48,8 +47,7 @@ const rootReducer = combineReducers({
   gift,
   pages,
   appAstrokunj,
-  astromallReducer,
-  astropujaReducer,
+  ecommerceReducer,
   blogs,
   templeReducer,
   testimonialReducer,

@@ -5,13 +5,13 @@ import { img_url } from "../../../utils/api-routes";
 import logo from '../../../assets/images/logo.png';
 import { EditSvg, DeleteSvg } from "../../../assets/svg/index.js";
 import MainDatatable from "../../../components/common/MainDatatable.jsx";
-import * as AstromallActions from '../../../redux/actions/astromallAction.js';
+import * as EcommerceActions from '../../../redux/actions/ecommerceAction.js';
 import ViewModal from "../../../components/modal/ViewModal.jsx";
 
 const Product = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { allProductData: ProductData } = useSelector(state => state.astromallReducer);
+    const { allProductData: ProductData } = useSelector(state => state.ecommerceReducer);
 
     const [text, setText] = useState("");
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -39,7 +39,7 @@ const Product = () => {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >
                 <div onClick={() => navigate('/astro-mall/product/edit-product', { state: { stateData: row } })} style={{ cursor: "pointer" }}><EditSvg /></div>
-                <div onClick={() => dispatch(AstromallActions.deleteAstromallProduct({ productId: row?._id }))} style={{ cursor: "pointer" }}><DeleteSvg /></div>
+                <div onClick={() => dispatch(EcommerceActions.deleteEcommerceProduct({ productId: row?._id }))} style={{ cursor: "pointer" }}><DeleteSvg /></div>
             </div>,
             width: "180px"
         },
@@ -47,7 +47,7 @@ const Product = () => {
 
     useEffect(() => {
         //! Dispatching API for Getting Category
-        dispatch(AstromallActions.getAllProducts())
+        dispatch(EcommerceActions.getAllProducts())
     }, []);
 
     return (

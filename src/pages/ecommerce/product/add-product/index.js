@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Grid, TextField, MenuItem, FormControl, InputLabel, Select, Button, Avatar, Dialog, DialogContent, FormControlLabel, Checkbox } from "@mui/material";
-import { api_url, base_url, img_url } from "../../../../utils/api-routes";
-import { CrossSvg, UploadImageSvg } from "../../../../assets/svg";
-import * as AstromallActions from '../../../../redux/actions/astromallAction';
-import { HideDateFromCurrent, YYYYMMDD } from "../../../../utils/common-function";
+import { Grid, TextField, MenuItem, FormControl, InputLabel, Select, Avatar } from "@mui/material";
 import { Color } from "../../../../assets/colors";
+import { YYYYMMDD } from "../../../../utils/common-function";
+import { base_url, img_url } from "../../../../utils/api-routes";
+import { CrossSvg, UploadImageSvg } from "../../../../assets/svg";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
+import * as EcommerceActions from '../../../../redux/actions/ecommerceAction';
 
 const AddProduct = ({ mode }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const stateData = location.state && location.state.stateData;
-    const { astromallCategoryData } = useSelector(state => state.astromallReducer);
+    const { ecommerceCategoryData } = useSelector(state => state.ecommerceReducer);
 
     const [productDetail, setProductDetail] = useState({ categoryId: stateData ? stateData?.categoryId : '', productName: stateData ? stateData?.productName : '', description: stateData ? stateData?.description : '', mrp: stateData ? stateData?.mrp : '', offerPrice: stateData ? stateData?.price : '', purchasePrice: stateData ? stateData?.purchasePrice : '', refundDay: stateData ? stateData?.refundRequetDay : '', stockQuantity: stateData ? stateData?.quantity : '', inventory: stateData ? stateData?.inventory : '', manufactureDate: stateData ? YYYYMMDD(stateData?.manufactureDate) : '', expiryDate: stateData ? YYYYMMDD(stateData?.expiryDate) : '' });
     const [inputFieldError, setInputFieldError] = useState({ categoryId: '', subCategoryId: '', productName: '', description: '', mrp: '', offerPrice: '', purchasePrice: '', refundDay: '', stockQuantity: '', inventory: '', manufactureDate: '', expiryDate: '', image: '', bulkImage: '' });
@@ -105,34 +105,10 @@ const AddProduct = ({ mode }) => {
             handleInputFieldError("offerPrice", "Please Enter Offer Price Less Than Mrp")
             isValid = false;
         }
-        // if (!purchasePrice) {
-        //     handleInputFieldError("purchasePrice", "Please Enter Purchase Price")
-        //     isValid = false;
-        // }
-        // if (!refundDay) {
-        //     handleInputFieldError("refundDay", "Please Enter Refund Day")
-        //     isValid = false;
-        // }
         if (!stockQuantity) {
             handleInputFieldError("stockQuantity", "Please Enter Stock Quantity")
             isValid = false;
         }
-        // if (!inventory) {
-        //     handleInputFieldError("inventory", "Please Enter Inventory")
-        //     isValid = false;
-        // }
-        // if (!manufactureDate) {
-        //     handleInputFieldError("manufactureDate", "Please Enter Manufacture Date")
-        //     isValid = false;
-        // }
-        // if (!expiryDate) {
-        //     handleInputFieldError("expiryDate", "Please Enter Expiry Date")
-        //     isValid = false;
-        // }
-        // if (new Date(expiryDate) <= new Date(manufactureDate)) {
-        //     handleInputFieldError("expiryDate", "Expiry date is greater than the manufacture date")
-        //     isValid = false;
-        // }
         if (!description) {
             handleInputFieldError("description", "Please Enter Description")
             isValid = false;
@@ -166,12 +142,7 @@ const AddProduct = ({ mode }) => {
                 formData.append("description", description);
                 formData.append("mrp", mrp);
                 formData.append("price", offerPrice);
-                // formData.append("purchasePrice", purchasePrice);
                 formData.append("quantity", stockQuantity);
-                // formData.append("inventory", inventory);
-                // formData.append("refundRequetDay", refundDay);
-                // formData.append("manufactureDate", manufactureDate);
-                // formData.append("expiryDate", expiryDate);
 
                 formData.append("image", image?.bytes);
                 bulkImageArray.map((value, index) => (
@@ -183,7 +154,7 @@ const AddProduct = ({ mode }) => {
                 }
 
                 //! Dispatching API for Updating Products
-                dispatch(AstromallActions.updateAstromallProduct(payload))
+                dispatch(EcommerceActions.updateEcommerceProduct(payload))
 
             } else {
                 let formData = new FormData();
@@ -192,12 +163,7 @@ const AddProduct = ({ mode }) => {
                 formData.append("description", description);
                 formData.append("mrp", mrp);
                 formData.append("price", offerPrice);
-                // formData.append("purchasePrice", purchasePrice);
                 formData.append("quantity", stockQuantity);
-                // formData.append("inventory", inventory);
-                // formData.append("refundRequetDay", refundDay);
-                // formData.append("manufactureDate", manufactureDate);
-                // formData.append("expiryDate", expiryDate);
 
                 formData.append("image", image?.bytes);
                 bulkImageArray.map((value, index) => (
@@ -210,7 +176,7 @@ const AddProduct = ({ mode }) => {
                 }
 
                 //! Dispatching API for Creating Products
-                dispatch(AstromallActions.createAstromallProduct(payload))
+                dispatch(EcommerceActions.createEcommerceProduct(payload))
             }
         } else {
             console.log("Validation Error !!!")
@@ -219,7 +185,7 @@ const AddProduct = ({ mode }) => {
 
     useEffect(() => {
         //! Dispatching API for Getting Category
-        dispatch(AstromallActions.getAstromallCategory())
+        dispatch(EcommerceActions.getEcommerceCategory())
     }, []);
 
     return (
@@ -260,7 +226,7 @@ const AddProduct = ({ mode }) => {
                                 onFocus={() => handleInputFieldError("categoryId", null)}
                             >
                                 <MenuItem disabled>---Select Category Name---</MenuItem>
-                                {astromallCategoryData.map((value, index) => {
+                                {ecommerceCategoryData.map((value, index) => {
                                     return <MenuItem key={index} value={value?._id}>{value?.categoryName}</MenuItem>
                                 })}
                             </Select>
@@ -306,32 +272,6 @@ const AddProduct = ({ mode }) => {
                         />
                     </Grid>
 
-                    {/* <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Purchase Price <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='purchasePrice' type="number"
-                            value={productDetail?.purchasePrice}
-                            onChange={handleInputField}
-                            error={inputFieldError.purchasePrice ? true : false}
-                            helperText={inputFieldError.purchasePrice}
-                            onFocus={() => handleInputFieldError("purchasePrice", null)}
-                            inputProps={{ min: 0 }}
-                        />
-                    </Grid> */}
-
-                    {/* <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Refund Day</>} variant='outlined' fullWidth
-                            name='refundDay' type="number"
-                            value={productDetail?.refundDay}
-                            onChange={handleInputField}
-                            error={inputFieldError.refundDay ? true : false}
-                            helperText={inputFieldError.refundDay}
-                            onFocus={() => handleInputFieldError("refundDay", null)}
-                            inputProps={{ min: 0 }}
-                        />
-                    </Grid> */}
-
                     <Grid item lg={6} md={6} sm={12} xs={12} >
                         <TextField
                             label={<>Stock Quantity <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
@@ -344,47 +284,6 @@ const AddProduct = ({ mode }) => {
                             inputProps={{ min: 0 }}
                         />
                     </Grid>
-
-                    {/* <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Inventory</>} variant='outlined' fullWidth
-                            name='inventory' type="number"
-                            value={productDetail?.inventory}
-                            onChange={handleInputField}
-                            error={inputFieldError.inventory ? true : false}
-                            helperText={inputFieldError.inventory}
-                            onFocus={() => handleInputFieldError("inventory", null)}
-                            inputProps={{ min: 0 }}
-                        />
-                    </Grid> */}
-
-                    {/* <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Manufacture Date</>} variant='outlined' fullWidth type="date"
-                            name='manufactureDate'
-                            value={productDetail?.manufactureDate}
-                            onChange={handleInputField}
-                            error={inputFieldError.manufactureDate ? true : false}
-                            helperText={inputFieldError.manufactureDate}
-                            onFocus={() => handleInputFieldError("manufactureDate", null)}
-                            InputLabelProps={{ shrink: true }}
-                            inputProps={{ max: HideDateFromCurrent(0) }}
-                        />
-                    </Grid> */}
-
-                    {/* <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Expiry Date</>} variant='outlined' fullWidth type="date"
-                            name='expiryDate'
-                            value={productDetail?.expiryDate}
-                            onChange={handleInputField}
-                            error={inputFieldError.expiryDate ? true : false}
-                            helperText={inputFieldError.expiryDate}
-                            onFocus={() => handleInputFieldError("expiryDate", null)}
-                            InputLabelProps={{ shrink: true }}
-                            inputProps={{ min: HideDateFromCurrent(0) }}
-                        />
-                    </Grid> */}
 
                     <Grid item lg={12} md={12} sm={12} xs={12} >
                         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>

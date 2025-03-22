@@ -1,320 +1,239 @@
-import GroupsIcon from '@mui/icons-material/Groups';
-import PersonIcon from '@mui/icons-material/Person';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import HistoryIcon from '@mui/icons-material/History';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import CallIcon from '@mui/icons-material/Call';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import FaceRetouchingNaturalIcon from '@mui/icons-material/FaceRetouchingNatural';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
-import AddLinkIcon from '@mui/icons-material/AddLink';
-import MedicationIcon from '@mui/icons-material/Medication';
-import LightbulbCircleIcon from '@mui/icons-material/LightbulbCircle';
-import FluorescentIcon from '@mui/icons-material/Fluorescent';
-import PreviewIcon from '@mui/icons-material/Preview';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import RedeemIcon from '@mui/icons-material/Redeem';
-import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
-import PersonPinIcon from '@mui/icons-material/PersonPin';
-import DescriptionIcon from '@mui/icons-material/Description';
-import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import CampaignIcon from '@mui/icons-material/Campaign';
-import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
-import CategoryIcon from '@mui/icons-material/Category';
-import { FaHome, } from "react-icons/fa";
-import { BiAbacus, BiUser, BiUserPlus } from "react-icons/bi";
+import { AnnouncementRouteSvg, AstrologerRouteSvg, BannerRouteSvg, BlogsRouteSvg, CustomerRouteSvg, GiftRouteSvg, HistoryRouteSvg, LanguageRouteSvg, LiveRouteSvg, MainExpertiesRouteSvg, NotificationRouteSvg, OtherRouteSvg, PoojaRouteSvg, RatingRouteSvg, RechargeRouteSvg, RemediesRouteSvg, SkillRouteSvg } from '../../assets/svg';
 
 export const RouteName = [
     {
         path: "/",
         name: "Dashboard",
-        icon: <FaHome size={24} />,
-    },
-    {
-        name: "Astrologer",
-        icon: <GroupsIcon />,
-        subRoutes: [
-            {
-                path: "/astrologer",
-                name: " List Of Astrologers",
-                icon: <PersonIcon />,
-            },
-            {
-                path: "/astrologer-enquiry",
-                name: "Astrologer Enquiry",
-                icon: <PersonIcon />,
-            },
-            {
-                path: "/withdrawal-request",
-                name: "Withdrawal Request",
-                icon: <PersonIcon />,
-            },
-        ],
+        icon: <OtherRouteSvg />,
     },
     {
         path: "/customer",
         name: "Customer",
-        icon: <PersonPinIcon />,
+        icon: <CustomerRouteSvg />,
     },
     {
-        path: "/banner",
-        name: "Banner",
-        icon: <ViewCarouselIcon />,
-    },
-    {
-        path: "/recharge",
-        name: "Recharge",
-        icon: <TextSnippetIcon />,
-    },
-    {
-        path: "/referral",
-        name: "Referral",
-        icon: <TextSnippetIcon />,
-    },
-    // {
-    //     name: "Astro Mall",
-    //     icon: <LightbulbCircleIcon />,
-    //     subRoutes: [
-    //         {
-    //             path: "/astro-mall/category",
-    //             name: "Category",
-    //             icon: <FluorescentIcon />,
-    //         },
-    //         {
-    //             path: "/astro-mall/product",
-    //             name: "Product",
-    //             icon: <FluorescentIcon />,
-    //         },
-    //         {
-    //             path: "/astro-mall/order-history",
-    //             name: "Order History",
-    //             icon: <FluorescentIcon />,
-    //         },
-    //     ],
-    // },
-    {
-        name: "Temple",
-        icon: <TempleBuddhistIcon />,
+        name: "Astrologer",
+        icon: <AstrologerRouteSvg />,
         subRoutes: [
             {
-                path: "/temple/darshan",
-                name: "Darshan",
-                icon: <FluorescentIcon />,
+                path: "/astrologer",
+                name: " List Of Astrologers",
+                icon: <OtherRouteSvg />,
             },
             {
-                path: "/temple/assets",
-                name: "Assets",
-                icon: <FluorescentIcon />,
+                path: "/astrologer-enquiry",
+                name: "Astrologer Enquiry",
+                icon: <OtherRouteSvg />,
             },
             {
-                path: "/temple/live-link",
-                name: "Live Link",
-                icon: <FluorescentIcon />,
+                path: "/withdrawal-request",
+                name: "Withdrawal Request",
+                icon: <OtherRouteSvg />,
             },
         ],
     },
     {
-        name: "Astro Puja",
-        icon: <LightbulbCircleIcon />,
+        path: "/banner",
+        name: "Banner",
+        icon: <BannerRouteSvg />,
+    },
+    {
+        path: "/recharge",
+        name: "Recharge",
+        icon: <RechargeRouteSvg />,
+    },
+    {
+        path: "/referral",
+        name: "Referral",
+        icon: <OtherRouteSvg />,
+    },
+    {
+        name: "Ecommerce",
+        icon: <PoojaRouteSvg />,
         subRoutes: [
             {
-                path: "/astro-puja/puja",
-                name: "Puja",
-                icon: <FluorescentIcon />,
+                path: "/ecommerce/category",
+                name: "Category",
+                icon: <OtherRouteSvg />,
             },
             {
-                path: "/astro-puja/puja-request",
-                name: "Puja Request",
-                icon: <FluorescentIcon />,
+                path: "/ecommerce/product",
+                name: "Product",
+                icon: <OtherRouteSvg />,
             },
             {
-                path: "/astro-puja/puja-booked",
-                name: "Puja Booked",
-                icon: <FluorescentIcon />,
+                path: "/ecommerce/order-history",
+                name: "Order History",
+                icon: <OtherRouteSvg />,
+            },
+        ],
+    },
+    {
+        name: "Temple",
+        icon: <OtherRouteSvg />,
+        subRoutes: [
+            {
+                path: "/temple/darshan",
+                name: "Darshan",
+                icon: <OtherRouteSvg />,
             },
             {
-                path: "/astro-puja/puja-history",
-                name: "Puja History",
-                icon: <FluorescentIcon />,
+                path: "/temple/assets",
+                name: "Assets",
+                icon: <OtherRouteSvg />,
+            },
+            {
+                path: "/temple/live-link",
+                name: "Live Link",
+                icon: <OtherRouteSvg />,
             },
         ],
     },
     {
         name: "Notification",
-        icon: <NotificationsNoneIcon />,
+        icon: <NotificationRouteSvg />,
         subRoutes: [
             {
                 path: "/customer-notification",
                 name: "Customer Notification",
-                icon: <FaceRetouchingNaturalIcon />,
+                icon: <OtherRouteSvg />,
             },
             {
                 path: "/astrologer-notification",
                 name: "Astrologer Notification",
-                icon: <AcUnitIcon />,
+                icon: <OtherRouteSvg />,
             },
         ],
     },
     {
         path: "/skill",
         name: "Skill",
-        icon: <AddLinkIcon />,
-    },
-    {
-        path: "/testimonial",
-        name: "Testimonial",
-        icon: <AddLinkIcon />,
-    },
-    {
-        name: "Religious",
-        icon: <LightbulbCircleIcon />,
-        subRoutes: [
-            {
-                path: "/religious/category",
-                name: "Category",
-                icon: <FluorescentIcon />,
-            },
-            {
-                path: "/religious/sub-category",
-                name: "Sub-Category",
-                icon: <FluorescentIcon />,
-            }
-        ],
+        icon: <SkillRouteSvg />,
     },
     {
         path: "/remedies",
         name: "Remedies",
-        icon: <MedicationIcon />,
+        icon: <RemediesRouteSvg />,
     },
     {
         path: "/main-expertise",
         name: "Main Expertise",
-        icon: <FluorescentIcon />,
+        icon: <MainExpertiesRouteSvg />,
     },
-    // {
-    //   name: "Expertise",
-    //   icon: <LightbulbCircleIcon />,
-    //   subRoutes: [
-    //     {
-    //       path: "/expertise",
-    //       name: "Expertise",
-    //       icon: <FluorescentIcon />,
-    //     },
-    //     {
-    //       path: "/main-expertise",
-    //       name: "Main Expertise",
-    //       icon: <FluorescentIcon />,
-    //     }
-    //   ],
-    // },
+    {
+        path: "/testimonial",
+        name: "Testimonial",
+        icon: <OtherRouteSvg />,
+    },
+    {
+        name: "Religious",
+        icon: <OtherRouteSvg />,
+        subRoutes: [
+            {
+                path: "/religious/category",
+                name: "Category",
+                icon: <OtherRouteSvg />,
+            },
+            {
+                path: "/religious/sub-category",
+                name: "Sub-Category",
+                icon: <OtherRouteSvg />,
+            }
+        ],
+    },
     {
         path: "/history",
         name: "History",
-        icon: <HistoryIcon />,
+        icon: <HistoryRouteSvg />,
         subRoutes: [
             {
                 path: "/history/chat-history",
                 name: "Chat History",
-                icon: <ChatBubbleOutlineIcon />,
+                icon: <OtherRouteSvg />,
             },
             {
                 path: "/history/call-history",
                 name: "Call History",
-                icon: <CallIcon />,
+                icon: <OtherRouteSvg />,
             },
-            // {
-            //     path: "/history/video-call-history",
-            //     name: "V.Call History",
-            //     icon: <RedeemIcon />,
-            // },
-            // {
-            //     path: "/history/live-history",
-            //     name: "Live History",
-            //     icon: <VideocamIcon />,
-            // },
-            // {
-            //     path: "/history/gift-history",
-            //     name: "Gift History",
-            //     icon: <RedeemIcon />,
-            // },
             {
                 path: "/history/mudra-history",
                 name: "Mudra History",
-                icon: <RedeemIcon />,
+                icon: <OtherRouteSvg />,
             },
             {
                 path: "/history/mudra-request-history",
                 name: "Mudra Request History",
-                icon: <RedeemIcon />,
+                icon: <OtherRouteSvg />,
             },
         ],
     },
     {
         path: "/gift",
         name: "Gift",
-        icon: <RedeemIcon />,
+        icon: <GiftRouteSvg />,
     },
     {
         path: "/mudra",
         name: "Mudra",
-        icon: <RedeemIcon />,
+        icon: <OtherRouteSvg />,
     },
     {
         path: "/review",
         name: "Review",
-        icon: <PreviewIcon />,
+        icon: <RatingRouteSvg />,
     },
     {
         path: "/astro-blog",
         name: "AstroBlog",
-        icon: <RateReviewIcon />,
+        icon: <BlogsRouteSvg />,
     },
     {
+
         path: "/pages",
         name: "Pages",
-        icon: <DescriptionIcon />,
+        icon: <OtherRouteSvg />,
         subRoutes: [
             {
                 path: "/pages/terms-and-conditions",
                 name: "Terms and Conditions",
-                icon: <BiAbacus />,
+                icon: <OtherRouteSvg />,
             },
             {
                 path: "/pages/privacy-policy",
                 name: "Privacy Policy",
-                icon: <BiAbacus />,
+                icon: <OtherRouteSvg />,
             },
             {
                 path: "/pages/about-us",
                 name: "About Us",
-                icon: <BiAbacus />,
+                icon: <OtherRouteSvg />,
             },
             {
                 path: "/displayHowToUse",
                 name: "How to use- ScreenShots",
-                icon: <BiAbacus />,
+                icon: <OtherRouteSvg />,
             },
             {
                 path: "/displayHowToUseVideos",
                 name: "How to use - Videos",
-                icon: <BiAbacus />,
+                icon: <OtherRouteSvg />,
             },
         ],
     },
     {
         path: "/reports/admin-earning",
         name: "Admin Earning",
-        icon: <ReportGmailerrorredIcon />,
+        icon: <OtherRouteSvg />,
     },
     {
         path: "/language",
         name: "Language",
-        icon: <BiAbacus />,
+        icon: <LanguageRouteSvg />,
     },
     {
         path: "/announcement",
         name: "Announcement",
-        icon: <CampaignIcon fontSize="30px" />,
+        icon: <AnnouncementRouteSvg fontSize="30px" />,
     },
 ];

@@ -18,8 +18,7 @@ import giftSaga from "./giftSaga";
 import pageSaga from "./pageSaga";
 import appAstrokunjSaga from "./appAstrokunjSaga";
 //! New 
-import astromallSaga from "./astromallSaga";
-import astropujaSaga from "./astropujaSaga";
+import ecommerceSaga from "./ecommerceSaga";
 import astroBlogSaga from "./astroBlogSaga";
 import templeSaga from "./templeSaga";
 import liveSaga from "./liveSaga";
@@ -45,8 +44,7 @@ export default function* rootSaga() {
     giftSaga(),
     pageSaga(),
     appAstrokunjSaga(),
-    astromallSaga(),
-    astropujaSaga(),
+    ecommerceSaga(),
     astroBlogSaga(),
     templeSaga(),
     liveSaga(),

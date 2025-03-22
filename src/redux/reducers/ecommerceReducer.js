@@ -1,26 +1,26 @@
 import * as actionTypes from "../action-types";
 
 const initialState = {
-    astromallCategoryData: [],
-    astromallProductData: [],
+    ecommerceCategoryData: [],
+    ecommerceProductData: [],
     allProductData:[],
     orderHistoryData:[],
 };
 
-const astromallReducer = (state = initialState, actions) => {
+const ecommerceReducer = (state = initialState, actions) => {
     const { payload, type } = actions;
 
     switch (type) {
-        case actionTypes.SET_ASTRO_MALL_CATEGORY: {
+        case actionTypes.SET_ECOMMERCE_CATEGORY: {
             return {
                 ...state,
-                astromallCategoryData: payload,
+                ecommerceCategoryData: payload,
             };
         }
-        case actionTypes.SET_ASTRO_MALL_PRODUCT: {
+        case actionTypes.SET_ECOMMERCE_PRODUCT: {
             return {
                 ...state,
-                astromallProductData: payload,
+                ecommerceProductData: payload,
             };
         }
         case actionTypes.SET_ALL_PRODUCTS: {
@@ -42,4 +42,4 @@ const astromallReducer = (state = initialState, actions) => {
     }
 };
 
-export default astromallReducer;
+export default ecommerceReducer;

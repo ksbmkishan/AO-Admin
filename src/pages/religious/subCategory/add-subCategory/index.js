@@ -93,10 +93,10 @@ const AddReligiousSubCategory = ({ mode }) => {
             handleInputFieldError("description", "Please Enter Description")
             isValid = false;
         }
-        if (description?.length > 2000) {
-            handleInputFieldError("description", "Description Should be Less Than 2000")
-            isValid = false;
-        }
+        // if (description?.length > 2000) {
+        //     handleInputFieldError("description", "Description Should be Less Than 2000")
+        //     isValid = false;
+        // }
         if (!file) {
             handleInputFieldError("image", "Please Select Image")
             isValid = false;

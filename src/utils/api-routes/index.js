@@ -1,17 +1,17 @@
 export let base_url, img_url, api_url;
+// https://astrooneapi.ksdelhi.net/\
 
 if (window.location.protocol === 'http:') {
-    base_url = "https://astrooneapi.ksdelhi.net/";
-    img_url = "https://astrooneapi.ksdelhi.net/uploads/";
-    api_url = "https://astrooneapi.ksdelhi.net/api/";
+    base_url = "http://192.168.29.16:5018/";
+    img_url = "http://192.168.29.16:5018/uploads/";
+    api_url = "http://192.168.29.16:5018/api/";
 } else if (window.location.protocol === 'https:') {
-    base_url = "https://astrooneapi.ksdelhi.net/";
-    img_url = "https://astrooneapi.ksdelhi.net/uploads/";
-    api_url = "https://astrooneapi.ksdelhi.net/api/";
+    base_url = "http://192.168.29.16:5018/";
+    img_url = "http://192.168.29.16:5018/uploads/";
+    api_url = "http://192.168.29.16:5018/api/";
 } else {
     console.log('Unknown protocol');
 };
-
 
 //! Dashboard
 export const get_dashboard = 'admin/get_dashboard'
@@ -175,15 +175,15 @@ export const get_banners = 'admin/get-banners'
 export const change_banner_status = 'api/admin/update_banner_status';
 
 //! Astro-Mall
-export const get_astro_mall_category = 'ecommerce/get_product_category';
-export const create_astro_mall_category = 'ecommerce/create_product_category';
-export const update_astro_mall_category = 'ecommerce/update_product_category';
-export const delete_astro_mall_category = 'ecommerce/delete_product_category';
+export const get_ecommerce_category = 'ecommerce/get_all_categories';
+export const create_ecommerce_category = 'ecommerce/create_category';
+export const update_ecommerce_category = 'api/ecommerce/update-category';
+export const delete_ecommerce_category = (id) => `api/ecommerce/delete-category/${id}`;
 
-export const get_astro_mall_product = 'ecommerce/get_products';
-export const create_astro_mall_product = 'ecommerce/create_products';
-export const update_astro_mall_product = 'ecommerce/update_products';
-export const delete_astro_mall_product = 'ecommerce/delete_product';
+export const get_ecommerce_product = 'ecommerce/get_all_products';
+export const create_ecommerce_product = 'ecommerce/add_product';
+export const update_ecommerce_product = 'ecommerce/update_products';
+export const delete_ecommerce_product = 'ecommerce/delete_product';
 
 //! All-Products
 export const get_all_products = 'ecommerce/get_all_products';

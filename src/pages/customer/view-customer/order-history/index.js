@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MainDatatable from "../../../../components/common/MainDatatable.jsx";
 import * as CustomerActions from '../../../../redux/actions/customerAction';
-import * as AstromallActions from '../../../../redux/actions/astromallAction';
+import * as EcommerceActions from '../../../../redux/actions/ecommerceAction';
 import { CrossSvg, ViewSvg } from "../../../../assets/svg/index.js";
 import { Dialog, DialogContent, Grid } from "@mui/material";
 import { Color } from "../../../../assets/colors/index.js";
@@ -36,7 +36,7 @@ const OrderHistory = ({ customerId }) => {
         {
             name: "Change Status",
             cell: (row) => (
-                <select value={row?.status} onChange={(e) => dispatch(AstromallActions.changeOrderStatus({ orderId: row?.orderId, status: e.target.value == 'OUT FOR DELIVERY' ? 'OUT_FOR_DELIVERY' : e.target.value }))} style={{ outline: "none", padding: "5px 8px", border: "1px solid #666666", color: "#666666", borderRadius: "5px", fontFamily: "Philosopher" }}>
+                <select value={row?.status} onChange={(e) => dispatch(EcommerceActions.changeOrderStatus({ orderId: row?.orderId, status: e.target.value == 'OUT FOR DELIVERY' ? 'OUT_FOR_DELIVERY' : e.target.value }))} style={{ outline: "none", padding: "5px 8px", border: "1px solid #666666", color: "#666666", borderRadius: "5px", fontFamily: "Philosopher" }}>
                     <option value={''}>---Select---</option>
                     <option value={'INITIATED'}>Initiated</option>
                     <option value={'ACCEPTED'}>Accepted</option>
