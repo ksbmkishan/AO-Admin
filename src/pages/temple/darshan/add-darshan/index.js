@@ -18,11 +18,27 @@ const AddDarshan = ({ mode }) => {
     const stateData = location.state && location.state.stateData;
     console.log("State Data ::: ", stateData);
 
-    const [inputFieldDetail, setInputFieldDetail] = useState({ title: stateData ? stateData?.title : '', temple: stateData ? stateData?.temple : '', description: stateData ? stateData?.description : '' });
-    const [inputFieldError, setInputFieldError] = useState({ image: '', temple: '', title: '', description: '', bulkImage: '', bulkAudio: '' });
+    const [inputFieldDetail, setInputFieldDetail] = useState({
+        title: stateData ? stateData?.title : '',
+        temple: stateData ? stateData?.temple : '',
+        description: stateData ? stateData?.description : '',
+        aarti: stateData ? stateData?.aarti : '',
+        aartilyrics: stateData ? stateData?.aartilyrics : '',
+        chalisa: stateData ? stateData?.chalisa : '',
+        chalisalyrics: stateData ? stateData?.chalisalyrics : '',
+        mantralink: stateData ? stateData?.mantralink : '',
+        mantralyrics: stateData ? stateData?.mantralyrics : '',
+        bhajan: stateData ? stateData?.bhajan : '',
+        bhjanlyrics: stateData ? stateData?.bhjanlyrics : '',
+    });
+    const [inputFieldError, setInputFieldError] = useState({
+        image: '', temple: '', title: '', description: '', bulkImage: '', bulkAudio: '',
+        aarti: '', aartilyrics: '', chalisa: '', chalisalyrics: '', mantralink: '', mantralyrics: '', bhajan: '', bhjanlyrics: ''
+    });
     const [image, setImage] = useState({ file: stateData ? api_urls + stateData?.image : '', bytes: '' });
     const [bulkImage, setBulkImage] = useState([]);
-    const [bulkAudio, setBulkAudio] = useState([]);
+    const [bulkAudio, setBulkAudio] = useState(stateData ? stateData?.
+        bulkAudioUpload : []);
 
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value })); //* Handle Input Field : Error
@@ -118,7 +134,9 @@ const AddDarshan = ({ mode }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Darshan Data :: ", { ...inputFieldDetail, image, bulkImage, bulkAudio })
-        const { title, description, temple } = inputFieldDetail;
+        const { title, description, temple, aarti, aartilyrics, chalisa, chalisalyrics, mantralink, mantralyrics, bhajan, bhjanlyrics } = inputFieldDetail;
+
+        console.log('Audio ', bulkAudio)
 
         if (handleValidation()) {
 
@@ -128,6 +146,14 @@ const AddDarshan = ({ mode }) => {
                 formData.append("temple", temple);
                 formData.append("title", title);
                 formData.append("description", description);
+                formData.append("aarti", aarti);
+                formData.append("aartilyrics", aartilyrics);
+                formData.append("chalisa",chalisa);
+                formData.append("chalisalyrics",chalisalyrics);
+                formData.append("mantralink",mantralink);
+                formData.append("mantralyrics",mantralyrics);
+                formData.append("bhajan",bhajan);
+                formData.append("bhjanlyrics",bhjanlyrics);
                 formData.append("image", image?.bytes);
                 bulkImage.forEach(image => { formData.append(`bulkImageUpload`, image?.bytes); });
                 bulkAudio.forEach(audio => { formData.append(`bulkAudioUpload`, audio?.bytes); });
@@ -146,6 +172,14 @@ const AddDarshan = ({ mode }) => {
                 formData.append("temple", temple);
                 formData.append("title", title);
                 formData.append("description", description);
+                formData.append("aarti", aarti);
+                formData.append("aartilyrics", aartilyrics);
+                formData.append("chalisa",chalisa);
+                formData.append("chalisalyrics",chalisalyrics);
+                formData.append("mantralink",mantralink);
+                formData.append("mantralyrics",mantralyrics);
+                formData.append("bhajan",bhajan);
+                formData.append("bhjanlyrics",bhjanlyrics);
                 formData.append("image", image?.bytes);
                 bulkImage.forEach(image => { formData.append(`bulkImageUpload`, image?.bytes); });
                 bulkAudio.forEach(audio => { formData.append(`bulkAudioUpload`, audio?.bytes); });
@@ -218,24 +252,24 @@ const AddDarshan = ({ mode }) => {
                     </Grid>
 
                     <Grid item lg={12} md={12} sm={12} xs={12}>
-            <label>
-                Description <span style={{ color: "red" }}>*</span>
-            </label>
-                <ReactQuill
-                    value={inputFieldDetail?.description}
-                    onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, description: value })}
-                    placeholder="Type your description here..."
-                    error={inputFieldError.description ? true : false}
-                    helperText={inputFieldError.description}
-                    onFocus={() => handleInputFieldError("description", null)}
-                />
-            {/* Optionally, display error */}
-            {inputFieldError.description && (
-                <span style={{ color: "red" }}>
-                    {inputFieldError.description}
-                </span>
-            )}
-        </Grid>
+                        <label>
+                            Description <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <ReactQuill
+                            value={inputFieldDetail?.description}
+                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, description: value })}
+                            placeholder="Type your description here..."
+                            error={inputFieldError.description ? true : false}
+                            helperText={inputFieldError.description}
+                            onFocus={() => handleInputFieldError("description", null)}
+                        />
+                        {/* Optionally, display error */}
+                        {inputFieldError.description && (
+                            <span style={{ color: "red" }}>
+                                {inputFieldError.description}
+                            </span>
+                        )}
+                    </Grid>
 
 
                     <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
@@ -262,18 +296,114 @@ const AddDarshan = ({ mode }) => {
                         <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
                             {bulkAudio.length > 0 && bulkAudio?.map((value, index) => (
                                 <div key={index} style={{ position: "relative" }}>
-                                    <audio controls className="h-10" ><source src={value?.file} /></audio>
+                                    <video controls style={{ height: '200px', maxWidth: '300px' }} ><source src={value?.file} /></video>
                                     <div onClick={() => setBulkAudio(bulkAudio.filter((curr, currIndex) => currIndex !== index))} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
                                 </div>
                             ))}
                         </div>
 
-                        <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More Audio(Max File Count : 5)</div>
+                        <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More GIF/Video</div>
                         <label htmlFor="upload-bulk-audio" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
                             <UploadImageSvg h="25" w="25" color="#000" />
                             <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
                         </label>
-                        <input id="upload-bulk-audio" accept="audio/*" multiple type="file" onChange={handleBulkAudio} hidden />
+                        <input id="upload-bulk-audio" accept="video/*" multiple type="file" onChange={handleBulkAudio} hidden />
+                    </Grid>
+
+                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <TextField
+                            label={<>Aarti Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='aarti'
+                            value={inputFieldDetail?.aarti}
+                            onChange={handleInputField}
+                            error={inputFieldError.aarti ? true : false}
+                            helperText={inputFieldError.title}
+                            onFocus={() => handleInputFieldError("aarti", null)}
+                        />
+                    </Grid>
+
+                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <TextField
+                            label={<>Aarti Lyrics Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='aartilyrics'
+                            value={inputFieldDetail?.aartilyrics}
+                            onChange={handleInputField}
+                            error={inputFieldError.aartilyrics ? true : false}
+                            helperText={inputFieldError.title}
+                            onFocus={() => handleInputFieldError("aartilyrics", null)}
+                        />
+                    </Grid>
+
+                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <TextField
+                            label={<>Chalisa Link<span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='chalisa'
+                            value={inputFieldDetail?.chalisa}
+                            onChange={handleInputField}
+                            error={inputFieldError.chalisa ? true : false}
+                            helperText={inputFieldError.chalisa}
+                            onFocus={() => handleInputFieldError("chalisa", null)}
+                        />
+                    </Grid>
+
+                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <TextField
+                            label={<>Chalisa Lyrics Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='chalisalyrics'
+                            value={inputFieldDetail?.chalisalyrics}
+                            onChange={handleInputField}
+                            error={inputFieldError.chalisalyrics ? true : false}
+                            helperText={inputFieldError.chalisalyrics}
+                            onFocus={() => handleInputFieldError("chalisalyrics", null)}
+                        />
+                    </Grid>
+
+                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <TextField
+                            label={<>Mantra Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='mantralink'
+                            value={inputFieldDetail?.mantralink}
+                            onChange={handleInputField}
+                            error={inputFieldError.mantralink ? true : false}
+                            helperText={inputFieldError.mantralink}
+                            onFocus={() => handleInputFieldError("mantralink", null)}
+                        />
+                    </Grid>
+
+                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <TextField
+                            label={<>Mantra Lyrics Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='mantralyrics'
+                            value={inputFieldDetail?.mantralyrics}
+                            onChange={handleInputField}
+                            error={inputFieldError.mantralyrics ? true : false}
+                            helperText={inputFieldError.mantralyrics}
+                            onFocus={() => handleInputFieldError("mantralyrics", null)}
+                        />
+                    </Grid>
+
+                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <TextField
+                            label={<>Bhajan Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='bhajan'
+                            value={inputFieldDetail?.bhajan}
+                            onChange={handleInputField}
+                            error={inputFieldError.bhajan ? true : false}
+                            helperText={inputFieldError.bhajan}
+                            onFocus={() => handleInputFieldError("bhajan", null)}
+                        />
+                    </Grid>
+
+                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <TextField
+                            label={<>Bhajan Lyrics Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            name='bhjanlyrics'
+                            value={inputFieldDetail?.bhjanlyrics}
+                            onChange={handleInputField}
+                            error={inputFieldError.bhjanlyrics ? true : false}
+                            helperText={inputFieldError.bhjanlyrics}
+                            onFocus={() => handleInputFieldError("bhjanlyrics", null)}
+                        />
                     </Grid>
 
                     <Grid item lg={12} md={12} sm={12} xs={12}>
