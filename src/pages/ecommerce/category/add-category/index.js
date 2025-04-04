@@ -100,13 +100,7 @@ const AddCategory = ({ mode }) => {
                     data: formData,
                     onComplete: () => navigate("/ecommerce/category")
                 }
-
-                if (title !== 'E_Puja') {
-                    //! Dispatching API for Creating Category
-                    dispatch(EcommerceActions.updateEcommerceCategory(payload))
-                } else {
-                    Swal.fire({ icon: "info", text: "We can't update E-Puja", showConfirmButton: false, timer: 2000, });
-                }
+                dispatch(EcommerceActions.updateEcommerceCategory(payload))
 
             } else {
                 let formData = new FormData()
