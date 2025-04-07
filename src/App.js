@@ -77,6 +77,8 @@ import Review from "./pages/review";
 import AddReview from "./pages/review/add-review";
 
 //! Astroblog 
+import AstroblogCategory from "./pages/astro-blog/category";
+import AstroblogAddCategory from "./pages/astro-blog/category/add-category";
 import Astroblog from "./pages/astro-blog";
 import AddAstroblog from "./pages/astro-blog/add-astro-blog";
 
@@ -267,10 +269,14 @@ function App() {
           <Route path="/review/add-review" element={<AddReview mode="Add" />} />
           <Route path="/review/edit-review" element={<AddReview mode="Edit" />} />
 
+          <Route path="/astro-blog/category" element={<AstroblogCategory />} />
+          <Route path="/astro-blog/category/add-category" element={<AstroblogAddCategory mode="Add" />} />
+          <Route path="/astro-blog/category/edit-category" element={<AstroblogAddCategory mode="Edit" />} />
+
           {/* Astroblog */}
-          <Route path="/astro-blog" element={<Astroblog />} />
-          <Route path="/astro-blog/add-astro-blog" element={<AddAstroblog mode="Add" />} />
-          <Route path="/astro-blog/edit-astro-blog" element={<AddAstroblog mode="Edit" />} />
+          <Route path="/astro-blog/blog" element={<Astroblog />} />
+          <Route path="/astro-blog/blog/add-blog" element={<AddAstroblog mode="Add" />} />
+          <Route path="/astro-blog/blog/edit-blog" element={<AddAstroblog mode="Edit" />} />
 
           {/* Language */}
           <Route path="/language" element={<Language />} />

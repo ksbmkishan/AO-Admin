@@ -173,10 +173,26 @@ export const RouteName = [
         name: "Review",
         icon: <RatingRouteSvg />,
     },
+    // {
+    //     path: "/astro-blog",
+    //     name: "AstroBlog",
+    //     icon: <BlogsRouteSvg />,
+    // },
     {
-        path: "/astro-blog",
-        name: "AstroBlog",
+        name: "Astroblog",
         icon: <BlogsRouteSvg />,
+        subRoutes: [
+            {
+                path: "/astro-blog/category",
+                name: "Category",
+                icon: <OtherRouteSvg />,
+            },
+            {
+                path: "/astro-blog/blog",
+                name: "Blog",
+                icon: <OtherRouteSvg />,
+            },
+        ],
     },
     {
 

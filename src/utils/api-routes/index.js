@@ -191,6 +191,12 @@ export const get_all_products = 'ecommerce/get_all_products';
 export const get_order_history = 'ecommerce/order_history';
 export const change_order_status = 'ecommerce/change_order_status';
 
+//? Category
+export const get_astro_blog_category = 'api/admin/blog-category-list';
+export const create_astro_blog_category = 'api/admin/add-blog-category';
+export const update_astro_blog_category = 'api/admin/update_blog_category';
+export const delete_astro_blog_category = 'api/admin/delete_blog_category';
+
 //! Astro-Blog
 export const add_astro_blog = 'admin/add-astro-blog';
 export const get_astro_blogs = 'admin/get_astro_blogs';

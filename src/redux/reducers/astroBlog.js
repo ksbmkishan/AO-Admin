@@ -1,6 +1,7 @@
 import * as actionTypes from "../action-types";
 const initialState = {
     blogData: null,
+    astroblogCategoryData: [],
 };
 
 const blogs = (state = initialState, actions) => {
@@ -12,6 +13,8 @@ const blogs = (state = initialState, actions) => {
                 blogData: payload,
             };
         }
+        case actionTypes.SET_ASTRO_BLOG_CATEGORY:
+            return { ...state, astroblogCategoryData: payload };
         default:
             return state;
     }

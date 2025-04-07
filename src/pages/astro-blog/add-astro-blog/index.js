@@ -1,13 +1,13 @@
 import RichTextEditor from 'react-rte';
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Grid, TextField, Avatar } from "@mui/material";
+import { Grid, TextField, Avatar, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { UploadImageSvg } from "../../../assets/svg";
 import { Color } from "../../../assets/colors";
 import { img_url } from "../../../utils/api-routes";
 import { Regex_Accept_Alpha } from "../../../utils/regex-pattern";
-import * as AddAstroBlog from "../../../redux/actions/astroBlogActions";
+import * as AstroblogActions from "../../../redux/actions/astroBlogActions";
 
 const AddAstroblog = ({ mode }) => {
     const navigate = useNavigate();
@@ -15,115 +15,54 @@ const AddAstroblog = ({ mode }) => {
     const dispatch = useDispatch();
     const stateData = location.state?.stateData;
 
-    console.log('state ::: ', stateData)
+    const { astroblogCategoryData } = useSelector(state => state.blogs);
 
-    const [astroblogDetail, setAstroblogDetail] = useState({
-        title: stateData ? stateData.title : '',
-        created_by: stateData ? stateData.created_by : '',
-        category: stateData ? stateData.blogCategory : '',
+    const [inputFieldDetail, setInputFieldDetail] = useState({ title: stateData ? stateData?.title : '', created_by: stateData ? stateData?.created_by : '', categoryId: stateData ? stateData?.blogCategoryId?._id : '' });
+    const [description, setDescription] = useState(stateData ? RichTextEditor.createValueFromString(stateData?.description, 'html') : RichTextEditor.createEmptyValue());
+    const [inputFieldError, setInputFieldError] = useState({ title: '', created_by: '', category: '', description: '', image: '', categoryId: '' });
+    const [image, setImage] = useState({ file: stateData ? img_url + stateData.image : '', bytes: '' });
 
-    });
-    const [customCategory, setCustomCategory] = useState('');
-    const [error, setError] = useState('');
-    const [description, setDescription] = useState(RichTextEditor.createEmptyValue());
-    const [inputFieldError, setInputFieldError] = useState({
-        title: '', created_by: '', category: '', description: '', image: '', images: ''
-    });
-    const [image, setImage] = useState({
-        file: stateData ? img_url + stateData.image : '',
-        bytes: ''
-    });
+    //* Handle Input Field : Error
+    const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value }))
 
-    const [images, setImages] = useState({
-        files: stateData && Array.isArray(stateData.images) ? stateData.images.map(img => img_url + img) : [],
-        bytes: ''
-    });
+    //* Handle Input Field : Data
+    const handleInputField = (event) => setInputFieldDetail({ ...inputFieldDetail, [event?.target?.name]: event?.target?.value });
 
-    console.log('Images :: ', images.bytes)
-
-
-    useEffect(() => {
-        if (stateData) {
-            const data = RichTextEditor.createValueFromString(stateData.description, 'html');
-            setDescription(data);
-        }
-    }, [stateData]);
-
-    const handleInputFieldError = (input, value) => {
-        setInputFieldError(prev => ({ ...prev, [input]: value }));
-    };
-
-    const handleInputField = (e) => {
-        const { name, value } = e.target;
-        setAstroblogDetail(prev => ({ ...prev, [name]: value }));
-    };
-
+    //* Handle Image
     const handleImage = (e) => {
-        console.log('adsgas')
         if (e.target.files && e.target.files.length > 0) {
-            setImage({
-                file: URL.createObjectURL(e.target.files[0]),
-                bytes: e.target.files[0],
-            });
+            if (e.target.files[0]?.size < 1 * 1024 * 1024) {
+                setImage({
+                    file: URL.createObjectURL(e.target.files[0]),
+                    bytes: e.target.files[0],
+                });
+            } else {
+                alert("Please upload images having size less than 1 MB")
+            }
         }
-        handleInputFieldError("image", null);
-    };
 
-    const handleImageMultiple = (event) => {
-        const files = event.target.files;
-
-        if (files.length > 0) {
-            const newImages = [...images.files, ...Array.from(files).map(file => URL.createObjectURL(file))];
-            const bytesImages = [...images.bytes, ...Array.from(files).map(file => file)];
-            setImages({ files: newImages, bytes: bytesImages });
-        }
+        handleInputFieldError("image", null)
     };
 
     const handleDrop = (e) => {
         e.preventDefault();
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            setImage({
-                file: URL.createObjectURL(e.dataTransfer.files[0]),
-                bytes: e.dataTransfer.files[0],
-            });
+            if (e.dataTransfer.files[0]?.size < 1 * 1024 * 1024) {
+                setImage({
+                    file: URL.createObjectURL(e.dataTransfer.files[0]),
+                    bytes: e.dataTransfer.files[0],
+                });
+            } else {
+                alert("Please upload images having size less than 1 MB")
+            }
         }
         handleInputFieldError("image", null);
     };
 
-    const handleDropMultiple = (event) => {
-        event.preventDefault();
-        const files = event.target.files;
-        if (files.length > 0) {
-            const newImages = [...images.files, ...Array.from(files).map(file => URL.createObjectURL(file))];
-            const bytesImages = [...images.bytes, ...Array.from(files).map(file => file)];
-
-            setImages({ files: newImages, bytes: bytesImages });
-        }
-    };
-
-    const handleCategoryChange = (event) => {
-        const value = event.target.value;
-        setAstroblogDetail(prev => ({ ...prev, category: value }));
-        if (value !== 'Others') {
-            setCustomCategory('');
-        }
-    };
-
-    const handleCustomCategoryChange = (event) => {
-        setCustomCategory(event.target.value);
-    };
-
-    const handleBlur = () => {
-        if (astroblogDetail.category === 'Others' && !customCategory) {
-            setError('Custom category is required.');
-        } else {
-            setError('');
-        }
-    };
-
+    //! Handle Validation 
     const handleValidation = () => {
         let isValid = true;
-        const { title, category, created_by } = astroblogDetail;
+        const { title, created_by, categoryId } = inputFieldDetail;
         const { file } = image;
 
         if (!title) {
@@ -140,14 +79,11 @@ const AddAstroblog = ({ mode }) => {
             handleInputFieldError("created_by", "Please Enter Valid Author Name");
             isValid = false;
         }
-        // if (!category) {
-        //     handleInputFieldError("category", "Please Select Category");
-        //     isValid = false;
-        // } else if (category === 'Others' && !customCategory) {
-        //     handleInputFieldError("category", "Custom category is required.");
-        //     isValid = false;
-        // }
-        if (description.toString('html') === "<p><br></p>") {
+        if (!categoryId) {
+            handleInputFieldError("categoryId", "Please Select Category");
+            isValid = false;
+        }
+        if (description?.toString('html') === "<p><br></p>") {
             handleInputFieldError("description", "Please Enter Description");
             isValid = false;
         }
@@ -159,53 +95,40 @@ const AddAstroblog = ({ mode }) => {
         return isValid;
     };
 
+    //! Handle Submit 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        console.log('images.bytes ',images.bytes, image.bytes)
+        console.log({ ...inputFieldDetail, description: description.toString('html') });
 
         if (handleValidation()) {
-            const { title, category, created_by } = astroblogDetail;
+            const { title, created_by, categoryId } = inputFieldDetail;
+            console.log('categories: ' + categoryId);
             const formData = new FormData();
             formData.append("title", title);
             formData.append("created_by", created_by);
-            formData.append("blogCategory", 'Category');
-            // formData.append("blogCategory", category === 'Others' ? customCategory : category);
+            formData.append("blogCategoryId", categoryId);
             formData.append("description", description.toString('html'));
-            // ✅ Single Image Append करें
-            if (image.bytes) {
-                formData.append("image", image.bytes);
-            }
-
-            // ✅ Multiple Images Append करें
-            if (images.bytes && images.bytes.length > 0) {
-                images.bytes.forEach((file, index) => {
-                    formData.append(`images`, file);  // ✅ Same key `images` for multiple files
-                });
-            }
-
-            console.log('images files :: ', images.bytes);
+            formData.append("image", image.bytes);
 
             if (stateData) {
                 formData.append("blogId", stateData._id);
-                dispatch(AddAstroBlog.updateAstroBlog({
-                    data: formData,
-                    onComplete: () => navigate("/astro-blog")
-                }));
+                dispatch(AstroblogActions.updateAstroBlog({ data: formData, onComplete: () => navigate("/astro-blog/blog") }));
             } else {
-                dispatch(AddAstroBlog.addAstroBlog({
-                    data: formData,
-                    onComplete: () => navigate("/astro-blog")
-                }));
+                dispatch(AstroblogActions.addAstroBlog({ data: formData, onComplete: () => navigate("/astro-blog/blog") }));
             }
         }
     };
 
+    useEffect(() => {
+        //! Dispatching API for Getting Category
+        dispatch(AstroblogActions.getAstroblogCategory());
+    }, []);
+
     return (
         <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", fontFamily: 'Philosopher', backgroundColor: "#fff" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", backgroundColor: "#fff" }}>
                 <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black }}>{mode} Astroblog</div>
-                <div onClick={() => navigate("/astro-blog")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
+                <div onClick={() => navigate("/astro-blog/blog")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
             </div>
 
             <Grid container sx={{ alignItems: "center" }} spacing={3}>
@@ -226,20 +149,38 @@ const AddAstroblog = ({ mode }) => {
                     {inputFieldError.image && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px" }}>{inputFieldError.image}</div>}
                 </Grid>
 
-
-
-                <Grid item lg={6} md={6} sm={12} xs={12}>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
                     <TextField
                         label={<>Title <span style={{ color: "red" }}>*</span></>}
                         variant='outlined'
                         fullWidth
                         name='title'
-                        value={astroblogDetail.title}
+                        value={inputFieldDetail.title}
                         onChange={handleInputField}
                         error={!!inputFieldError.title}
                         helperText={inputFieldError.title}
                         onFocus={() => handleInputFieldError("title", null)}
                     />
+                </Grid>
+
+                <Grid item lg={6} md={6} sm={12} xs={12} >
+                    <FormControl fullWidth>
+                        <InputLabel id="select-label">Select Category Name<span style={{ color: "red" }}>* </span></InputLabel>
+                        <Select
+                            label="Select Category Name * " variant="outlined" fullWidth
+                            name='categoryId'
+                            value={inputFieldDetail?.categoryId}
+                            onChange={handleInputField}
+                            error={inputFieldError?.categoryId ? true : false}
+                            onFocus={() => handleInputFieldError("categoryId", null)}
+                        >
+                            <MenuItem disabled>---Select Category Name---</MenuItem>
+                            {astroblogCategoryData.map((value, index) => {
+                                return <MenuItem key={index} value={value?._id}>{value?.blog_category}</MenuItem>
+                            })}
+                        </Select>
+                    </FormControl>
+                    {inputFieldError?.categoryId && <div style={{ color: "#D32F2F", fontSize: "10px", padding: "3px 15px 0 15px" }}>{inputFieldError?.categoryId}</div>}
                 </Grid>
 
                 <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -248,54 +189,13 @@ const AddAstroblog = ({ mode }) => {
                         variant='outlined'
                         fullWidth
                         name='created_by'
-                        value={astroblogDetail.created_by}
+                        value={inputFieldDetail.created_by}
                         onChange={handleInputField}
                         error={!!inputFieldError.created_by}
                         helperText={inputFieldError.created_by}
                         onFocus={() => handleInputFieldError("created_by", null)}
                     />
                 </Grid>
-
-                {/* <Grid item lg={12} md={12} sm={12} xs={12}>
-                    <FormControl variant="outlined" fullWidth error={!!inputFieldError.category || !!error}>
-                        <InputLabel id="select-label">Select Category <span style={{ color: "red" }}>*</span></InputLabel>
-                        <Select
-                            id="category-select"
-                            value={astroblogDetail.category}
-                            onChange={handleCategoryChange}
-                            onBlur={handleBlur}
-                            label="Select Category *"
-                        >
-                            <MenuItem value="" disabled>---Select Category---</MenuItem>
-                            <MenuItem value="Love">Love</MenuItem>
-                            <MenuItem value="Health">Health</MenuItem>
-                            <MenuItem value="Success">Success</MenuItem>
-                            <MenuItem value="Marriage">Marriage</MenuItem>
-                            <MenuItem value="Life">Life</MenuItem>
-                            <MenuItem value="Financial">Financial</MenuItem>
-                            <MenuItem value="Vastu">Vastu</MenuItem>
-                            <MenuItem value="Education">Education</MenuItem>
-                            <MenuItem value="Business">Business</MenuItem>
-                            <MenuItem value="Festival">Festive</MenuItem>
-                            <MenuItem value="Relationship">Relationship</MenuItem>
-                            <MenuItem value="Others">Others</MenuItem>
-                        </Select>
-                        {astroblogDetail.category === 'Others' && (
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                fullWidth
-                                label="Custom Category"
-                                value={customCategory}
-                                onChange={handleCustomCategoryChange}
-                                onBlur={handleBlur}
-                                helperText={error}
-                                error={!!error}
-                            />
-                        )}
-                        {inputFieldError.category && <FormHelperText error>{inputFieldError.category}</FormHelperText>}
-                    </FormControl>
-                </Grid> */}
 
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                     <RichTextEditor
@@ -305,29 +205,6 @@ const AddAstroblog = ({ mode }) => {
                         onFocus={() => handleInputFieldError("description", null)}
                     />
                     {inputFieldError.description && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "400" }}>{inputFieldError.description}</div>}
-                </Grid>
-
-                <Grid item lg={12} sm={12} md={12} xs={12}>
-                    <div style={{ color: "#000", border: "1px solid #C4C4C4", borderRadius: "3px", padding: "20px" }}>
-                        <label onDragOver={(e) => e.preventDefault()} onDrop={handleDropMultiple} htmlFor="upload-images"
-                            style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px", cursor: "pointer" }}>
-                            {Array.isArray(images.files) && images.files.length > 0 ? (
-                                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
-                                    {images.files.map((img, index) => (
-                                        <Avatar key={index} src={img} style={{ height: '100px', width: '100px', borderRadius: "initial" }} />
-                                    ))}
-                                </div>
-                            ) : (
-                                <>
-                                    <UploadImageSvg h="80" w="80" color="#C4C4C4" />
-                                    <div style={{ fontWeight: "600", fontSize: "18px" }}>Choose Multiple Images to Upload</div>
-                                    <div style={{ fontWeight: "500", fontSize: "16px", color: 'grey' }}>Or Drop Your Images Here</div>
-                                </>
-                            )}
-                        </label>
-                        <input id="upload-images" onChange={handleImageMultiple} hidden accept="images/*" type="file" multiple />
-                    </div>
-                    {inputFieldError.images && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px" }}>{inputFieldError.images}</div>}
                 </Grid>
 
                 <Grid item lg={12} md={12} sm={12} xs={12}>
