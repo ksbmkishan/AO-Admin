@@ -87,6 +87,11 @@ export const RouteName = [
                 name: "Live Link",
                 icon: <OtherRouteSvg />,
             },
+            {
+                path: "/temple/vardani-shivalya",
+                name: "Vardani Shivalya",
+                icon: <OtherRouteSvg />,
+            }
         ],
     },
     {

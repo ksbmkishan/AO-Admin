@@ -1,3 +1,4 @@
+import RichTextEditor from 'react-rte';
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,10 +18,11 @@ const AddProduct = ({ mode }) => {
     console.log(stateData);
     const { ecommerceCategoryData } = useSelector(state => state.ecommerceReducer);
 
-    const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: stateData ? stateData?.category?._id : '', productName: stateData ? stateData?.name : '', description: stateData ? stateData?.description : '', price: stateData ? stateData?.price : '', commission: stateData ? stateData?.adminCommissionPercentage : '' });
+    const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: stateData ? stateData?.category?._id : '', productName: stateData ? stateData?.name : '', price: stateData ? stateData?.price : '', commission: stateData ? stateData?.adminCommissionPercentage : '' });
     const [inputFieldError, setInputFieldError] = useState({ categoryId: '', productName: '', description: '', price: '', image: '', bulkImage: '' });
     const [image, setImage] = useState({ file: stateData ? base_url + stateData?.image : '', bytes: '' });
     const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bannerImage?.map(value => { return { file: base_url + value, bytes: '' } }) : []); //* Mutliple File 
+    const [description, setDescription] = useState(stateData ? RichTextEditor.createValueFromString(stateData?.description, 'html') : RichTextEditor.createEmptyValue());
 
     //* Handle Input Field : Error
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value }))
@@ -72,7 +74,7 @@ const AddProduct = ({ mode }) => {
     //* Handle Validation
     const handleValidation = () => {
         let isValid = true;
-        const { categoryId, productName, price, description } = inputFieldDetail;
+        const { categoryId, productName, price } = inputFieldDetail;
 
         const { file } = image;
         if (!categoryId) {
@@ -95,12 +97,8 @@ const AddProduct = ({ mode }) => {
             handleInputFieldError("price", "Please Enter price")
             isValid = false;
         }
-        if (!description) {
-            handleInputFieldError("description", "Please Enter Description")
-            isValid = false;
-        }
-        if (description?.length > 2000) {
-            handleInputFieldError("description", "Description Should be Less Than 2000")
+        if (description?.toString('html') === "<p><br></p>") {
+            handleInputFieldError("description", "Please Enter Description");
             isValid = false;
         }
         if (!file) {
@@ -116,14 +114,14 @@ const AddProduct = ({ mode }) => {
         e.preventDefault();
         const bulkImageArray = bulkImage?.map((value) => value?.bytes);
 
-        const { categoryId, productName, description, price, commission } = inputFieldDetail;
+        const { categoryId, productName, price, commission } = inputFieldDetail;
 
         if (handleValidation()) {
             if (stateData) {
                 let formData = new FormData();
                 formData.append("category", categoryId);
                 formData.append("name", productName);
-                formData.append("description", description);
+                formData.append("description", description.toString('html'));
                 formData.append("price", price);
                 formData.append("adminCommissionPercentage", commission);
 
@@ -144,7 +142,7 @@ const AddProduct = ({ mode }) => {
                 let formData = new FormData();
                 formData.append("category", categoryId);
                 formData.append("name", productName);
-                formData.append("description", description);
+                formData.append("description", description.toString('html'));
                 formData.append("price", price);
                 formData.append("adminCommissionPercentage", commission);
 
@@ -255,7 +253,7 @@ const AddProduct = ({ mode }) => {
                         />
                     </Grid>}
 
-                    <Grid item lg={12} md={12} sm={12} xs={12} >
+                    {/* <Grid item lg={12} md={12} sm={12} xs={12} >
                         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                             <label style={{ color: "#000", marginBottom: "#000", fontSize: "14.5px", color: "grey" }}>Description <span style={{ color: "red" }}>*</span></label>
                             <textarea
@@ -269,6 +267,16 @@ const AddProduct = ({ mode }) => {
                             />
                         </div>
                         {inputFieldError?.description && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px", }}>{inputFieldError?.description}</div>}
+                    </Grid> */}
+
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <RichTextEditor
+                            value={description}
+                            onChange={setDescription}
+                            editorStyle={{ minHeight: '50vh' }}
+                            onFocus={() => handleInputFieldError("description", null)}
+                        />
+                        {inputFieldError.description && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "400" }}>{inputFieldError.description}</div>}
                     </Grid>
 
                     <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>

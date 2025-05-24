@@ -27,7 +27,9 @@ const Product = () => {
         { name: 'S.No.', selector: row => ProductData.indexOf(row) + 1, width: '80px' },
         { name: 'Category', selector: row => row?.category?.categoryName },
         { name: 'name', selector: row => row?.name },
-        { name: 'Description', selector: row => row?.description ? <div style={{ cursor: "pointer" }} onClick={() => openModal(row?.description)}>{row.description}</div> : 'N/A' },
+        { name: 'Description', selector: row => row?.description ? <div style={{ cursor: "pointer" }} onClick={() => openModal(row?.description)} dangerouslySetInnerHTML={{
+            __html:row.description
+        }}></div> : 'N/A' },
         { name: 'Price', selector: row => row?.price },
         { name: 'Commission(%)', selector: row => row?.adminCommissionPercentage || 'N/A' },
         { name: 'Image', cell: row => <img src={row?.image ? base_url + row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
@@ -51,7 +53,7 @@ const Product = () => {
         <>
             <MainDatatable data={ProductData} columns={productColumns} title={'Ecommerce Product'} url={'/ecommerce/product/add-product'} />
 
-            <ViewModal openModal={modalIsOpen} text={text} title={'Description'} handleCloseModal={closeModal} />
+            <ViewModal openModal={modalIsOpen} description={text} title={'Description'} handleCloseModal={closeModal} />
         </>
     );
 }

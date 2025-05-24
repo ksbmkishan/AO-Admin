@@ -342,14 +342,14 @@ function* getMudraHistoryByCustomerId(action) {
 function* getMudraRequestHistoryByCustomerId(action) {
   try {
     const { payload } = action;
-    console.log("Payload ::: ", payload);
+    console.log("Payload ::: TTT ", payload);
 
     yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
-    const { data } = yield postAPI(get_mudra_request_history_by_customer_id(payload?.customerId));
-    console.log("Get Mudra Request History By Customer Id Saga Response ::: ", data);
+    const { data } = yield postAPI(get_mudra_request_history_by_customer_id,payload);
+    console.log("Get Divvya History By Customer Id Saga Response ::: ", data);
 
     if (data?.success) {
-      yield put({ type: actionTypes.SET_MUDRA_REQUEST_HISTORY_BY_CUSTOMER_ID, payload: data?.requests?.reverse() });
+      yield put({ type: actionTypes.SET_MUDRA_REQUEST_HISTORY_BY_CUSTOMER_ID, payload: data?.data });
     } else {
       yield put({ type: actionTypes.SET_MUDRA_REQUEST_HISTORY_BY_CUSTOMER_ID, payload: [] });
     }

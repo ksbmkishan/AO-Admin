@@ -121,6 +121,8 @@ import AddEcommerceCategory from "./pages/ecommerce/category/add-category";
 import EcommerceProduct from "./pages/ecommerce/product";
 import AddEcommerceProduct from "./pages/ecommerce/product/add-product";
 import AddEcommerceOrderHistory from "./pages/ecommerce/order-history";
+import VardaniShivalya from "./pages/temple/vardani_shivalya";
+import AddVardaniShivalya from "./pages/temple/vardani_shivalya/add-vardani-shivalya";
 
 function App() {
 
@@ -211,6 +213,9 @@ function App() {
           <Route path="/temple/live-link" element={<TempleLiveLink />} />
           <Route path="/temple/live-link/add-live-link" element={<TempleAddLiveLink mode={'Add'} />} />
           <Route path="/temple/live-link/edit-live-link" element={<TempleAddLiveLink mode={'Edit'} />} />
+
+          <Route path="/temple/vardani-shivalya" element={<VardaniShivalya />} />
+          <Route path="/temple/vardani-shivalya/add-vardani-shivalya" element={<AddVardaniShivalya mode={'Add'} />} />
 
           {/* Notification */}
           <Route path="/customer-notification" element={<CustomerNotification />} />

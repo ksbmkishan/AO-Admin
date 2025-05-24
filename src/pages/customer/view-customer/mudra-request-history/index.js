@@ -13,20 +13,8 @@ const MudraRequestHistory = ({ customerId }) => {
     //* Data-Table Column
     const columns = [
         { name: 'S.No.', selector: (row) => mudraRequestHistoryByCustomerIdData?.indexOf(row) + 1, width: '80px' },
-        {
-            name: 'Req.User', selector: row => row?.requesterId?.customerName ? <div>
-                <div>{row?.requesterId?.customerName}</div>
-                <div>{row?.requesterId?.phoneNumber}</div>
-            </div> : 'N/A', width: '200px'
-        },
-        {
-            name: 'Res.User', selector: row => row?.responderId?.customerName ? <div>
-                <div>{row?.responderId?.customerName}</div>
-                <div>{row?.responderId?.phoneNumber}</div>
-            </div> : 'N/A', width: '200px'
-        },
-        { name: 'Amount', selector: row => row?.amount && IndianRupee(row?.amount), width: '150px' },
-        { name: 'Reason', selector: row => row?.rejectionMessage ? <div onClick={() => dispatch(CommonActions?.openTextModal({ title: 'Reason', text: row?.rejectionMessage }))} style={{ cursor: 'pointer' }}>{row?.rejectionMessage}</div> : 'N/A' },
+        { name: 'Name', selector: row => row?.name, width: '150px' },
+        { name: 'Amount', selector: row => row?.price && IndianRupee(row?.price), width: '150px' },
         { name: 'Status', selector: row => row?.status && row?.status, width: '150px' },
         { name: 'Date', selector: row => row?.createdAt ? moment(row?.createdAt).format('DD MMMM YYYY') : 'N/A', width: '200px' },
     ];
@@ -38,7 +26,7 @@ const MudraRequestHistory = ({ customerId }) => {
 
     return (
         <>
-            <MainDatatable data={mudraRequestHistoryByCustomerIdData} columns={columns} title={'Mudra Request History'} />
+            <MainDatatable data={mudraRequestHistoryByCustomerIdData} columns={columns} title={'Divya Rashi History'} />
 
         </>
     )

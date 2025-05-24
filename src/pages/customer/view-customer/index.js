@@ -27,7 +27,7 @@ const ViewCustomer = () => {
 
     const { customerName, image, email, phoneNumber, wallet_balance, dateOfBirth, timeOfBirth, address } = customerByIdData;
 
-    const tabHead = ['Profile', 'Chat', 'Call', 'Video Call', 'Live', 'Puja', 'Order', 'Review', 'Mudra', 'Mudra Request'];
+    const tabHead = ['Profile', 'Chat', 'Call', 'Order', 'Review', 'Divya Rashi Request', 'Divya Rashi'];
     const [activeTabHead, setActiveTabHead] = useState(0);
     const handleChange = (event, newValue) => setActiveTabHead(newValue);
 
@@ -83,13 +83,13 @@ const ViewCustomer = () => {
                 {activeTabHead == 0 && <div><Profile customer={stateData} /></div>}
                 {activeTabHead == 1 && <div><ChatHistory customerId={stateData?._id} /></div>}
                 {activeTabHead == 2 && <div><CallHistory customerId={stateData?._id} /></div>}
-                {activeTabHead == 3 && <div><VideoCallHistory customerId={stateData?._id} /></div>}
-                {activeTabHead == 4 && <div><LiveHistory customerId={stateData?._id} /></div>}
-                {activeTabHead == 5 && <div><PujaHistory customerId={stateData?._id} /></div>}
-                {activeTabHead == 6 && <div><OrderHistory customerId={stateData?._id} /></div>}
-                {activeTabHead == 7 && <div><ReviewHistory customerId={stateData?._id} /></div>}
-                {activeTabHead == 8 && <div><MudraHistory customerId={stateData?._id} /></div>}
-                {activeTabHead == 9 && <div><MudraRequestHistory customerId={stateData?._id} /></div>}
+                {/* {activeTabHead == 3 && <div><VideoCallHistory customerId={stateData?._id} /></div>} */}
+                {/* {activeTabHead == 4 && <div><LiveHistory customerId={stateData?._id} /></div>} */}
+                {/* {activeTabHead == 5 && <div><PujaHistory customerId={stateData?._id} /></div>} */}
+                {activeTabHead == 3 && <div><OrderHistory customerId={stateData?._id} /></div>}
+                {activeTabHead == 4 && <div><ReviewHistory customerId={stateData?._id} /></div>}
+                {activeTabHead == 5 && <div><MudraHistory customerId={stateData?._id} /></div>}
+                {activeTabHead == 6 && <div><MudraRequestHistory customerId={stateData?._id} /></div>}
             </div>
         </>
     )

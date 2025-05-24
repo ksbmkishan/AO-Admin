@@ -61,11 +61,11 @@ export const get_call_history_by_customer_id = 'api/admin/customer_chat_history'
 export const get_video_call_history_by_customer_id = 'api/admin/customer_chat_history'; //* type - VideoCall
 export const get_live_history_by_customer_id = 'api/admin/customer_chat_history'; //* type - live_video_call
 export const get_puja_history_by_customer_id = 'api/admin/';
-export const get_order_history_by_customer_id = 'api/customers/getCustomerOrder';
+export const get_order_history_by_customer_id = 'api/ecommerce/productOrderHistory';
 export const get_following_history_by_customer_id = 'api/admin/customer_followed_list';
 export const get_review_history_by_customer_id = 'api/admin/get-customer-review';
 export const get_mudra_history_by_customer_id = (customerId) => `api/customers/gift-wallet-history/${customerId}`;
-export const get_mudra_request_history_by_customer_id = (customerId) => `api/customers/get-wallet-request/${customerId}`;
+export const get_mudra_request_history_by_customer_id = `api/customers/getDivyaRashiWalletHistory`;
 
 //! Astro-Puja
 export const get_puja = 'api/ecommerce/get_puja';
@@ -145,6 +145,8 @@ export const get_temple_darshan_by_id = (id) => `api/admin/getById/${id}`;
 export const create_temple_darshan = 'api/admin/create-darshan';
 export const update_temple_darshan = '';
 export const delete_temple_darshan = (id) => `api/admin/delete-darshan/${id}`;
+export const darshan_Delete_Image = 'api/admin/darshanDeleteImage';
+export const darshan_Delete_Video = 'api/admin/darshanDeleteVideo';
 
 //? Asset Category
 export const get_temple_assets = 'api/admin/get-pooja-items';
@@ -162,6 +164,10 @@ export const get_temple_live_link = 'api/admin/get_Darshan';
 export const create_temple_live_link = 'api/admin/add_Darshan';
 export const update_temple_live_link = (id) => `api/admin/update_Darshan/${id}`;
 export const delete_temple_live_link = (id) => `api/admin/delete_Darshan/${id}`;
+
+//? Temple Mandir
+export const get_temple_mandir = 'api/admin/get-vardani-shivalya';
+export const update_temple_mandir =`api/admin/update-vardani-shivalya`;
 
 //TODO---------------------Working-----------------------TODO// 
 
@@ -189,7 +195,7 @@ export const get_all_products = 'ecommerce/get_all_products';
 
 //! order History
 export const get_order_history = 'ecommerce/order_history';
-export const change_order_status = 'ecommerce/change_order_status';
+export const change_order_status = 'ecommerce/productStatusUpdate';
 
 //? Category
 export const get_astro_blog_category = 'api/admin/blog-category-list';

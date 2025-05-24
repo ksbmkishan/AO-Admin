@@ -11,8 +11,15 @@ import { api_urls } from "../../../../utils/api-urls/index.js";
 
 const OrderHistory = ({ customerId }) => {
     const dispatch = useDispatch();
-    const { orderHistoryByCustomerIdData: orderHistoryByCustomerIdDataRedux } = useSelector(state => state?.customerReducer);
+   
+    useEffect(function () {
+        //! Dispatching API for Getting Order History
+        console.log('customer id')
+        dispatch(CustomerActions.getOrderHistoryByCustomerId({ customerId }));
+    }, []);
 
+    const { orderHistoryByCustomerIdData: orderHistoryByCustomerIdDataRedux } = useSelector(state => state?.customerReducer);
+    console.log(orderHistoryByCustomerIdDataRedux, ' Order History By Customer Id Data :::')
     const orderHistoryByCustomerIdData = orderHistoryByCustomerIdDataRedux?.map(value => {
         if (value.status === "OUT_FOR_DELIVERY") { return { ...value, status: "OUT FOR DELIVERY" }; }
         return value;
@@ -20,7 +27,7 @@ const OrderHistory = ({ customerId }) => {
 
     const [productDetails, setProductDetails] = useState([]);
     const [productModal, setProductModal] = useState(false);
-
+    console.log('product details ', productDetails)
     const handleProductModal = (data) => {
         console.log(data)
         setProductDetails(data);
@@ -30,32 +37,25 @@ const OrderHistory = ({ customerId }) => {
     //* Data-Table Column
     const columns = [
         { name: 'S.No.', selector: (row) => orderHistoryByCustomerIdData.indexOf(row) + 1, width: '80px' },
-        { name: 'Order Id', selector: row => row?.orderId, width: '270px' },
-        { name: 'Total QTY', selector: row => row?.products?.reduce((acc, data) => acc + data?.quantity, 0) },
-        { name: 'Amount', selector: row => row?.totalAmount },
+        { name: 'Order Id', selector: row => row?.invoiceId, width: '270px' },
+        { name: 'Total QTY', selector: row => row?.items?.reduce((acc, data) => acc + data?.quantity, 0) },
+        { name: 'Amount', selector: row => 'Rs.' + row?.amount },
         {
             name: "Change Status",
             cell: (row) => (
-                <select value={row?.status} onChange={(e) => dispatch(EcommerceActions.changeOrderStatus({ orderId: row?.orderId, status: e.target.value == 'OUT FOR DELIVERY' ? 'OUT_FOR_DELIVERY' : e.target.value }))} style={{ outline: "none", padding: "5px 8px", border: "1px solid #666666", color: "#666666", borderRadius: "5px", fontFamily: "Philosopher" }}>
+                <select value={row?.status} onChange={(e) => dispatch(EcommerceActions.changeOrderStatus({ orderId: row?.invoiceId, status: e.target.value == 'OUT FOR DELIVERY' ? 'OUT_FOR_DELIVERY' : e.target.value }))} style={{ outline: "none", padding: "5px 8px", border: "1px solid #666666", color: "#666666", borderRadius: "5px", fontFamily: "Philosopher" }}>
                     <option value={''}>---Select---</option>
-                    <option value={'INITIATED'}>Initiated</option>
-                    <option value={'ACCEPTED'}>Accepted</option>
-                    <option value={'PACKED'}>Packed</option>
-                    <option value={'REJECTED'}>Rejected</option>
-                    <option value={'OUT FOR DELIVERY'}>Out for delivery</option>
-                    <option value={'DELIVERED'}>Delivered</option>
-                    <option value={'CANCELLED'}>Cancelled</option>
+                    <option value={'Pending'}>Pending</option>
+                    <option value={'In-Progress'}>In-Progress</option>
+                    <option value={'Complete'}>Completed</option>
                 </select>
             ),
         },
         { name: 'Date', selector: row => row?.createdAt ? moment(row?.createdAt).format('DD MMM YYYY') : 'N/A' },
-        { name: 'Product', selector: row => <div onClick={() => handleProductModal(row?.products)}><ViewSvg /></div> },
+        { name: 'Product', selector: row => <div onClick={() => handleProductModal(row)}><ViewSvg /></div> },
     ];
 
-    useEffect(function () {
-        //! Dispatching API for Getting Order History
-        dispatch(CustomerActions.getOrderHistoryByCustomerId({ customerId }));
-    }, []);
+   
 
     return (
         <>
@@ -72,7 +72,7 @@ const OrderHistory = ({ customerId }) => {
                             </div>
 
                             {/* Mapping through products to display each one */}
-                            {productDetails && productDetails?.map((product, index) => (
+                            {productDetails && productDetails?.items?.map((product, index) => (
                                 <Grid container key={index} spacing={2} sx={{ marginTop: 2, borderBottom: '1px solid #ddd', paddingBottom: 2 }}>
                                     {/* Product Image */}
                                     <Grid item xs={12} sm={4}>
@@ -98,6 +98,19 @@ const OrderHistory = ({ customerId }) => {
                                     </Grid>
                                 </Grid>
                             ))}
+
+                                    <Grid   Grid item xs={12} sm={8}>
+                                       
+                                        <div style={{ fontSize: '16px', fontWeight: '500', marginTop: '10px' }}>
+                                            Name: {productDetails?.addressId?.name}
+                                        </div>
+                                        <div style={{ fontSize: '14px', color: '#555',fontWeight: '500', marginTop: '8px' }}>
+                                           Address: {productDetails?.addressId?.house}, {productDetails?.addressId?.area}, {productDetails?.addressId?.city},{productDetails?.addressId?.state} ({productDetails?.addressId?.pincode})
+                                        </div>
+                                        <div style={{ fontSize: '14px', marginTop: '5px' }}>
+                                            Mobile: {productDetails?.addressId?.phone}
+                                        </div>
+                                    </Grid>
                         </Grid>
                     </Grid>
                 </DialogContent>

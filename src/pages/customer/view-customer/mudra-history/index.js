@@ -27,7 +27,7 @@ const MudraHistory = ({ customerId }) => {
 
     return (
         <>
-            <MainDatatable data={mudraHistoryByCustomerIdData} columns={columns} title={'Mudra History'} />
+            <MainDatatable data={mudraHistoryByCustomerIdData} columns={columns} title={'Divya Rashi Request History'} />
 
         </>
     )

@@ -28,6 +28,14 @@ export const deleteTempleDarshan = payload => ({
     type: actionTypes.DELETE_TEMPLE_DARSHAN, payload
 });
 
+export const deleteTempleImage = payload => ({
+    type: actionTypes.DELETE_TEMPLE_IMAGE, payload
+});
+
+export const deleteTempleVideo = payload => ({
+    type: actionTypes.DELETE_TEMPLE_VIDEO, payload
+})
+
 //! Asset
 export const getTempleAssets = payload => ({
     type: actionTypes.GET_TEMPLE_ASSETS, payload
@@ -89,4 +97,13 @@ export const updateTempleLiveLink = payload => ({
 
 export const deleteTempleLiveLink = payload => ({
     type: actionTypes.DELETE_TEMPLE_LIVE_LINK, payload
+});
+
+
+export const getTempleMandir = payload => ({
+    type: actionTypes.GET_TEMPLE_MANDIR, payload
+});
+
+export const updateTempleMandir = payload => ({
+    type: actionTypes.UPDATE_TEMPLE_MANDIR, payload
 });

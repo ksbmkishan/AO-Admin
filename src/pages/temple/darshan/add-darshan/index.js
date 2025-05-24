@@ -3,42 +3,46 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Grid, TextField, Avatar, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { Color } from "../../../../assets/colors";
-import { img_url } from "../../../../utils/api-routes";
+import { base_url, img_url } from "../../../../utils/api-routes";
 import { CrossSvg, UploadImageSvg } from "../../../../assets/svg";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
 import * as TempleActions from '../../../../redux/actions/templeAction';
 import { api_urls } from "../../../../utils/api-urls";
 import ReactQuill from 'react-quill'; // import the Quill component
 import 'react-quill/dist/quill.snow.css';
+import RichTextEditor from 'react-rte';
 
 const AddDarshan = ({ mode }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const stateData = location.state && location.state.stateData;
+    const id = location.state && location.state.stateData?._id
     console.log("State Data ::: ", stateData);
 
     const [inputFieldDetail, setInputFieldDetail] = useState({
         title: stateData ? stateData?.title : '',
         temple: stateData ? stateData?.temple : '',
-        description: stateData ? stateData?.description : '',
+        description: stateData ? RichTextEditor.createValueFromString(stateData?.description, 'html') : RichTextEditor.createEmptyValue(),
         aarti: stateData ? stateData?.aarti : '',
-        aartilyrics: stateData ? stateData?.aartilyrics : '',
+        aartilyrics: stateData ? RichTextEditor.createValueFromString(stateData?.aartilyrics, 'html') : RichTextEditor.createEmptyValue(),
         chalisa: stateData ? stateData?.chalisa : '',
-        chalisalyrics: stateData ? stateData?.chalisalyrics : '',
+        chalisalyrics: stateData ? RichTextEditor.createValueFromString(stateData?.chalisalyrics, 'html') : RichTextEditor.createEmptyValue(),
         mantralink: stateData ? stateData?.mantralink : '',
-        mantralyrics: stateData ? stateData?.mantralyrics : '',
+        mantralyrics: stateData ? RichTextEditor.createValueFromString(stateData?.mantralyrics, 'html') : RichTextEditor.createEmptyValue(),
         bhajan: stateData ? stateData?.bhajan : '',
-        bhjanlyrics: stateData ? stateData?.bhjanlyrics : '',
+        bhjanlyrics: stateData ? RichTextEditor.createValueFromString(stateData?.bhjanlyrics, 'html') : RichTextEditor.createEmptyValue(),
     });
     const [inputFieldError, setInputFieldError] = useState({
-        image: '', temple: '', title: '', description: '', bulkImage: '', bulkAudio: '',
+        image: '', temple: '', title: '', description: '', bulkImage: '', bulkVideo: '',
         aarti: '', aartilyrics: '', chalisa: '', chalisalyrics: '', mantralink: '', mantralyrics: '', bhajan: '', bhjanlyrics: ''
     });
     const [image, setImage] = useState({ file: stateData ? api_urls + stateData?.image : '', bytes: '' });
-    const [bulkImage, setBulkImage] = useState([]);
-    const [bulkAudio, setBulkAudio] = useState(stateData ? stateData?.
-        bulkAudioUpload : []);
+    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bulkImageOnly && stateData?.bulkImageOnly?.map(value => ({ file: base_url + value })) : []);
+    const [bulkVideo, setbulkVideo] = useState(stateData ? stateData?.
+        bulkVideoUpload.map(value => ({ file: base_url + value})) : []);
+
+    console.log('bulkImage :: ', bulkImage);
 
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value })); //* Handle Input Field : Error
@@ -71,38 +75,54 @@ const AddDarshan = ({ mode }) => {
     //! Handle Bulk Image 
     const handleBulkImage = (event) => {
         const selectedFiles = event.target.files;
+
         console.log("Selected files: ", selectedFiles);
 
-        if (selectedFiles?.length > 5) {
-            alert('Please select file less than 5');
-        } else {
-            if (selectedFiles && selectedFiles.length > 0) {
-                const updatedImage = Array.from(selectedFiles).map(file => ({
-                    file: URL.createObjectURL(file),
-                    bytes: file
-                }));
-                setBulkImage(updatedImage);
-            }
+        if (bulkImage?.length >= 5) {
+            alert('Please select less than 5 files');
+            return;
+        }
+
+        if (selectedFiles && selectedFiles.length > 0) {
+            const updatedImage = Array.from(selectedFiles).map(file => ({
+                file: URL.createObjectURL(file),
+                bytes: file
+            }));
+
+            // अगर आप नई images को पुराने के साथ जोड़ना चाहते हैं:
+            setBulkImage((prev) => [...prev, ...updatedImage]);
+
+            // अगर आप नई images को पुराने पर ओवरराइड करना चाहते हैं:
+            // setBulkImage(updatedImage);
         }
     };
 
-    //! Handle Bulk Audio 
-    const handleBulkAudio = (event) => {
+    //! Handle Bulk Video 
+    const handlebulkVideo = (event) => {
+
         const selectedFiles = event.target.files;
+
         console.log("Selected files: ", selectedFiles);
 
-        if (selectedFiles?.length > 5) {
-            alert('Please select file less than 5');
-        } else {
-            if (selectedFiles && selectedFiles.length > 0) {
-                const updatedAudio = Array.from(selectedFiles).map(file => ({
-                    file: URL.createObjectURL(file),
-                    bytes: file
-                }));
-                setBulkAudio(updatedAudio);
-            }
+        if (bulkVideo?.length >= 5) {
+            alert('Please select less than 5 files');
+            return;
+        }
+
+        if (selectedFiles && selectedFiles.length > 0) {
+            const updatedVideo = Array.from(selectedFiles).map(file => ({
+                file: URL.createObjectURL(file),
+                bytes: file
+            }));
+
+            // अगर आप नई images को पुराने के साथ जोड़ना चाहते हैं:
+            setbulkVideo((prev) => [...prev, ...updatedVideo]);
+
+            // अगर आप नई images को पुराने पर ओवरराइड करना चाहते हैं:
+            // setBulkImage(updatedImage);
         }
     };
+    console.log("Bulk Video :::", bulkVideo);
 
     //! Handle validation
     const handleValidation = () => {
@@ -130,13 +150,39 @@ const AddDarshan = ({ mode }) => {
         return isValid;
     };
 
+    const handleImageDelete = (data) => {
+        console.log('data ', data);
+        const payload = {
+            data: {
+                id: stateData?._id,
+                image: data
+            },
+            onComplete: () => console.log('test')
+        }
+
+        dispatch(TempleActions.deleteTempleImage(payload))
+    }
+
+    const handleVideoDelete = (data) => {
+        console.log('video file ',data);
+        const payload = {
+            data: {
+                id: stateData?._id,
+                video: data
+            },
+            onComplete: () => console.log('test')
+        }
+
+        dispatch(TempleActions.deleteTempleVideo(payload))
+    }
+
     //! Handle Submit - Creating Darshan
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Darshan Data :: ", { ...inputFieldDetail, image, bulkImage, bulkAudio })
+        console.log("Darshan Data :: ", { ...inputFieldDetail, image, bulkImage, bulkVideo })
         const { title, description, temple, aarti, aartilyrics, chalisa, chalisalyrics, mantralink, mantralyrics, bhajan, bhjanlyrics } = inputFieldDetail;
 
-        console.log('Audio ', bulkAudio)
+        console.log('Audio ', bulkVideo)
 
         if (handleValidation()) {
 
@@ -145,18 +191,18 @@ const AddDarshan = ({ mode }) => {
                 formData.append("id", stateData?._id);
                 formData.append("temple", temple);
                 formData.append("title", title);
-                formData.append("description", description);
+                formData.append("description", description?.toString('html'));
                 formData.append("aarti", aarti);
-                formData.append("aartilyrics", aartilyrics);
-                formData.append("chalisa",chalisa);
-                formData.append("chalisalyrics",chalisalyrics);
-                formData.append("mantralink",mantralink);
-                formData.append("mantralyrics",mantralyrics);
-                formData.append("bhajan",bhajan);
-                formData.append("bhjanlyrics",bhjanlyrics);
+                formData.append("aartilyrics", aartilyrics?.toString('html'));
+                formData.append("chalisa", chalisa);
+                formData.append("chalisalyrics", chalisalyrics?.toString('html'));
+                formData.append("mantralink", mantralink);
+                formData.append("mantralyrics", mantralyrics?.toString('html'));
+                formData.append("bhajan", bhajan);
+                formData.append("bhjanlyrics", bhjanlyrics?.toString('html'));
                 formData.append("image", image?.bytes);
                 bulkImage.forEach(image => { formData.append(`bulkImageUpload`, image?.bytes); });
-                bulkAudio.forEach(audio => { formData.append(`bulkAudioUpload`, audio?.bytes); });
+                bulkVideo.forEach(video => { formData.append(`bulkVideoUpload`, video?.bytes); });
 
 
                 const payload = {
@@ -171,18 +217,19 @@ const AddDarshan = ({ mode }) => {
                 let formData = new FormData();
                 formData.append("temple", temple);
                 formData.append("title", title);
-                formData.append("description", description);
+                formData.append("description", description?.toString('html'));
                 formData.append("aarti", aarti);
-                formData.append("aartilyrics", aartilyrics);
-                formData.append("chalisa",chalisa);
-                formData.append("chalisalyrics",chalisalyrics);
-                formData.append("mantralink",mantralink);
-                formData.append("mantralyrics",mantralyrics);
-                formData.append("bhajan",bhajan);
-                formData.append("bhjanlyrics",bhjanlyrics);
+                formData.append("aartilyrics", aartilyrics?.toString('html'));
+                formData.append("chalisa", chalisa);
+                formData.append("chalisalyrics", chalisalyrics?.toString('html'));
+                formData.append("mantralink", mantralink);
+                formData.append("mantralyrics", mantralyrics?.toString('html'));
+                formData.append("bhajan", bhajan);
+                formData.append("bhjanlyrics", bhjanlyrics?.toString('html'));
                 formData.append("image", image?.bytes);
                 bulkImage.forEach(image => { formData.append(`bulkImageUpload`, image?.bytes); });
-                bulkAudio.forEach(audio => { formData.append(`bulkAudioUpload`, audio?.bytes); });
+                bulkVideo.forEach(video => { formData.append(`bulkVideoUpload`, video?.bytes); });
+
                 const payload = {
                     data: formData,
                     onComplete: () => navigate("/temple/darshan")
@@ -255,12 +302,11 @@ const AddDarshan = ({ mode }) => {
                         <label>
                             Description <span style={{ color: "red" }}>*</span>
                         </label>
-                        <ReactQuill
+
+                        <RichTextEditor
                             value={inputFieldDetail?.description}
                             onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, description: value })}
-                            placeholder="Type your description here..."
-                            error={inputFieldError.description ? true : false}
-                            helperText={inputFieldError.description}
+                            editorStyle={{ minHeight: '50vh', }}
                             onFocus={() => handleInputFieldError("description", null)}
                         />
                         {/* Optionally, display error */}
@@ -277,7 +323,10 @@ const AddDarshan = ({ mode }) => {
                             {bulkImage.length > 0 && bulkImage?.map((value, index) => (
                                 <div key={index} style={{ position: "relative" }}>
                                     <Avatar src={value.file} style={{ height: '150px', width: "250px", borderRadius: "initial" }} />
-                                    <div onClick={() => setBulkImage(bulkImage.filter((curr, currIndex) => currIndex !== index))} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
+                                    <div onClick={() => {
+                                        value?.bytes ? 
+                                        setBulkImage(bulkImage.filter((curr, currIndex) => currIndex !== index)) : handleImageDelete(value?.file)
+                                        }} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
                                 </div>
                             ))}
                         </div>
@@ -294,12 +343,32 @@ const AddDarshan = ({ mode }) => {
 
                     <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
                         <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
-                            {bulkAudio.length > 0 && bulkAudio?.map((value, index) => (
-                                <div key={index} style={{ position: "relative" }}>
-                                    <video controls style={{ height: '200px', maxWidth: '300px' }} ><source src={value?.file} /></video>
-                                    <div onClick={() => setBulkAudio(bulkAudio.filter((curr, currIndex) => currIndex !== index))} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
-                                </div>
-                            ))}
+                            {bulkVideo.length > 0 && bulkVideo.map((value, index) => {
+                                return (
+                                    <div key={index} style={{ position: "relative" }}>
+                                        <video controls style={{ height: '200px', maxWidth: '300px' }}>
+                                            {value?.file ?
+                                                <source src={value?.file} /> :
+                                                <source src={base_url + value} />}
+                                        </video>
+                                        <div
+                                            onClick={() => {
+                                                value?.file ? 
+                                                 handleVideoDelete(value?.file) : setbulkVideo(bulkVideo.filter((curr, currIndex) => currIndex !== index)) 
+                                            }
+                                            }
+                                            style={{
+                                                position: "absolute",
+                                                top: '-13px',
+                                                right: '-15px',
+                                                cursor: "pointer"
+                                            }}
+                                        >
+                                            <CrossSvg />
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
 
                         <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More GIF/Video</div>
@@ -307,7 +376,7 @@ const AddDarshan = ({ mode }) => {
                             <UploadImageSvg h="25" w="25" color="#000" />
                             <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
                         </label>
-                        <input id="upload-bulk-audio" accept="video/*" multiple type="file" onChange={handleBulkAudio} hidden />
+                        <input id="upload-bulk-audio" accept="video/*" type="file" onChange={handlebulkVideo} hidden />
                     </Grid>
 
                     <Grid item lg={6} md={6} sm={6} xs={6}>
@@ -322,17 +391,7 @@ const AddDarshan = ({ mode }) => {
                         />
                     </Grid>
 
-                    <Grid item lg={6} md={6} sm={6} xs={6}>
-                        <TextField
-                            label={<>Aarti Lyrics Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='aartilyrics'
-                            value={inputFieldDetail?.aartilyrics}
-                            onChange={handleInputField}
-                            error={inputFieldError.aartilyrics ? true : false}
-                            helperText={inputFieldError.title}
-                            onFocus={() => handleInputFieldError("aartilyrics", null)}
-                        />
-                    </Grid>
+
 
                     <Grid item lg={6} md={6} sm={6} xs={6}>
                         <TextField
@@ -346,17 +405,7 @@ const AddDarshan = ({ mode }) => {
                         />
                     </Grid>
 
-                    <Grid item lg={6} md={6} sm={6} xs={6}>
-                        <TextField
-                            label={<>Chalisa Lyrics Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='chalisalyrics'
-                            value={inputFieldDetail?.chalisalyrics}
-                            onChange={handleInputField}
-                            error={inputFieldError.chalisalyrics ? true : false}
-                            helperText={inputFieldError.chalisalyrics}
-                            onFocus={() => handleInputFieldError("chalisalyrics", null)}
-                        />
-                    </Grid>
+
 
                     <Grid item lg={6} md={6} sm={6} xs={6}>
                         <TextField
@@ -370,17 +419,7 @@ const AddDarshan = ({ mode }) => {
                         />
                     </Grid>
 
-                    <Grid item lg={6} md={6} sm={6} xs={6}>
-                        <TextField
-                            label={<>Mantra Lyrics Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='mantralyrics'
-                            value={inputFieldDetail?.mantralyrics}
-                            onChange={handleInputField}
-                            error={inputFieldError.mantralyrics ? true : false}
-                            helperText={inputFieldError.mantralyrics}
-                            onFocus={() => handleInputFieldError("mantralyrics", null)}
-                        />
-                    </Grid>
+
 
                     <Grid item lg={6} md={6} sm={6} xs={6}>
                         <TextField
@@ -394,16 +433,82 @@ const AddDarshan = ({ mode }) => {
                         />
                     </Grid>
 
-                    <Grid item lg={6} md={6} sm={6} xs={6}>
-                        <TextField
-                            label={<>Bhajan Lyrics Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='bhjanlyrics'
+
+
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <label>
+                            Aarti Lyrics <span style={{ color: "red" }}>*</span>
+                        </label>
+
+                        <RichTextEditor
+                            value={inputFieldDetail?.aartilyrics}
+                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, aartilyrics: value })}
+                            editorStyle={{ minHeight: '20vh', }}
+                            onFocus={() => handleInputFieldError("aartilyrics", null)}
+                        />
+                        {/* Optionally, display error */}
+                        {inputFieldError.aartilyrics && (
+                            <span style={{ color: "red" }}>
+                                {inputFieldError.aartilyrics}
+                            </span>
+                        )}
+                    </Grid>
+
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <label>
+                            Chalisa Lyrics <span style={{ color: "red" }}>*</span>
+                        </label>
+
+                        <RichTextEditor
+                            value={inputFieldDetail?.chalisalyrics}
+                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, chalisalyrics: value })}
+                            editorStyle={{ minHeight: '20vh', }}
+                            onFocus={() => handleInputFieldError("chalisalyrics", null)}
+                        />
+                        {/* Optionally, display error */}
+                        {inputFieldError.chalisalyrics && (
+                            <span style={{ color: "red" }}>
+                                {inputFieldError.chalisalyrics}
+                            </span>
+                        )}
+                    </Grid>
+
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <label>
+                            Mantra Lyrics <span style={{ color: "red" }}>*</span>
+                        </label>
+
+                        <RichTextEditor
+                            value={inputFieldDetail?.mantralyrics}
+                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, mantralyrics: value })}
+                            editorStyle={{ minHeight: '20vh', }}
+                            onFocus={() => handleInputFieldError("mantralyrics", null)}
+                        />
+                        {/* Optionally, display error */}
+                        {inputFieldError.mantralyrics && (
+                            <span style={{ color: "red" }}>
+                                {inputFieldError.mantralyrics}
+                            </span>
+                        )}
+                    </Grid>
+
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <label>
+                            Bhajan Lyrics <span style={{ color: "red" }}>*</span>
+                        </label>
+
+                        <RichTextEditor
                             value={inputFieldDetail?.bhjanlyrics}
-                            onChange={handleInputField}
-                            error={inputFieldError.bhjanlyrics ? true : false}
-                            helperText={inputFieldError.bhjanlyrics}
+                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, bhjanlyrics: value })}
+                            editorStyle={{ minHeight: '20vh', }}
                             onFocus={() => handleInputFieldError("bhjanlyrics", null)}
                         />
+                        {/* Optionally, display error */}
+                        {inputFieldError.bhjanlyrics && (
+                            <span style={{ color: "red" }}>
+                                {inputFieldError.bhjanlyrics}
+                            </span>
+                        )}
                     </Grid>
 
                     <Grid item lg={12} md={12} sm={12} xs={12}>
