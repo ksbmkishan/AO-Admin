@@ -20,7 +20,7 @@ const SideBar = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 991) setHiddenSidebarWidth(65);
+      if (window.innerWidth > 991) setHiddenSidebarWidth(85);
       else setHiddenSidebarWidth(0);
     };
 
@@ -33,7 +33,7 @@ const SideBar = () => {
   }, []);
   return (
     <>
-      <motion.div animate={{ width: isSidebarOpen ? "250px" : `${hiddenSidebarWidth}px` }} className={`sidebar`}>
+      <motion.div animate={{ width: isSidebarOpen ? "300px" : `${hiddenSidebarWidth}px` }} className={`sidebar`}>
         {isSidebarOpen ? (
           <div className="top_section" style={{ marginBottom: "-15px", padding: '10px 0' }}>
             <img src={logo} style={{ width: 80, height: 80 }} />

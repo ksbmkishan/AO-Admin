@@ -324,7 +324,7 @@ function* updateTempleLiveLink(action) {
         const { payload } = action;
         console.log("Payload ::: ", payload);
 
-        const { data } = yield postAPI(update_temple_live_link(payload?._id), payload?.data);
+        const { data } = yield postAPI(update_temple_live_link(payload?._id), payload?.formData);
         console.log("Update Temple Live Link Saga Response ::: ", data);
 
         if (data?.success) {

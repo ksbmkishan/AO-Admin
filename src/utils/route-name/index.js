@@ -162,13 +162,13 @@ export const RouteName = [
                 icon: <OtherRouteSvg />,
             },
             {
-                path: "/history/mudra-history",
-                name: "Mudra History",
+                path: "/history/divya-history",
+                name: "Divya Rashi History",
                 icon: <OtherRouteSvg />,
             },
             {
-                path: "/history/mudra-request-history",
-                name: "Mudra Request History",
+                path: "/history/divya-request-history",
+                name: "Divya Rashi Request History",
                 icon: <OtherRouteSvg />,
             },
         ],

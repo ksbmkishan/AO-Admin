@@ -1,6 +1,6 @@
 import * as actionTypes from "../action-types";
 import { call, put, takeLeading } from "redux-saga/effects";
-import { get_call_history, get_chat_history, get_gift_history, get_live_history, get_mudra_history, get_mudra_request_history, get_video_call_history, } from "../../utils/api-routes";
+import { get_call_history, get_chat_history, get_divya_history, get_gift_history, get_live_history, get_mudra_history, get_mudra_request_history, get_video_call_history, } from "../../utils/api-routes";
 import { getAPI } from "../../utils/api-function";
 
 function* getChatHistory() {
@@ -92,11 +92,11 @@ function* getGiftHistory() {
 function* getMudraHistory() {
   try {
     yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
-    const { data } = yield getAPI(get_mudra_history);
+    const { data } = yield getAPI(get_divya_history);
     console.log("Get Mudra History Saga Response ::: ", data);
 
     if (data?.success) {
-      yield put({ type: actionTypes.SET_MUDRA_HISTORY, payload: data?.transactions?.reverse() });
+      yield put({ type: actionTypes.SET_MUDRA_HISTORY, payload: data?.data });
     } else {
       yield put({ type: actionTypes.SET_MUDRA_HISTORY, payload: [] });
     }
@@ -115,7 +115,7 @@ function* getMudraRequestHistory(action) {
     console.log("Get Mudra Request History Saga Response ::: ", data);
 
     if (data?.success) {
-      yield put({ type: actionTypes.SET_MUDRA_REQUEST_HISTORY, payload: data?.requests?.reverse() });
+      yield put({ type: actionTypes.SET_MUDRA_REQUEST_HISTORY, payload: data?.transactions?.reverse() });
     } else {
       yield put({ type: actionTypes.SET_MUDRA_REQUEST_HISTORY, payload: [] });
     }

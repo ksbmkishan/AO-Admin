@@ -84,8 +84,9 @@ export const get_call_history = 'api/admin/get_call_history';
 export const get_video_call_history = 'api/admin/all_videocall_history';
 export const get_live_history = 'api/admin/all_live_videocall_history';
 export const get_gift_history = 'api/admin/get_all_gift_history';
-export const get_mudra_history = 'api/customers/get-All-wallet-history';
-export const get_mudra_request_history = 'api/customers/get-All-request-history';
+export const get_mudra_request_history = 'api/customers/get-All-wallet-history';
+export const get_mudra_history = 'api/customers/get-All-request-history';
+export const get_divya_history = 'api/customers/getDivyaRashiHistory';
 
 //! Skill
 export const get_skill = 'api/admin/get-skill';
