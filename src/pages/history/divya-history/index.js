@@ -15,10 +15,10 @@ const MudraHistory = () => {
 
    const columns = [
            { name: 'S.No.', selector: (row) => mudraHistoryData?.indexOf(row) + 1, width: '80px' },
-           { name: 'Name', selector: row => row?.name, width: '150px' },
-           { name: 'Amount', selector: row => row?.price && IndianRupee(row?.price), width: '150px' },
-           { name: 'Status', selector: row => row?.status && row?.status, width: '150px' },
-           { name: 'Date', selector: row => row?.createdAt ? moment(row?.createdAt).format('DD MMMM YYYY') : 'N/A', width: '200px' },
+           { name: 'Name', selector: row => row?.name },
+           { name: 'Amount', selector: row => row?.price && IndianRupee(row?.price) },
+           { name: 'Status', selector: row => row?.status && row?.status },
+           { name: 'Date', selector: row => row?.createdAt ? moment(row?.createdAt).format('DD MMMM YYYY') : 'N/A' },
        ];
 
     useEffect(function () {

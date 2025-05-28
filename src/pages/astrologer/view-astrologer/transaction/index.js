@@ -11,9 +11,9 @@ const Transaction = ({ astrologerId }) => {
     //* Order History DataTable Columns
     const columns = [
         { name: 'S.No.', selector: row => transactionHistoryByAstrologerIdData.indexOf(row) + 1, width: '80px' },
-        { name: 'Astrologer', selector: row => row?.astrologerId?.astrologerName },
-        { name: 'Amount', selector: row => row?.amount },
-        { name: 'Status', selector: row => <div style={{ textTransform: 'capitalize' }}>{row?.status}</div> },
+        { name: 'Astrologer', selector: row => row?.transactions[0]?.astrologerId?.astrologerName },
+        { name: 'Amount', selector: row => row?.transactions[0]?.amount },
+        { name: 'Status', selector: row => <div style={{ textTransform: 'capitalize' }}>{row?.type}</div> },
         { name: 'Created Date', selector: row => moment(row?.createdAt).format('DD MMM YYYY') },
     ];
 

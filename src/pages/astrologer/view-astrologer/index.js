@@ -27,7 +27,7 @@ const ViewAstrologer = () => {
 
     const { astrologerName, profileImage, email, phoneNumber, wallet_balance, city, state, country, zipCode, dateOfBirth } = astrologerByIdData;
 
-    const tabHead = ['Profile', 'Chat', 'Call', 'Review', 'Transaction', ];
+    const tabHead = ['Profile', 'Chat', 'Call', 'Review','Transaction' ];
     const [activeTabHead, setActiveTabHead] = useState(0);
     const handleChange = (event, newValue) => setActiveTabHead(newValue);
 
@@ -83,12 +83,9 @@ const ViewAstrologer = () => {
                 {activeTabHead == 0 && <div><Profile astrologer={astrologerByIdData} /></div>}
                 {activeTabHead == 1 && <div><ChatHistory astrologerId={stateData?._id} /></div>}
                 {activeTabHead == 2 && <div><CallHistory astrologerId={stateData?._id} /></div>}
-                {activeTabHead == 3 && <div><VideoCallHistory astrologerId={stateData?._id} /></div>}
-                {activeTabHead == 4 && <div><LiveHistory astrologerId={stateData?._id} /></div>}
-                {activeTabHead == 5 && <div><GiftHistory astrologerId={stateData?._id} /></div>}
-                {activeTabHead == 6 && <div><Review astrologerId={stateData?._id} /></div>}
-                {activeTabHead == 7 && <div><Transaction astrologerId={stateData?._id} /></div>}
-                {activeTabHead == 8 && <div><PujaHistory astrologerId={stateData?._id} /></div>}
+                {activeTabHead == 3 && <div><Review astrologerId={stateData?._id} /></div>}
+                {activeTabHead == 4 && <div><Transaction astrologerId={stateData?._id} /></div>}
+                {/* {activeTabHead == 5 && <div><PujaHistory astrologerId={stateData?._id} /></div>} */}
             </div>
         </>
     )
