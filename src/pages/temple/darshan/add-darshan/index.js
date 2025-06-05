@@ -20,6 +20,8 @@ const AddDarshan = ({ mode }) => {
     const id = location.state && location.state.stateData?._id
     console.log("State Data ::: ", stateData);
 
+    const [inputFields, setInputFields] = useState(['']);
+
     const [inputFieldDetail, setInputFieldDetail] = useState({
         title: stateData ? stateData?.title : '',
         temple: stateData ? stateData?.temple : '',
@@ -38,9 +40,13 @@ const AddDarshan = ({ mode }) => {
         aarti: '', aartilyrics: '', chalisa: '', chalisalyrics: '', mantralink: '', mantralyrics: '', bhajan: '', bhjanlyrics: ''
     });
     const [image, setImage] = useState({ file: stateData ? api_urls + stateData?.image : '', bytes: '' });
-    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bulkImageOnly && stateData?.bulkImageOnly?.map(value => ({ file: base_url + value })) : []);
+    const [bulkImage, setBulkImage] = useState(
+        Array.isArray(stateData?.bulkImageOnly)
+            ? stateData.bulkImageOnly.map(value => ({ file: base_url + value, inputs: [''] }))
+            : []
+    );
     const [bulkVideo, setbulkVideo] = useState(stateData ? stateData?.
-        bulkVideoUpload.map(value => ({ file: base_url + value})) : []);
+        bulkVideoUpload.map(value => ({ file: base_url + value })) : []);
 
     console.log('bulkImage :: ', bulkImage);
 
@@ -164,7 +170,7 @@ const AddDarshan = ({ mode }) => {
     }
 
     const handleVideoDelete = (data) => {
-        console.log('video file ',data);
+        console.log('video file ', data);
         const payload = {
             data: {
                 id: stateData?._id,
@@ -175,6 +181,26 @@ const AddDarshan = ({ mode }) => {
 
         dispatch(TempleActions.deleteTempleVideo(payload))
     }
+
+    const handleInputChange = (imgIndex, inputIndex, value) => {
+        const updated = [...bulkImage];
+        updated[imgIndex].inputs[inputIndex] = value;
+        setBulkImage(updated);
+    };
+
+    const handleAddField = (imgIndex) => {
+        const updated = [...bulkImage];
+        updated[imgIndex].inputs.push('');
+        setBulkImage(updated);
+    };
+
+    const handleRemoveField = (imgIndex, inputIndex) => {
+        const updated = [...bulkImage];
+        updated[imgIndex].inputs.splice(inputIndex, 1);
+        setBulkImage(updated);
+    };
+
+
 
     //! Handle Submit - Creating Darshan
     const handleSubmit = async (e) => {
@@ -317,6 +343,73 @@ const AddDarshan = ({ mode }) => {
                         )}
                     </Grid>
 
+                    {/* {inputFields.map((field, index) => (
+                        <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
+                            <div key={index} style={{ marginBottom: '10px', flexDirection: 'row', alignItems: 'center' }}>
+                            {bulkImage.length > 0 && bulkImage?.map((value, index) => (
+                                <div key={index} style={{ position: "relative" }}>
+                                    <Avatar src={value.file} style={{ height: '150px', width: "250px", borderRadius: "initial" }} />
+                                  
+                                </div>
+                            ))}
+                                <label htmlFor="upload-bulk-image" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
+                            <UploadImageSvg h="25" w="25" color="#000" />
+                            <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
+                        </label>
+                        <input id="upload-bulk-image" multiple type="file" onChange={handleBulkImage} hidden />
+                                <input
+                                    type="Priority"
+                                    value={field}
+                                    onChange={(e) => handleChange(index, e.target.value)}
+                                    placeholder={`Input ${index + 1}`}
+                                />
+                                {inputFields.length > 1 && (
+                                    <div onClick={() => handleRemoveField(index)} style={{ top: '-13px', right: '-15px', cursor: "pointer" }}>
+                                        <CrossSvg />
+                                    </div>
+                                )}
+                            </div>
+
+                            <button type="button" style={{ backgroundColor: 'green' }} onClick={handleAddField}>Add Input</button>
+                            <br /><br />
+                        </Grid>
+                    ))} */}
+
+                   {/** <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <label htmlFor="upload-bulk-image" style={{ cursor: 'pointer', border: '1px solid #ccc', padding: '10px', backgroundColor: '#F1F1F7', display: 'inline-block' }}>
+                                Upload Images
+                            </label>
+                            <input id="upload-bulk-image" type="file" multiple onChange={handleBulkImage} hidden />
+                        </Grid>
+
+                        {bulkImage.length > 0 && bulkImage.map((image, imgIndex) => (
+                            <Grid item xs={12} key={imgIndex}>
+                                <Avatar src={image.file} style={{ height: '150px', width: "250px", borderRadius: "initial" }} />
+
+                                {image.inputs.map((input, inputIndex) => (
+                                    <div key={inputIndex} style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        <input
+                                            type="text"
+                                            value={input}
+                                            placeholder={`Priority ${inputIndex + 1}`}
+                                            onChange={(e) => handleInputChange(imgIndex, inputIndex, e.target.value)}
+                                            style={{ flex: 1, padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                                        />
+                                        {image.inputs.length > 1 && (
+                                            <button type="button" onClick={() => handleRemoveField(imgIndex, inputIndex)}>Remove</button>
+                                        )}
+                                    </div>
+                                ))}
+
+                                <button type="button" onClick={() => handleAddField(imgIndex)} style={{ backgroundColor: 'green', color: '#fff', padding: '6px 12px', borderRadius: '4px' }}>
+                                    Add Input
+                                </button>
+                            </Grid>
+                        ))}
+                    </Grid> */} 
+
+
 
                     <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
                         <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
@@ -324,9 +417,9 @@ const AddDarshan = ({ mode }) => {
                                 <div key={index} style={{ position: "relative" }}>
                                     <Avatar src={value.file} style={{ height: '150px', width: "250px", borderRadius: "initial" }} />
                                     <div onClick={() => {
-                                        value?.bytes ? 
-                                        setBulkImage(bulkImage.filter((curr, currIndex) => currIndex !== index)) : handleImageDelete(value?.file)
-                                        }} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
+                                        value?.bytes ?
+                                            setBulkImage(bulkImage.filter((curr, currIndex) => currIndex !== index)) : handleImageDelete(value?.file)
+                                    }} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
                                 </div>
                             ))}
                         </div>
@@ -353,8 +446,8 @@ const AddDarshan = ({ mode }) => {
                                         </video>
                                         <div
                                             onClick={() => {
-                                                value?.file ? 
-                                                 handleVideoDelete(value?.file) : setbulkVideo(bulkVideo.filter((curr, currIndex) => currIndex !== index)) 
+                                                value?.file ?
+                                                    handleVideoDelete(value?.file) : setbulkVideo(bulkVideo.filter((curr, currIndex) => currIndex !== index))
                                             }
                                             }
                                             style={{

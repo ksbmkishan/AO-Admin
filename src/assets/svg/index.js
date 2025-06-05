@@ -38,6 +38,8 @@ export const CrossSvg = ({ w = '30', h = '30' }) => {
     )
 };
 
+
+
 export const DownloadSvg = ({ h = '20', w = '20', color = '#667284' }) => {
     return (
         <>
