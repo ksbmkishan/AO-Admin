@@ -42,6 +42,10 @@ import TempleAssets from "./pages/temple/assets";
 import TempleAddAssets from "./pages/temple/assets/add-assets";
 import TempleAssetsItems from "./pages/temple/assets/items";
 import TempleAddAssetsItems from "./pages/temple/assets/items/add-items";
+
+import TempleVRAssetsItems from "./pages/temple/assets/vr_assets/index";
+import TempleVRAddAssetsItems from "./pages/temple/assets/vr_assets/add-items";
+
 import TempleLiveLink from "./pages/temple/live-link";
 import TempleAddLiveLink from "./pages/temple/live-link/add-live-link";
 
@@ -123,6 +127,17 @@ import AddEcommerceProduct from "./pages/ecommerce/product/add-product";
 import AddEcommerceOrderHistory from "./pages/ecommerce/order-history";
 import VardaniShivalya from "./pages/temple/vardani_shivalya";
 import AddVardaniShivalya from "./pages/temple/vardani_shivalya/add-vardani-shivalya";
+
+
+// Letter To God
+import UpdateWelcomeMessage from "./pages/letter-to-god/welcome-message/UpdateWelcomMesssage";
+import DisplayWelcomeMessage from "./pages/letter-to-god/welcome-message/DisplayWelcomeMessage";
+import Tags from "./pages/letter-to-god/tags/Tags";
+import QAs from "./pages/letter-to-god/qa/QA";
+import AddQA from "./pages/letter-to-god/qa/AddQA";
+import GetAllAIQAs from "./pages/letter-to-god/qa/AiQA";
+import ManagePlans from "./pages/letter-to-god/plan/Manage-Plan";
+import PlanPurchasedHistory from "./pages/letter-to-god/plan/PlanPurchasedHistory";
 
 function App() {
 
@@ -210,6 +225,11 @@ function App() {
           <Route path="/temple/assets/items/add-items" element={<TempleAddAssetsItems mode={'Add'} />} />
           <Route path="/temple/assets/items/edit-items" element={<TempleAddAssetsItems mode={'Edit'} />} />
 
+
+          <Route path="/temple/vr_assets/items" element={<TempleVRAssetsItems />} />
+          <Route path="/temple/vr_assets/items/add-items" element={<TempleVRAddAssetsItems mode={'Add'} />} />
+          <Route path="/temple/vr_assets/items/edit-items" element={<TempleVRAddAssetsItems mode={'Edit'} />} />
+
           <Route path="/temple/live-link" element={<TempleLiveLink />} />
           <Route path="/temple/live-link/add-live-link" element={<TempleAddLiveLink mode={'Add'} />} />
           <Route path="/temple/live-link/edit-live-link" element={<TempleAddLiveLink mode={'Edit'} />} />
@@ -222,7 +242,17 @@ function App() {
           <Route path="/customer-notification/add-notification" element={<AddNotification type="Customer" />} />
           <Route path="/astrologer-notification" element={<AstrologerNotification />} />
           <Route path="/astrologer-notification/add-notification" element={<AddNotification type="Astrologer" />} />
-
+           
+           {/*Letter To God */}
+           <Route path="/letter-to-god/welcome-message" element={<DisplayWelcomeMessage />} />
+           <Route path="/letter-to-god/update-welcome-message" element={<UpdateWelcomeMessage />} />
+           <Route path="/letter-to-god/tags" element={<Tags />} />
+           <Route path="/letter-to-god/qa" element={<QAs />} />
+           <Route path="/letter-to-god/add-qa" element={<AddQA />} />
+           <Route path="/letter-to-god/ai-qa" element={<GetAllAIQAs />} />
+           <Route path="/letter-to-god/manage-plan" element={<ManagePlans />} />
+           <Route path="/letter-to-god/Purhcased-history" element={<PlanPurchasedHistory/>} />
+          
           {/* Skill */}
           <Route path="/skill" element={<Skill />} />
           <Route path="/skill/add-skill" element={<AddSkill mode="Add" />} />

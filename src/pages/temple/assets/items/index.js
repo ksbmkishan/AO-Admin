@@ -24,7 +24,7 @@ const Items = () => {
     //* DataTable Columns
     const columns = [
         { name: 'S.No.', selector: row => templeAssetsItemsByAssetsIdData.indexOf(row) + 1, width: '80px' },
-        { name: 'Title', selector: row => row?.itemName || 'N/A' },
+        { name: 'Titleeeee', selector: row => row?.itemName || 'N/A' },
         { name: 'Price', selector: row => row?.itemPrice || 'N/A' },
         { name: 'Image', selector: row => <Avatar src={api_urls + row?.itemImage} /> },
         {

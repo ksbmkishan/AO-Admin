@@ -234,6 +234,35 @@ export const NotificationRouteSvg = ({ w = '25', h = '25' }) => {
     )
 };
 
+export const LetterToGodSvg = ({ w = '25', h = '25' }) => {
+  return (
+    <svg width={w} height={h} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Outer circle or glow */}
+      <circle cx="32" cy="32" r="30" fill="#fff" stroke="#D56A14" strokeWidth="4" />
+      
+      {/* Envelope */}
+      <rect x="14" y="22" width="36" height="20" rx="2" fill="#D56A14" />
+      <path d="M14 22L32 36L50 22" fill="#fff" />
+      <path d="M14 22L32 36L50 22" stroke="#fff" strokeWidth="2" />
+
+      {/* Heart (symbolizing prayer/love) */}
+      <path
+        d="M32 16C30 14 26 14 24 16C22 18 22 21 24 23L32 30L40 23C42 21 42 18 40 16C38 14 34 14 32 16Z"
+        fill="#D56A14"
+      />
+
+      {/* Chat bubble outline (subtle) */}
+      <path
+        d="M20 44H40C42.2091 44 44 45.7909 44 48V50C44 51.1046 43.1046 52 42 52H22L18 56V48C18 45.7909 19.7909 44 22 44H20Z"
+        fill="#fff"
+        stroke="#D56A14"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+};
+
+
 export const SkillRouteSvg = ({ w = '25', h = '25' }) => {
     return (
         <>
