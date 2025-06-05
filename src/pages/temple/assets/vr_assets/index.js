@@ -7,16 +7,15 @@ import DownloadIcon from '@mui/icons-material/Download';
 
 import { DeleteSvg, EditSvg } from "../../../../assets/svg";
 import { Color } from "../../../../assets/colors";
-import { api_urls } from "../../../../utils/api-urls";
-import MainDatatable from "../../../../components/datatable/MainDatatable";
 import { DeepSearchSpace } from "../../../../utils/common-function";
+import MainDatatable from "../../../../components/datatable/MainDatatable";
 
 const Items = () => {
     const navigate = useNavigate();
     const [vrPoojaItems, setVrPoojaItems] = useState([]);
     const [searchText, setSearchText] = useState('');
 
-    // Axios API call
+    // Fetch VR Pooja items
     const fetchItems = async () => {
         try {
             const res = await axios.get("https://astrooneapi.ksdelhi.net/api/admin/get_vr_items");
@@ -32,9 +31,27 @@ const Items = () => {
         fetchItems();
     }, []);
 
+    // Handle delete item
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this item?")) return;
+
+        try {
+            const response = await axios.delete(`https://astrooneapi.ksdelhi.net/api/admin/delete_vr_item/${id}`);
+            if (response.data.success) {
+                alert("Item deleted successfully.");
+                fetchItems(); // Refresh list
+            } else {
+                alert("Failed to delete item: " + response.data.message);
+            }
+        } catch (error) {
+            console.error("Delete error:", error);
+            alert("Something went wrong while deleting the item.");
+        }
+    };
+
     const filteredData = DeepSearchSpace(vrPoojaItems, searchText);
 
-    //* DataTable Columns
+    // Table columns
     const columns = [
         { name: 'S.No.', selector: (row, index) => index + 1, width: '80px' },
         { name: 'Title', selector: row => row?.itemName || 'N/A' },
@@ -58,12 +75,12 @@ const Items = () => {
             name: 'Action',
             cell: row => (
                 <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-                    {/* Replace with actual delete handler */}
-                    <div style={{ cursor: "pointer" }}><DeleteSvg /></div>
-
+                    <div style={{ cursor: "pointer" }} onClick={() => handleDelete(row._id)}>
+                        <DeleteSvg />
+                    </div>
                     <div
                         onClick={() =>
-                            navigate(`/temple/assets/items/add-items`, {
+                            navigate(`/temple/vr_assets/items/add-items`, {
                                 state: { stateData: row, update: 'update' },
                             })
                         }
@@ -77,8 +94,14 @@ const Items = () => {
     ];
 
     return (
-        <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px", fontFamily: 'Philosopher' }}>
+        <div style={{
+            padding: "20px",
+            backgroundColor: "#fff",
+            marginBottom: "20px",
+            boxShadow: '0px 0px 5px lightgrey',
+            borderRadius: "10px"
+        }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
                 <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black }}>VR Pooja Items</div>
 
                 <div style={{ display: "flex", gap: "40px", alignItems: "center" }}>
@@ -86,19 +109,22 @@ const Items = () => {
                         <CSVLink
                             filename="VR_Pooja_Items"
                             data={vrPoojaItems}
-                            style={{ color: "#000", fontSize: "1rem", textDecoration: "none", display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}
+                            style={{
+                                color: "#000", fontSize: "1rem",
+                                textDecoration: "none", display: "flex", alignItems: "center", gap: "10px", cursor: "pointer"
+                            }}
                         >
                             <DownloadIcon />
                         </CSVLink>
                     )}
 
                     <div
-                        onClick={() => navigate('/temple/assets/items/add-items')}
+                        onClick={() => navigate('/temple/vr_assets/items/add-items')}
                         style={{
                             fontWeight: "500",
                             backgroundColor: Color.primary,
                             color: Color.white,
-                            padding: "2px 5px",
+                            padding: "6px 12px",
                             borderRadius: "5px",
                             display: "flex",
                             alignItems: "center",
