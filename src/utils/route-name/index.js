@@ -1,4 +1,4 @@
-import { AnnouncementRouteSvg, AstrologerRouteSvg, BannerRouteSvg, BlogsRouteSvg, CustomerRouteSvg, GiftRouteSvg, HistoryRouteSvg, LanguageRouteSvg, LiveRouteSvg, MainExpertiesRouteSvg, NotificationRouteSvg, OtherRouteSvg, PoojaRouteSvg, RatingRouteSvg, RechargeRouteSvg, RemediesRouteSvg, SkillRouteSvg } from '../../assets/svg';
+import { AnnouncementRouteSvg, AstrologerRouteSvg, BannerRouteSvg, BlogsRouteSvg, CustomerRouteSvg, GiftRouteSvg, HistoryRouteSvg, LanguageRouteSvg, LiveRouteSvg, MainExpertiesRouteSvg, NotificationRouteSvg, OtherRouteSvg, PoojaRouteSvg, RatingRouteSvg, RechargeRouteSvg, RemediesRouteSvg, SkillRouteSvg, LetterToGodSvg } from '../../assets/svg';
 
 export const RouteName = [
     {
@@ -83,6 +83,11 @@ export const RouteName = [
                 icon: <OtherRouteSvg />,
             },
             {
+                path: "/temple/vr_assets/items",
+                name: "VR Assets",
+                icon: <OtherRouteSvg />,
+            },
+            {
                 path: "/temple/live-link",
                 name: "Live Link",
                 icon: <OtherRouteSvg />,
@@ -110,6 +115,50 @@ export const RouteName = [
             },
         ],
     },
+
+
+    // Letter To God
+
+     {
+        name: "Letter To God-Chatbot",
+        icon: <LetterToGodSvg />,
+        subRoutes: [
+            {
+                path: "/letter-to-god/welcome-message",
+                name: "Welcome Message",
+                icon: <OtherRouteSvg />,
+            },
+            {
+                path: "/letter-to-god/tags",
+                name: "Tags",
+                icon: <OtherRouteSvg />,
+            },
+             {
+                path: "/letter-to-god/qa",
+                name: "QA",
+                icon: <OtherRouteSvg />,
+            },
+            {
+                path: "/letter-to-god/ai-qa",
+                name: "AI-QA",
+                icon: <OtherRouteSvg />,
+            },
+            {
+                path: "/letter-to-god/manage-plan",
+                name: "Manage-Plan",
+                icon: <OtherRouteSvg />,
+            },
+
+            {
+                path:'/letter-to-god/Purhcased-history',
+                name:"Purchased-History",
+                icon: <OtherRouteSvg/>
+            }
+        ],
+    },
+
+
+    // Letter To God
     {
         path: "/skill",
         name: "Skill",

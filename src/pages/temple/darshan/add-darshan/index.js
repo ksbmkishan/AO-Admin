@@ -1,3 +1,531 @@
+// import React, { useState } from "react";
+// import { useDispatch } from "react-redux";
+// import { useLocation, useNavigate } from "react-router-dom";
+// import { Grid, TextField, Avatar, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+// import { Color } from "../../../../assets/colors";
+// import { base_url, img_url } from "../../../../utils/api-routes";
+// import { CrossSvg, UploadImageSvg } from "../../../../assets/svg";
+// import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
+// import * as TempleActions from '../../../../redux/actions/templeAction';
+// import { api_urls } from "../../../../utils/api-urls";
+// import ReactQuill from 'react-quill'; // import the Quill component
+// import 'react-quill/dist/quill.snow.css';
+// import RichTextEditor from 'react-rte';
+
+// const AddDarshan = ({ mode }) => {
+//     const navigate = useNavigate();
+//     const dispatch = useDispatch();
+//     const location = useLocation();
+//     const stateData = location.state && location.state.stateData;
+//     const id = location.state && location.state.stateData?._id
+//     console.log("State Data ::: ", stateData);
+
+//     const [inputFieldDetail, setInputFieldDetail] = useState({
+//         title: stateData ? stateData?.title : '',
+//         temple: stateData ? stateData?.temple : '',
+//         description: stateData ? RichTextEditor.createValueFromString(stateData?.description, 'html') : RichTextEditor.createEmptyValue(),
+//         aarti: stateData ? stateData?.aarti : '',
+//         aartilyrics: stateData ? RichTextEditor.createValueFromString(stateData?.aartilyrics, 'html') : RichTextEditor.createEmptyValue(),
+//         chalisa: stateData ? stateData?.chalisa : '',
+//         chalisalyrics: stateData ? RichTextEditor.createValueFromString(stateData?.chalisalyrics, 'html') : RichTextEditor.createEmptyValue(),
+//         mantralink: stateData ? stateData?.mantralink : '',
+//         mantralyrics: stateData ? RichTextEditor.createValueFromString(stateData?.mantralyrics, 'html') : RichTextEditor.createEmptyValue(),
+//         bhajan: stateData ? stateData?.bhajan : '',
+//         bhjanlyrics: stateData ? RichTextEditor.createValueFromString(stateData?.bhjanlyrics, 'html') : RichTextEditor.createEmptyValue(),
+//     });
+//     const [inputFieldError, setInputFieldError] = useState({
+//         image: '', temple: '', title: '', description: '', bulkImage: '', bulkVideo: '',
+//         aarti: '', aartilyrics: '', chalisa: '', chalisalyrics: '', mantralink: '', mantralyrics: '', bhajan: '', bhjanlyrics: ''
+//     });
+//     const [image, setImage] = useState({ file: stateData ? api_urls + stateData?.image : '', bytes: '' });
+//     const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bulkImageOnly && stateData?.bulkImageOnly?.map(value => ({ file: base_url + value })) : []);
+//     const [bulkVideo, setbulkVideo] = useState(stateData ? stateData?.
+//         bulkVideoUpload.map(value => ({ file: base_url + value})) : []);
+
+//     console.log('bulkImage :: ', bulkImage);
+
+//     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
+//     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value })); //* Handle Input Field : Error
+
+//     //! Handle Image : Normally
+//     const handleImage = (e) => {
+//         if (e.target.files && e.target.files.length > 0) {
+//             setImage({
+//                 file: URL.createObjectURL(e.target.files[0]),
+//                 bytes: e.target.files[0],
+//             });
+//         }
+
+//         handleInputFieldError("image", null)
+//     };
+
+//     //! Handle Image : Drop Feature
+//     const handleDrop = (e) => {
+//         e.preventDefault();
+//         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+//             setImage({
+//                 file: URL.createObjectURL(e.dataTransfer.files[0]),
+//                 bytes: e.dataTransfer.files[0],
+//             });
+//         }
+
+//         handleInputFieldError("image", null)
+//     };
+
+//     //! Handle Bulk Image 
+//     const handleBulkImage = (event) => {
+//         const selectedFiles = event.target.files;
+
+//         console.log("Selected files: ", selectedFiles);
+
+//         if (bulkImage?.length >= 5) {
+//             alert('Please select less than 5 files');
+//             return;
+//         }
+
+//         if (selectedFiles && selectedFiles.length > 0) {
+//             const updatedImage = Array.from(selectedFiles).map(file => ({
+//                 file: URL.createObjectURL(file),
+//                 bytes: file
+//             }));
+
+//             // अगर आप नई images को पुराने के साथ जोड़ना चाहते हैं:
+//             setBulkImage((prev) => [...prev, ...updatedImage]);
+
+//             // अगर आप नई images को पुराने पर ओवरराइड करना चाहते हैं:
+//             // setBulkImage(updatedImage);
+//         }
+//     };
+
+//     //! Handle Bulk Video 
+//     const handlebulkVideo = (event) => {
+
+//         const selectedFiles = event.target.files;
+
+//         console.log("Selected files: ", selectedFiles);
+
+//         if (bulkVideo?.length >= 5) {
+//             alert('Please select less than 5 files');
+//             return;
+//         }
+
+//         if (selectedFiles && selectedFiles.length > 0) {
+//             const updatedVideo = Array.from(selectedFiles).map(file => ({
+//                 file: URL.createObjectURL(file),
+//                 bytes: file
+//             }));
+
+//             // अगर आप नई images को पुराने के साथ जोड़ना चाहते हैं:
+//             setbulkVideo((prev) => [...prev, ...updatedVideo]);
+
+//             // अगर आप नई images को पुराने पर ओवरराइड करना चाहते हैं:
+//             // setBulkImage(updatedImage);
+//         }
+//     };
+//     console.log("Bulk Video :::", bulkVideo);
+
+//     //! Handle validation
+//     const handleValidation = () => {
+//         let isValid = true;
+//         const { title } = inputFieldDetail;
+//         const { file } = image;
+
+//         if (!title) {
+//             handleInputFieldError("title", "Please Enter Title")
+//             isValid = false;
+//         }
+//         if (!Regex_Accept_Alpha_Dot_Comma_Space.test(title)) {
+//             handleInputFieldError("title", "Please Enter Valid Title")
+//             isValid = false;
+//         }
+//         if (title.toString().length > 70) {
+//             handleInputFieldError("title", "Please Enter Title Less Than 70 Letter")
+//             isValid = false;
+//         }
+//         if (!file) {
+//             handleInputFieldError("image", "Please Upload Image")
+//             isValid = false;
+//         }
+
+//         return isValid;
+//     };
+
+//     const handleImageDelete = (data) => {
+//         console.log('data ', data);
+//         const payload = {
+//             data: {
+//                 id: stateData?._id,
+//                 image: data
+//             },
+//             onComplete: () => console.log('test')
+//         }
+
+//         dispatch(TempleActions.deleteTempleImage(payload))
+//     }
+
+//     const handleVideoDelete = (data) => {
+//         console.log('video file ',data);
+//         const payload = {
+//             data: {
+//                 id: stateData?._id,
+//                 video: data
+//             },
+//             onComplete: () => console.log('test')
+//         }
+
+//         dispatch(TempleActions.deleteTempleVideo(payload))
+//     }
+
+//     //! Handle Submit - Creating Darshan
+//     const handleSubmit = async (e) => {
+//         e.preventDefault();
+//         console.log("Darshan Data :: ", { ...inputFieldDetail, image, bulkImage, bulkVideo })
+//         const { title, description, temple, aarti, aartilyrics, chalisa, chalisalyrics, mantralink, mantralyrics, bhajan, bhjanlyrics } = inputFieldDetail;
+
+//         console.log('Audio ', bulkVideo)
+
+//         if (handleValidation()) {
+
+//             if (stateData) {
+//                 let formData = new FormData();
+//                 formData.append("id", stateData?._id);
+//                 formData.append("temple", temple);
+//                 formData.append("title", title);
+//                 formData.append("description", description?.toString('html'));
+//                 formData.append("aarti", aarti);
+//                 formData.append("aartilyrics", aartilyrics?.toString('html'));
+//                 formData.append("chalisa", chalisa);
+//                 formData.append("chalisalyrics", chalisalyrics?.toString('html'));
+//                 formData.append("mantralink", mantralink);
+//                 formData.append("mantralyrics", mantralyrics?.toString('html'));
+//                 formData.append("bhajan", bhajan);
+//                 formData.append("bhjanlyrics", bhjanlyrics?.toString('html'));
+//                 formData.append("image", image?.bytes);
+//                 bulkImage.forEach(image => { formData.append(`bulkImageUpload`, image?.bytes); });
+//                 bulkVideo.forEach(video => { formData.append(`bulkVideoUpload`, video?.bytes); });
+
+
+//                 const payload = {
+//                     data: formData,
+//                     onComplete: () => navigate("/temple/darshan")
+//                 }
+
+//                 //! Dispatching API for Updating Darshan
+//                 dispatch(TempleActions.createTempleDarshan(payload))
+
+//             } else {
+//                 let formData = new FormData();
+//                 formData.append("temple", temple);
+//                 formData.append("title", title);
+//                 formData.append("description", description?.toString('html'));
+//                 formData.append("aarti", aarti);
+//                 formData.append("aartilyrics", aartilyrics?.toString('html'));
+//                 formData.append("chalisa", chalisa);
+//                 formData.append("chalisalyrics", chalisalyrics?.toString('html'));
+//                 formData.append("mantralink", mantralink);
+//                 formData.append("mantralyrics", mantralyrics?.toString('html'));
+//                 formData.append("bhajan", bhajan);
+//                 formData.append("bhjanlyrics", bhjanlyrics?.toString('html'));
+//                 formData.append("image", image?.bytes);
+//                 bulkImage.forEach(image => { formData.append(`bulkImageUpload`, image?.bytes); });
+//                 bulkVideo.forEach(video => { formData.append(`bulkVideoUpload`, video?.bytes); });
+
+//                 const payload = {
+//                     data: formData,
+//                     onComplete: () => navigate("/temple/darshan")
+//                 }
+
+//                 //! Dispatching API for Creating Darshan
+//                 dispatch(TempleActions.createTempleDarshan(payload))
+//             }
+//         }
+//     };
+
+//     return (
+//         <>
+//             <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px" }}>
+//                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", fontFamily: 'Philosopher', backgroundColor: "#fff" }}>
+//                     <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Darshan</div>
+//                     <div onClick={() => navigate("/temple/darshan")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
+//                 </div>
+
+//                 <Grid container sx={{ alignItems: "center" }} spacing={3}>
+//                     <Grid item lg={12} sm={12} md={12} xs={12} >
+//                         <div style={{ color: "#000", border: "1px solid #C4C4C4", borderRadius: "3px" }}>
+//                             {image?.file ?
+//                                 <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px", cursor: "pointer" }}>
+//                                     <Avatar src={image.file} style={{ height: '300px', width: "300px", borderRadius: "initial" }} />
+//                                 </label>
+//                                 :
+//                                 <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center", padding: "100px 0", cursor: "pointer" }}>
+//                                     <UploadImageSvg h="80" w="80" color="#C4C4C4" />
+//                                     <div style={{ fontWeight: "600", fontSize: "18px" }}>Choose Your Image to Upload</div>
+//                                     <div style={{ fontWeight: "500", fontSize: "16px", color: 'grey' }}>Or Drop Your Image Here</div>
+//                                 </label>}
+//                             <input id="upload-image" onChange={handleImage} hidden accept="image/*" type="file" />
+//                         </div>
+//                         {inputFieldError?.image && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px", }}>{inputFieldError?.image}</div>}
+//                     </Grid>
+
+//                     <Grid item lg={6} md={12} sm={12} xs={12} >
+//                         <FormControl fullWidth>
+//                             <InputLabel id="select-label">Select Temple <span style={{ color: "red" }}>*</span></InputLabel>
+//                             <Select
+//                                 label="Select Temple *" variant="outlined" fullWidth
+//                                 name='temple'
+//                                 value={inputFieldDetail?.temple}
+//                                 onChange={handleInputField}
+//                                 error={inputFieldError?.temple ? true : false}
+//                                 onFocus={() => handleInputFieldError("temple", null)}
+//                             >
+//                                 <MenuItem disabled>---Select Temple---</MenuItem>
+//                                 <MenuItem value="Sanatan">Sanatan</MenuItem>
+//                                 <MenuItem value="Navgrah">Navgrah</MenuItem>
+//                             </Select>
+//                         </FormControl>
+//                         {inputFieldError?.temple && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "500" }}>{inputFieldError?.temple}</div>}
+//                     </Grid>
+
+//                     <Grid item lg={6} md={12} sm={12} xs={12} >
+//                         <TextField
+//                             label={<>Title <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+//                             name='title'
+//                             value={inputFieldDetail?.title}
+//                             onChange={handleInputField}
+//                             error={inputFieldError.title ? true : false}
+//                             helperText={inputFieldError.title}
+//                             onFocus={() => handleInputFieldError("title", null)}
+//                         />
+//                     </Grid>
+
+//                     <Grid item lg={12} md={12} sm={12} xs={12}>
+//                         <label>
+//                             Description <span style={{ color: "red" }}>*</span>
+//                         </label>
+
+//                         <RichTextEditor
+//                             value={inputFieldDetail?.description}
+//                             onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, description: value })}
+//                             editorStyle={{ minHeight: '50vh', }}
+//                             onFocus={() => handleInputFieldError("description", null)}
+//                         />
+//                         {/* Optionally, display error */}
+//                         {inputFieldError.description && (
+//                             <span style={{ color: "red" }}>
+//                                 {inputFieldError.description}
+//                             </span>
+//                         )}
+//                     </Grid>
+
+
+//                     <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
+//                         <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
+//                             {bulkImage.length > 0 && bulkImage?.map((value, index) => (
+//                                 <div key={index} style={{ position: "relative" }}>
+//                                     <Avatar src={value.file} style={{ height: '150px', width: "250px", borderRadius: "initial" }} />
+//                                     <div onClick={() => {
+//                                         value?.bytes ? 
+//                                         setBulkImage(bulkImage.filter((curr, currIndex) => currIndex !== index)) : handleImageDelete(value?.file)
+//                                         }} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
+//                                 </div>
+//                             ))}
+//                         </div>
+
+//                         <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More Images(Max File Count : 5)</div>
+//                         <label htmlFor="upload-bulk-image" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
+//                             <UploadImageSvg h="25" w="25" color="#000" />
+//                             <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
+//                         </label>
+//                         <input id="upload-bulk-image" multiple type="file" onChange={handleBulkImage} hidden />
+//                     </Grid>
+
+
+
+//                     <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
+//                         <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
+//                             {bulkVideo.length > 0 && bulkVideo.map((value, index) => {
+//                                 return (
+//                                     <div key={index} style={{ position: "relative" }}>
+//                                         <video controls style={{ height: '200px', maxWidth: '300px' }}>
+//                                             {value?.file ?
+//                                                 <source src={value?.file} /> :
+//                                                 <source src={base_url + value} />}
+//                                         </video>
+//                                         <div
+//                                             onClick={() => {
+//                                                 value?.file ? 
+//                                                  handleVideoDelete(value?.file) : setbulkVideo(bulkVideo.filter((curr, currIndex) => currIndex !== index)) 
+//                                             }
+//                                             }
+//                                             style={{
+//                                                 position: "absolute",
+//                                                 top: '-13px',
+//                                                 right: '-15px',
+//                                                 cursor: "pointer"
+//                                             }}
+//                                         >
+//                                             <CrossSvg />
+//                                         </div>
+//                                     </div>
+//                                 );
+//                             })}
+//                         </div>
+
+//                         <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More GIF/Video</div>
+//                         <label htmlFor="upload-bulk-audio" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
+//                             <UploadImageSvg h="25" w="25" color="#000" />
+//                             <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
+//                         </label>
+//                         <input id="upload-bulk-audio" accept="video/*" type="file" onChange={handlebulkVideo} hidden />
+//                     </Grid>
+
+//                     <Grid item lg={6} md={6} sm={6} xs={6}>
+//                         <TextField
+//                             label={<>Aarti Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+//                             name='aarti'
+//                             value={inputFieldDetail?.aarti}
+//                             onChange={handleInputField}
+//                             error={inputFieldError.aarti ? true : false}
+//                             helperText={inputFieldError.title}
+//                             onFocus={() => handleInputFieldError("aarti", null)}
+//                         />
+//                     </Grid>
+
+
+
+//                     <Grid item lg={6} md={6} sm={6} xs={6}>
+//                         <TextField
+//                             label={<>Chalisa Link<span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+//                             name='chalisa'
+//                             value={inputFieldDetail?.chalisa}
+//                             onChange={handleInputField}
+//                             error={inputFieldError.chalisa ? true : false}
+//                             helperText={inputFieldError.chalisa}
+//                             onFocus={() => handleInputFieldError("chalisa", null)}
+//                         />
+//                     </Grid>
+
+
+
+//                     <Grid item lg={6} md={6} sm={6} xs={6}>
+//                         <TextField
+//                             label={<>Mantra Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+//                             name='mantralink'
+//                             value={inputFieldDetail?.mantralink}
+//                             onChange={handleInputField}
+//                             error={inputFieldError.mantralink ? true : false}
+//                             helperText={inputFieldError.mantralink}
+//                             onFocus={() => handleInputFieldError("mantralink", null)}
+//                         />
+//                     </Grid>
+
+
+
+//                     <Grid item lg={6} md={6} sm={6} xs={6}>
+//                         <TextField
+//                             label={<>Bhajan Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+//                             name='bhajan'
+//                             value={inputFieldDetail?.bhajan}
+//                             onChange={handleInputField}
+//                             error={inputFieldError.bhajan ? true : false}
+//                             helperText={inputFieldError.bhajan}
+//                             onFocus={() => handleInputFieldError("bhajan", null)}
+//                         />
+//                     </Grid>
+
+
+
+//                     <Grid item lg={12} md={12} sm={12} xs={12}>
+//                         <label>
+//                             Aarti Lyrics <span style={{ color: "red" }}>*</span>
+//                         </label>
+
+//                         <RichTextEditor
+//                             value={inputFieldDetail?.aartilyrics}
+//                             onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, aartilyrics: value })}
+//                             editorStyle={{ minHeight: '20vh', }}
+//                             onFocus={() => handleInputFieldError("aartilyrics", null)}
+//                         />
+//                         {/* Optionally, display error */}
+//                         {inputFieldError.aartilyrics && (
+//                             <span style={{ color: "red" }}>
+//                                 {inputFieldError.aartilyrics}
+//                             </span>
+//                         )}
+//                     </Grid>
+
+//                     <Grid item lg={12} md={12} sm={12} xs={12}>
+//                         <label>
+//                             Chalisa Lyrics <span style={{ color: "red" }}>*</span>
+//                         </label>
+
+//                         <RichTextEditor
+//                             value={inputFieldDetail?.chalisalyrics}
+//                             onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, chalisalyrics: value })}
+//                             editorStyle={{ minHeight: '20vh', }}
+//                             onFocus={() => handleInputFieldError("chalisalyrics", null)}
+//                         />
+//                         {/* Optionally, display error */}
+//                         {inputFieldError.chalisalyrics && (
+//                             <span style={{ color: "red" }}>
+//                                 {inputFieldError.chalisalyrics}
+//                             </span>
+//                         )}
+//                     </Grid>
+
+//                     <Grid item lg={12} md={12} sm={12} xs={12}>
+//                         <label>
+//                             Mantra Lyrics <span style={{ color: "red" }}>*</span>
+//                         </label>
+
+//                         <RichTextEditor
+//                             value={inputFieldDetail?.mantralyrics}
+//                             onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, mantralyrics: value })}
+//                             editorStyle={{ minHeight: '20vh', }}
+//                             onFocus={() => handleInputFieldError("mantralyrics", null)}
+//                         />
+//                         {/* Optionally, display error */}
+//                         {inputFieldError.mantralyrics && (
+//                             <span style={{ color: "red" }}>
+//                                 {inputFieldError.mantralyrics}
+//                             </span>
+//                         )}
+//                     </Grid>
+
+//                     <Grid item lg={12} md={12} sm={12} xs={12}>
+//                         <label>
+//                             Bhajan Lyrics <span style={{ color: "red" }}>*</span>
+//                         </label>
+
+//                         <RichTextEditor
+//                             value={inputFieldDetail?.bhjanlyrics}
+//                             onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, bhjanlyrics: value })}
+//                             editorStyle={{ minHeight: '20vh', }}
+//                             onFocus={() => handleInputFieldError("bhjanlyrics", null)}
+//                         />
+//                         {/* Optionally, display error */}
+//                         {inputFieldError.bhjanlyrics && (
+//                             <span style={{ color: "red" }}>
+//                                 {inputFieldError.bhjanlyrics}
+//                             </span>
+//                         )}
+//                     </Grid>
+
+//                     <Grid item lg={12} md={12} sm={12} xs={12}>
+//                         <Grid container sx={{ justifyContent: "space-between" }}>
+//                             <div onClick={handleSubmit} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "10px 20px", borderRadius: "5px", cursor: "pointer", fontSize: "15px" }}>Submit</div>
+//                         </Grid>
+//                     </Grid>
+//                 </Grid>
+//             </div >
+//         </>
+//     );
+// };
+
+// export default AddDarshan;
+
+
+
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -12,142 +540,136 @@ import ReactQuill from 'react-quill'; // import the Quill component
 import 'react-quill/dist/quill.snow.css';
 import RichTextEditor from 'react-rte';
 
+
 const AddDarshan = ({ mode }) => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const location = useLocation();
+
     const stateData = location.state && location.state.stateData;
-    const id = location.state && location.state.stateData?._id
-    console.log("State Data ::: ", stateData);
+    const id = stateData?._id;
 
+    // Initialize input state with VR and temple_vr_darshan included
     const [inputFieldDetail, setInputFieldDetail] = useState({
-        title: stateData ? stateData?.title : '',
-        temple: stateData ? stateData?.temple : '',
-        description: stateData ? RichTextEditor.createValueFromString(stateData?.description, 'html') : RichTextEditor.createEmptyValue(),
-        aarti: stateData ? stateData?.aarti : '',
-        aartilyrics: stateData ? RichTextEditor.createValueFromString(stateData?.aartilyrics, 'html') : RichTextEditor.createEmptyValue(),
-        chalisa: stateData ? stateData?.chalisa : '',
-        chalisalyrics: stateData ? RichTextEditor.createValueFromString(stateData?.chalisalyrics, 'html') : RichTextEditor.createEmptyValue(),
-        mantralink: stateData ? stateData?.mantralink : '',
-        mantralyrics: stateData ? RichTextEditor.createValueFromString(stateData?.mantralyrics, 'html') : RichTextEditor.createEmptyValue(),
-        bhajan: stateData ? stateData?.bhajan : '',
-        bhjanlyrics: stateData ? RichTextEditor.createValueFromString(stateData?.bhjanlyrics, 'html') : RichTextEditor.createEmptyValue(),
+        temple: stateData ? stateData.temple : "",
+        title: stateData ? stateData.title : "",
+        description: stateData ? RichTextEditor.createValueFromString(stateData.description, "html") : RichTextEditor.createEmptyValue(),
+        aarti: stateData ? stateData.aarti : "",
+        chalisa: stateData ? stateData.chalisa : "",
+        mantralink: stateData ? stateData.mantralink : "",
+        bhajan: stateData ? stateData.bhajan : "",
+        aartilyrics: stateData ? RichTextEditor.createValueFromString(stateData.aartilyrics, "html") : RichTextEditor.createEmptyValue(),
+        chalisalyrics: stateData ? RichTextEditor.createValueFromString(stateData.chalisalyrics, "html") : RichTextEditor.createEmptyValue(),
+        mantralyrics: stateData ? RichTextEditor.createValueFromString(stateData.mantralyrics, "html") : RichTextEditor.createEmptyValue(),
+        bhjanlyrics: stateData ? RichTextEditor.createValueFromString(stateData.bhjanlyrics, "html") : RichTextEditor.createEmptyValue(),
+
+        vr_mode: stateData?.vr_mode?.length ? stateData.vr_mode.map(vr => ({
+            vr_title: vr.vr_title || "",
+            vr_image: vr.vr_image || null,
+            vr_image_file: null,
+            tags: Array.isArray(vr.tags) ? vr.tags.join(",") : vr.tags || "",
+            vr_type: vr.vr_type || "VR"
+        })) : [
+            {
+                vr_title: "",
+                vr_image: null,
+                vr_image_file: null,
+                tags: "",
+                vr_type: "VR"
+            }
+        ],
+
+        temple_vr_darshan: {
+            price: stateData?.temple_vr_darshan?.price ?? "",
+            type: stateData?.temple_vr_darshan?.type || "Deduct",
+        }
+
     });
+
+
     const [inputFieldError, setInputFieldError] = useState({
-        image: '', temple: '', title: '', description: '', bulkImage: '', bulkVideo: '',
-        aarti: '', aartilyrics: '', chalisa: '', chalisalyrics: '', mantralink: '', mantralyrics: '', bhajan: '', bhjanlyrics: ''
+        image: '',
+        temple: '',
+        title: '',
+        description: '',
+        bulkImage: '',
+        bulkVideo: '',
+        aarti: '',
+        aartilyrics: '',
+        chalisa: '',
+        chalisalyrics: '',
+        mantralink: '',
+        mantralyrics: '',
+        bhajan: '',
+        bhjanlyrics: ''
     });
-    const [image, setImage] = useState({ file: stateData ? api_urls + stateData?.image : '', bytes: '' });
-    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bulkImageOnly && stateData?.bulkImageOnly?.map(value => ({ file: base_url + value })) : []);
-    const [bulkVideo, setbulkVideo] = useState(stateData ? stateData?.
-        bulkVideoUpload.map(value => ({ file: base_url + value})) : []);
 
-    console.log('bulkImage :: ', bulkImage);
+    const [image, setImage] = useState({
+        file: stateData ? api_urls + stateData.image : null,
+        bytes: null
+    });
 
-    const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
-    const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value })); //* Handle Input Field : Error
+    const [bulkImage, setBulkImage] = useState(stateData?.bulkImageOnly?.map(img => ({ file: base_url+img })) || []);
+    const [bulkVideo, setbulkVideo] = useState(stateData?.bulkVideoUpload?.map(vid => ({ file: base_url+vid })) || []);
 
-    //! Handle Image : Normally
+    // === Handlers ===
+
+    const handleInputField = (e) => {
+        const { name, value } = e.target;
+        setInputFieldDetail(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleInputFieldError = (field, error) => {
+        setInputFieldError(prev => ({ ...prev, [field]: error }));
+    };
+
+    // VR Mode Handlers
+    const handleVRChange = (index, field, value) => {
+        const updatedVR = [...inputFieldDetail.vr_mode];
+        if (field === "vr_image") {
+            updatedVR[index].vr_image_file = value;
+            updatedVR[index].vr_image = URL.createObjectURL(value);
+        } else if (field === "tags") {
+            updatedVR[index][field] = value; // comma separated string
+        } else {
+            updatedVR[index][field] = value;
+        }
+        setInputFieldDetail(prev => ({ ...prev, vr_mode: updatedVR }));
+    };
+
+    const addVRMode = () => {
+        setInputFieldDetail(prev => ({
+            ...prev,
+            vr_mode: [...prev.vr_mode, { vr_title: "", vr_image: null, vr_image_file: null, tags: "", vr_type: "VR", vr_darshan_fake_user: 0 }],
+        }));
+    };
+
+    const removeVRMode = (index) => {
+        const updatedVR = [...inputFieldDetail.vr_mode];
+        updatedVR.splice(index, 1);
+        setInputFieldDetail(prev => ({ ...prev, vr_mode: updatedVR }));
+    };
+
+    // Temple VR Darshan handler
+    const handleTempleVRDarshan = (field, value) => {
+        setInputFieldDetail(prev => ({
+            ...prev,
+            temple_vr_darshan: {
+                ...prev.temple_vr_darshan,
+                [field]: value,
+            }
+        }));
+    };
+
+    // Image Handlers
     const handleImage = (e) => {
         if (e.target.files && e.target.files.length > 0) {
             setImage({
                 file: URL.createObjectURL(e.target.files[0]),
-                bytes: e.target.files[0],
+                bytes: e.target.files[0]
             });
+            handleInputFieldError("image", null);
         }
-
-        handleInputFieldError("image", null)
-    };
-
-    //! Handle Image : Drop Feature
-    const handleDrop = (e) => {
-        e.preventDefault();
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            setImage({
-                file: URL.createObjectURL(e.dataTransfer.files[0]),
-                bytes: e.dataTransfer.files[0],
-            });
-        }
-
-        handleInputFieldError("image", null)
-    };
-
-    //! Handle Bulk Image 
-    const handleBulkImage = (event) => {
-        const selectedFiles = event.target.files;
-
-        console.log("Selected files: ", selectedFiles);
-
-        if (bulkImage?.length >= 5) {
-            alert('Please select less than 5 files');
-            return;
-        }
-
-        if (selectedFiles && selectedFiles.length > 0) {
-            const updatedImage = Array.from(selectedFiles).map(file => ({
-                file: URL.createObjectURL(file),
-                bytes: file
-            }));
-
-            // अगर आप नई images को पुराने के साथ जोड़ना चाहते हैं:
-            setBulkImage((prev) => [...prev, ...updatedImage]);
-
-            // अगर आप नई images को पुराने पर ओवरराइड करना चाहते हैं:
-            // setBulkImage(updatedImage);
-        }
-    };
-
-    //! Handle Bulk Video 
-    const handlebulkVideo = (event) => {
-
-        const selectedFiles = event.target.files;
-
-        console.log("Selected files: ", selectedFiles);
-
-        if (bulkVideo?.length >= 5) {
-            alert('Please select less than 5 files');
-            return;
-        }
-
-        if (selectedFiles && selectedFiles.length > 0) {
-            const updatedVideo = Array.from(selectedFiles).map(file => ({
-                file: URL.createObjectURL(file),
-                bytes: file
-            }));
-
-            // अगर आप नई images को पुराने के साथ जोड़ना चाहते हैं:
-            setbulkVideo((prev) => [...prev, ...updatedVideo]);
-
-            // अगर आप नई images को पुराने पर ओवरराइड करना चाहते हैं:
-            // setBulkImage(updatedImage);
-        }
-    };
-    console.log("Bulk Video :::", bulkVideo);
-
-    //! Handle validation
-    const handleValidation = () => {
-        let isValid = true;
-        const { title } = inputFieldDetail;
-        const { file } = image;
-
-        if (!title) {
-            handleInputFieldError("title", "Please Enter Title")
-            isValid = false;
-        }
-        if (!Regex_Accept_Alpha_Dot_Comma_Space.test(title)) {
-            handleInputFieldError("title", "Please Enter Valid Title")
-            isValid = false;
-        }
-        if (title.toString().length > 70) {
-            handleInputFieldError("title", "Please Enter Title Less Than 70 Letter")
-            isValid = false;
-        }
-        if (!file) {
-            handleInputFieldError("image", "Please Upload Image")
-            isValid = false;
-        }
-
-        return isValid;
     };
 
     const handleImageDelete = (data) => {
@@ -164,7 +686,7 @@ const AddDarshan = ({ mode }) => {
     }
 
     const handleVideoDelete = (data) => {
-        console.log('video file ',data);
+        console.log('video file ', data);
         const payload = {
             data: {
                 id: stateData?._id,
@@ -176,350 +698,580 @@ const AddDarshan = ({ mode }) => {
         dispatch(TempleActions.deleteTempleVideo(payload))
     }
 
-    //! Handle Submit - Creating Darshan
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            setImage({
+                file: URL.createObjectURL(e.dataTransfer.files[0]),
+                bytes: e.dataTransfer.files[0]
+            });
+            handleInputFieldError("image", null);
+        }
+    };
+
+    // Bulk Image Handler
+    const handleBulkImage = (e) => {
+        const selectedFiles = e.target.files;
+        if (bulkImage.length >= 5) {
+            alert("Please select less than 5 files");
+            return;
+        }
+        if (selectedFiles && selectedFiles.length > 0) {
+            const updatedImages = Array.from(selectedFiles).map(file => ({
+                file: URL.createObjectURL(file),
+                bytes: file
+            }));
+            setBulkImage(prev => [...prev, ...updatedImages]);
+        }
+    };
+
+    // Bulk Video Handler
+    const handlebulkVideo = (e) => {
+        const selectedFiles = e.target.files;
+        if (bulkVideo.length >= 5) {
+            alert("Please select less than 5 files");
+            return;
+        }
+        if (selectedFiles && selectedFiles.length > 0) {
+            const updatedVideos = Array.from(selectedFiles).map(file => ({
+                file: URL.createObjectURL(file),
+                bytes: file
+            }));
+            setbulkVideo(prev => [...prev, ...updatedVideos]);
+        }
+    };
+
+    // Validation
+    const handleValidation = () => {
+        let isValid = true;
+        const { title } = inputFieldDetail;
+        const { file } = image;
+
+        if (!title) {
+            handleInputFieldError("title", "Please Enter Title");
+            isValid = false;
+        }
+        // Add any regex or length validations here as you had
+        if (!file) {
+            handleInputFieldError("image", "Please Upload Image");
+            isValid = false;
+        }
+
+        return isValid;
+    };
+
+    // Submit Handler
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Darshan Data :: ", { ...inputFieldDetail, image, bulkImage, bulkVideo })
-        const { title, description, temple, aarti, aartilyrics, chalisa, chalisalyrics, mantralink, mantralyrics, bhajan, bhjanlyrics } = inputFieldDetail;
 
-        console.log('Audio ', bulkVideo)
+        if (!handleValidation()) return;
 
-        if (handleValidation()) {
+        const formData = new FormData();
+        if (id) formData.append("id", id);
 
-            if (stateData) {
-                let formData = new FormData();
-                formData.append("id", stateData?._id);
-                formData.append("temple", temple);
-                formData.append("title", title);
-                formData.append("description", description?.toString('html'));
-                formData.append("aarti", aarti);
-                formData.append("aartilyrics", aartilyrics?.toString('html'));
-                formData.append("chalisa", chalisa);
-                formData.append("chalisalyrics", chalisalyrics?.toString('html'));
-                formData.append("mantralink", mantralink);
-                formData.append("mantralyrics", mantralyrics?.toString('html'));
-                formData.append("bhajan", bhajan);
-                formData.append("bhjanlyrics", bhjanlyrics?.toString('html'));
-                formData.append("image", image?.bytes);
-                bulkImage.forEach(image => { formData.append(`bulkImageUpload`, image?.bytes); });
-                bulkVideo.forEach(video => { formData.append(`bulkVideoUpload`, video?.bytes); });
+        formData.append("temple", inputFieldDetail.temple);
+        formData.append("title", inputFieldDetail.title);
+        formData.append("description", inputFieldDetail.description?.toString("html") || "");
+        formData.append("aarti", inputFieldDetail.aarti);
+        formData.append("aartilyrics", inputFieldDetail.aartilyrics?.toString("html") || "");
+        formData.append("chalisa", inputFieldDetail.chalisa);
+        formData.append("chalisalyrics", inputFieldDetail.chalisalyrics?.toString("html") || "");
+        formData.append("mantralink", inputFieldDetail.mantralink);
+        formData.append("mantralyrics", inputFieldDetail.mantralyrics?.toString("html") || "");
+        formData.append("bhajan", inputFieldDetail.bhajan);
+        formData.append("bhjanlyrics", inputFieldDetail.bhjanlyrics?.toString("html") || "");
+        formData.append("image", image.bytes);
 
-
-                const payload = {
-                    data: formData,
-                    onComplete: () => navigate("/temple/darshan")
-                }
-
-                //! Dispatching API for Updating Darshan
-                dispatch(TempleActions.createTempleDarshan(payload))
-
-            } else {
-                let formData = new FormData();
-                formData.append("temple", temple);
-                formData.append("title", title);
-                formData.append("description", description?.toString('html'));
-                formData.append("aarti", aarti);
-                formData.append("aartilyrics", aartilyrics?.toString('html'));
-                formData.append("chalisa", chalisa);
-                formData.append("chalisalyrics", chalisalyrics?.toString('html'));
-                formData.append("mantralink", mantralink);
-                formData.append("mantralyrics", mantralyrics?.toString('html'));
-                formData.append("bhajan", bhajan);
-                formData.append("bhjanlyrics", bhjanlyrics?.toString('html'));
-                formData.append("image", image?.bytes);
-                bulkImage.forEach(image => { formData.append(`bulkImageUpload`, image?.bytes); });
-                bulkVideo.forEach(video => { formData.append(`bulkVideoUpload`, video?.bytes); });
-
-                const payload = {
-                    data: formData,
-                    onComplete: () => navigate("/temple/darshan")
-                }
-
-                //! Dispatching API for Creating Darshan
-                dispatch(TempleActions.createTempleDarshan(payload))
+        // Append VR mode images and data
+        inputFieldDetail.vr_mode.forEach((vr, i) => {
+            formData.append(`vr_mode[${i}][vr_title]`, vr.vr_title);
+            formData.append(`vr_mode[${i}][tags]`, vr.tags);
+            formData.append(`vr_mode[${i}][vr_type]`, vr.vr_type);
+            formData.append(`vr_mode[${i}][vr_darshan_fake_user]`, vr.vr_darshan_fake_user);
+            if (vr.vr_image_file) {
+                formData.append(`vr_mode[${i}].vr_image`, vr.vr_image_file);
             }
-        }
+        });
+
+        // Append temple_vr_darshan price and type
+        formData.append("temple_vr_darshan[price]", inputFieldDetail.temple_vr_darshan.price);
+        formData.append("temple_vr_darshan[type]", inputFieldDetail.temple_vr_darshan.type);
+
+        bulkImage.forEach((img, i) => {
+            formData.append("bulkImageUpload", img.bytes);
+        });
+
+        bulkVideo.forEach((vid, i) => {
+            formData.append("bulkVideoUpload", vid.bytes);
+        });
+
+        const payload = {
+            data: formData,
+            onComplete: () => navigate("/temple/darshan")
+        };
+
+        dispatch(TempleActions.createTempleDarshan(payload));
     };
 
     return (
         <>
-            <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", fontFamily: 'Philosopher', backgroundColor: "#fff" }}>
-                    <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Darshan</div>
-                    <div onClick={() => navigate("/temple/darshan")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
-                </div>
+            <Grid container sx={{ alignItems: "center" }} spacing={3}>
+                {/* Existing image upload, temple select, title, description etc (keep unchanged) */}
+                <div style={{ padding: "20px", backgroundColor: "#fff", marginBottom: "20px", boxShadow: '0px 0px 5px lightgrey', borderRadius: "10px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", fontFamily: 'Philosopher', backgroundColor: "#fff" }}>
+                        <div style={{ fontSize: "22px", fontWeight: "500", color: Color.black, }}>{mode} Darshan</div>
+                        <div onClick={() => navigate("/temple/darshan")} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "5px 10px", borderRadius: "5px", cursor: "pointer", fontSize: "14px" }}>Display</div>
+                    </div>
 
-                <Grid container sx={{ alignItems: "center" }} spacing={3}>
-                    <Grid item lg={12} sm={12} md={12} xs={12} >
-                        <div style={{ color: "#000", border: "1px solid #C4C4C4", borderRadius: "3px" }}>
-                            {image?.file ?
-                                <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px", cursor: "pointer" }}>
-                                    <Avatar src={image.file} style={{ height: '300px', width: "300px", borderRadius: "initial" }} />
-                                </label>
-                                :
-                                <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center", padding: "100px 0", cursor: "pointer" }}>
-                                    <UploadImageSvg h="80" w="80" color="#C4C4C4" />
-                                    <div style={{ fontWeight: "600", fontSize: "18px" }}>Choose Your Image to Upload</div>
-                                    <div style={{ fontWeight: "500", fontSize: "16px", color: 'grey' }}>Or Drop Your Image Here</div>
-                                </label>}
-                            <input id="upload-image" onChange={handleImage} hidden accept="image/*" type="file" />
-                        </div>
-                        {inputFieldError?.image && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px", }}>{inputFieldError?.image}</div>}
-                    </Grid>
+                    <Grid container sx={{ alignItems: "center" }} spacing={3}>
+                        <Grid item lg={12} sm={12} md={12} xs={12} >
+                            <div style={{ color: "#000", border: "1px solid #C4C4C4", borderRadius: "3px" }}>
+                                {image?.file ?
+                                    <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px", cursor: "pointer" }}>
+                                        <Avatar src={image.file} style={{ height: '300px', width: "300px", borderRadius: "initial" }} />
+                                    </label>
+                                    :
+                                    <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center", padding: "100px 0", cursor: "pointer" }}>
+                                        <UploadImageSvg h="80" w="80" color="#C4C4C4" />
+                                        <div style={{ fontWeight: "600", fontSize: "18px" }}>Choose Your Image to Upload</div>
+                                        <div style={{ fontWeight: "500", fontSize: "16px", color: 'grey' }}>Or Drop Your Image Here</div>
+                                    </label>}
+                                <input id="upload-image" onChange={handleImage} hidden accept="image/*" type="file" />
+                            </div>
+                            {inputFieldError?.image && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px", }}>{inputFieldError?.image}</div>}
+                        </Grid>
 
-                    <Grid item lg={6} md={12} sm={12} xs={12} >
-                        <FormControl fullWidth>
-                            <InputLabel id="select-label">Select Temple <span style={{ color: "red" }}>*</span></InputLabel>
-                            <Select
-                                label="Select Temple *" variant="outlined" fullWidth
-                                name='temple'
-                                value={inputFieldDetail?.temple}
+                        <Grid item lg={6} md={12} sm={12} xs={12} >
+                            <FormControl fullWidth>
+                                <InputLabel id="select-label">Select Temple <span style={{ color: "red" }}>*</span></InputLabel>
+                                <Select
+                                    label="Select Temple *" variant="outlined" fullWidth
+                                    name='temple'
+                                    value={inputFieldDetail?.temple}
+                                    onChange={handleInputField}
+                                    error={inputFieldError?.temple ? true : false}
+                                    onFocus={() => handleInputFieldError("temple", null)}
+                                >
+                                    <MenuItem disabled>---Select Temple---</MenuItem>
+                                    <MenuItem value="Sanatan">Sanatan</MenuItem>
+                                    <MenuItem value="Navgrah">Navgrah</MenuItem>
+                                </Select>
+                            </FormControl>
+                            {inputFieldError?.temple && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "500" }}>{inputFieldError?.temple}</div>}
+                        </Grid>
+
+                        <Grid item lg={6} md={12} sm={12} xs={12} >
+                            <TextField
+                                label={<>Title <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                                name='title'
+                                value={inputFieldDetail?.title}
                                 onChange={handleInputField}
-                                error={inputFieldError?.temple ? true : false}
-                                onFocus={() => handleInputFieldError("temple", null)}
-                            >
-                                <MenuItem disabled>---Select Temple---</MenuItem>
-                                <MenuItem value="Sanatan">Sanatan</MenuItem>
-                                <MenuItem value="Navgrah">Navgrah</MenuItem>
-                            </Select>
-                        </FormControl>
-                        {inputFieldError?.temple && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "500" }}>{inputFieldError?.temple}</div>}
-                    </Grid>
+                                error={inputFieldError.title ? true : false}
+                                helperText={inputFieldError.title}
+                                onFocus={() => handleInputFieldError("title", null)}
+                            />
+                        </Grid>
 
-                    <Grid item lg={6} md={12} sm={12} xs={12} >
-                        <TextField
-                            label={<>Title <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='title'
-                            value={inputFieldDetail?.title}
-                            onChange={handleInputField}
-                            error={inputFieldError.title ? true : false}
-                            helperText={inputFieldError.title}
-                            onFocus={() => handleInputFieldError("title", null)}
-                        />
-                    </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <label>
+                                Description <span style={{ color: "red" }}>*</span>
+                            </label>
 
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                        <label>
-                            Description <span style={{ color: "red" }}>*</span>
-                        </label>
-
-                        <RichTextEditor
-                            value={inputFieldDetail?.description}
-                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, description: value })}
-                            editorStyle={{ minHeight: '50vh', }}
-                            onFocus={() => handleInputFieldError("description", null)}
-                        />
-                        {/* Optionally, display error */}
-                        {inputFieldError.description && (
-                            <span style={{ color: "red" }}>
-                                {inputFieldError.description}
-                            </span>
-                        )}
-                    </Grid>
+                            <RichTextEditor
+                                value={inputFieldDetail?.description}
+                                onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, description: value })}
+                                editorStyle={{ minHeight: '50vh', }}
+                                onFocus={() => handleInputFieldError("description", null)}
+                            />
+                            {/* Optionally, display error */}
+                            {inputFieldError.description && (
+                                <span style={{ color: "red" }}>
+                                    {inputFieldError.description}
+                                </span>
+                            )}
+                        </Grid>
 
 
-                    <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
-                        <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
-                            {bulkImage.length > 0 && bulkImage?.map((value, index) => (
-                                <div key={index} style={{ position: "relative" }}>
-                                    <Avatar src={value.file} style={{ height: '150px', width: "250px", borderRadius: "initial" }} />
-                                    <div onClick={() => {
-                                        value?.bytes ? 
-                                        setBulkImage(bulkImage.filter((curr, currIndex) => currIndex !== index)) : handleImageDelete(value?.file)
-                                        }} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More Images(Max File Count : 5)</div>
-                        <label htmlFor="upload-bulk-image" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
-                            <UploadImageSvg h="25" w="25" color="#000" />
-                            <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
-                        </label>
-                        <input id="upload-bulk-image" multiple type="file" onChange={handleBulkImage} hidden />
-                    </Grid>
-
-
-
-                    <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
-                        <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
-                            {bulkVideo.length > 0 && bulkVideo.map((value, index) => {
-                                return (
+                        <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
+                            <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
+                                {bulkImage.length > 0 && bulkImage?.map((value, index) => (
                                     <div key={index} style={{ position: "relative" }}>
-                                        <video controls style={{ height: '200px', maxWidth: '300px' }}>
-                                            {value?.file ?
-                                                <source src={value?.file} /> :
-                                                <source src={base_url + value} />}
-                                        </video>
-                                        <div
-                                            onClick={() => {
-                                                value?.file ? 
-                                                 handleVideoDelete(value?.file) : setbulkVideo(bulkVideo.filter((curr, currIndex) => currIndex !== index)) 
-                                            }
-                                            }
-                                            style={{
-                                                position: "absolute",
-                                                top: '-13px',
-                                                right: '-15px',
-                                                cursor: "pointer"
-                                            }}
-                                        >
-                                            <CrossSvg />
-                                        </div>
+                                        <Avatar src={value.file} style={{ height: '150px', width: "250px", borderRadius: "initial" }} />
+                                        <div onClick={() => {
+                                            value?.bytes ?
+                                                setBulkImage(bulkImage.filter((curr, currIndex) => currIndex !== index)) : handleImageDelete(value?.file)
+                                        }} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
                                     </div>
-                                );
-                            })}
-                        </div>
+                                ))}
+                            </div>
 
-                        <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More GIF/Video</div>
-                        <label htmlFor="upload-bulk-audio" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
-                            <UploadImageSvg h="25" w="25" color="#000" />
-                            <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
-                        </label>
-                        <input id="upload-bulk-audio" accept="video/*" type="file" onChange={handlebulkVideo} hidden />
-                    </Grid>
-
-                    <Grid item lg={6} md={6} sm={6} xs={6}>
-                        <TextField
-                            label={<>Aarti Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='aarti'
-                            value={inputFieldDetail?.aarti}
-                            onChange={handleInputField}
-                            error={inputFieldError.aarti ? true : false}
-                            helperText={inputFieldError.title}
-                            onFocus={() => handleInputFieldError("aarti", null)}
-                        />
-                    </Grid>
+                            <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More Images(Max File Count : 5)</div>
+                            <label htmlFor="upload-bulk-image" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
+                                <UploadImageSvg h="25" w="25" color="#000" />
+                                <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
+                            </label>
+                            <input id="upload-bulk-image" multiple type="file" onChange={handleBulkImage} hidden />
+                        </Grid>
 
 
 
-                    <Grid item lg={6} md={6} sm={6} xs={6}>
-                        <TextField
-                            label={<>Chalisa Link<span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='chalisa'
-                            value={inputFieldDetail?.chalisa}
-                            onChange={handleInputField}
-                            error={inputFieldError.chalisa ? true : false}
-                            helperText={inputFieldError.chalisa}
-                            onFocus={() => handleInputFieldError("chalisa", null)}
-                        />
-                    </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
+                            <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
+                                {bulkVideo.length > 0 && bulkVideo.map((value, index) => {
+                                    return (
+                                        <div key={index} style={{ position: "relative" }}>
+                                            <video controls style={{ height: '200px', maxWidth: '300px' }}>
+                                                {value?.file ?
+                                                    <source src={value?.file} /> :
+                                                    <source src={base_url + value} />}
+                                            </video>
+                                            <div
+                                                onClick={() => {
+                                                    value?.file ?
+                                                        handleVideoDelete(value?.file) : setbulkVideo(bulkVideo.filter((curr, currIndex) => currIndex !== index))
+                                                }
+                                                }
+                                                style={{
+                                                    position: "absolute",
+                                                    top: '-13px',
+                                                    right: '-15px',
+                                                    cursor: "pointer"
+                                                }}
+                                            >
+                                                <CrossSvg />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More GIF/Video</div>
+                            <label htmlFor="upload-bulk-audio" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
+                                <UploadImageSvg h="25" w="25" color="#000" />
+                                <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
+                            </label>
+                            <input id="upload-bulk-audio" accept="video/*" type="file" onChange={handlebulkVideo} hidden />
+                        </Grid>
+
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                label={<>Aarti Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                                name='aarti'
+                                value={inputFieldDetail?.aarti}
+                                onChange={handleInputField}
+                                error={inputFieldError.aarti ? true : false}
+                                helperText={inputFieldError.title}
+                                onFocus={() => handleInputFieldError("aarti", null)}
+                            />
+                        </Grid>
 
 
 
-                    <Grid item lg={6} md={6} sm={6} xs={6}>
-                        <TextField
-                            label={<>Mantra Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='mantralink'
-                            value={inputFieldDetail?.mantralink}
-                            onChange={handleInputField}
-                            error={inputFieldError.mantralink ? true : false}
-                            helperText={inputFieldError.mantralink}
-                            onFocus={() => handleInputFieldError("mantralink", null)}
-                        />
-                    </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                label={<>Chalisa Link<span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                                name='chalisa'
+                                value={inputFieldDetail?.chalisa}
+                                onChange={handleInputField}
+                                error={inputFieldError.chalisa ? true : false}
+                                helperText={inputFieldError.chalisa}
+                                onFocus={() => handleInputFieldError("chalisa", null)}
+                            />
+                        </Grid>
 
 
 
-                    <Grid item lg={6} md={6} sm={6} xs={6}>
-                        <TextField
-                            label={<>Bhajan Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='bhajan'
-                            value={inputFieldDetail?.bhajan}
-                            onChange={handleInputField}
-                            error={inputFieldError.bhajan ? true : false}
-                            helperText={inputFieldError.bhajan}
-                            onFocus={() => handleInputFieldError("bhajan", null)}
-                        />
-                    </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                label={<>Mantra Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                                name='mantralink'
+                                value={inputFieldDetail?.mantralink}
+                                onChange={handleInputField}
+                                error={inputFieldError.mantralink ? true : false}
+                                helperText={inputFieldError.mantralink}
+                                onFocus={() => handleInputFieldError("mantralink", null)}
+                            />
+                        </Grid>
 
 
 
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                        <label>
-                            Aarti Lyrics <span style={{ color: "red" }}>*</span>
-                        </label>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                label={<>Bhajan Link <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                                name='bhajan'
+                                value={inputFieldDetail?.bhajan}
+                                onChange={handleInputField}
+                                error={inputFieldError.bhajan ? true : false}
+                                helperText={inputFieldError.bhajan}
+                                onFocus={() => handleInputFieldError("bhajan", null)}
+                            />
+                        </Grid>
 
-                        <RichTextEditor
-                            value={inputFieldDetail?.aartilyrics}
-                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, aartilyrics: value })}
-                            editorStyle={{ minHeight: '20vh', }}
-                            onFocus={() => handleInputFieldError("aartilyrics", null)}
-                        />
-                        {/* Optionally, display error */}
-                        {inputFieldError.aartilyrics && (
-                            <span style={{ color: "red" }}>
-                                {inputFieldError.aartilyrics}
-                            </span>
-                        )}
-                    </Grid>
 
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                        <label>
-                            Chalisa Lyrics <span style={{ color: "red" }}>*</span>
-                        </label>
 
-                        <RichTextEditor
-                            value={inputFieldDetail?.chalisalyrics}
-                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, chalisalyrics: value })}
-                            editorStyle={{ minHeight: '20vh', }}
-                            onFocus={() => handleInputFieldError("chalisalyrics", null)}
-                        />
-                        {/* Optionally, display error */}
-                        {inputFieldError.chalisalyrics && (
-                            <span style={{ color: "red" }}>
-                                {inputFieldError.chalisalyrics}
-                            </span>
-                        )}
-                    </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <label>
+                                Aarti Lyrics <span style={{ color: "red" }}>*</span>
+                            </label>
 
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                        <label>
-                            Mantra Lyrics <span style={{ color: "red" }}>*</span>
-                        </label>
+                            <RichTextEditor
+                                value={inputFieldDetail?.aartilyrics}
+                                onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, aartilyrics: value })}
+                                editorStyle={{ minHeight: '20vh', }}
+                                onFocus={() => handleInputFieldError("aartilyrics", null)}
+                            />
+                            {/* Optionally, display error */}
+                            {inputFieldError.aartilyrics && (
+                                <span style={{ color: "red" }}>
+                                    {inputFieldError.aartilyrics}
+                                </span>
+                            )}
+                        </Grid>
 
-                        <RichTextEditor
-                            value={inputFieldDetail?.mantralyrics}
-                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, mantralyrics: value })}
-                            editorStyle={{ minHeight: '20vh', }}
-                            onFocus={() => handleInputFieldError("mantralyrics", null)}
-                        />
-                        {/* Optionally, display error */}
-                        {inputFieldError.mantralyrics && (
-                            <span style={{ color: "red" }}>
-                                {inputFieldError.mantralyrics}
-                            </span>
-                        )}
-                    </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <label>
+                                Chalisa Lyrics <span style={{ color: "red" }}>*</span>
+                            </label>
 
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                        <label>
-                            Bhajan Lyrics <span style={{ color: "red" }}>*</span>
-                        </label>
+                            <RichTextEditor
+                                value={inputFieldDetail?.chalisalyrics}
+                                onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, chalisalyrics: value })}
+                                editorStyle={{ minHeight: '20vh', }}
+                                onFocus={() => handleInputFieldError("chalisalyrics", null)}
+                            />
+                            {/* Optionally, display error */}
+                            {inputFieldError.chalisalyrics && (
+                                <span style={{ color: "red" }}>
+                                    {inputFieldError.chalisalyrics}
+                                </span>
+                            )}
+                        </Grid>
 
-                        <RichTextEditor
-                            value={inputFieldDetail?.bhjanlyrics}
-                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, bhjanlyrics: value })}
-                            editorStyle={{ minHeight: '20vh', }}
-                            onFocus={() => handleInputFieldError("bhjanlyrics", null)}
-                        />
-                        {/* Optionally, display error */}
-                        {inputFieldError.bhjanlyrics && (
-                            <span style={{ color: "red" }}>
-                                {inputFieldError.bhjanlyrics}
-                            </span>
-                        )}
-                    </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <label>
+                                Mantra Lyrics <span style={{ color: "red" }}>*</span>
+                            </label>
 
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                        <Grid container sx={{ justifyContent: "space-between" }}>
-                            <div onClick={handleSubmit} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "10px 20px", borderRadius: "5px", cursor: "pointer", fontSize: "15px" }}>Submit</div>
+                            <RichTextEditor
+                                value={inputFieldDetail?.mantralyrics}
+                                onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, mantralyrics: value })}
+                                editorStyle={{ minHeight: '20vh', }}
+                                onFocus={() => handleInputFieldError("mantralyrics", null)}
+                            />
+                            {/* Optionally, display error */}
+                            {inputFieldError.mantralyrics && (
+                                <span style={{ color: "red" }}>
+                                    {inputFieldError.mantralyrics}
+                                </span>
+                            )}
+                        </Grid>
+
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <label>
+                                Bhajan Lyrics <span style={{ color: "red" }}>*</span>
+                            </label>
+
+                            <RichTextEditor
+                                value={inputFieldDetail?.bhjanlyrics}
+                                onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, bhjanlyrics: value })}
+                                editorStyle={{ minHeight: '20vh', }}
+                                onFocus={() => handleInputFieldError("bhjanlyrics", null)}
+                            />
+                            {/* Optionally, display error */}
+                            {inputFieldError.bhjanlyrics && (
+                                <span style={{ color: "red" }}>
+                                    {inputFieldError.bhjanlyrics}
+                                </span>
+                            )}
+                        </Grid>
+
+
+
+                       <Grid item xs={12}>
+  <label style={{ fontWeight: "600", fontSize: "18px" }}>VR Mode</label>
+  {inputFieldDetail.vr_mode.map((vr, index) => (
+    <div
+      key={index}
+      style={{
+        border: "1px solid #C4C4C4",
+        borderRadius: "8px",
+        padding: "15px",
+        marginBottom: "15px",
+        position: "relative",
+      }}
+    >
+      <Grid container spacing={2}>
+        {/* VR Title */}
+        <Grid item xs={12} md={4}>
+          <FormControl fullWidth required error={!!inputFieldError[`vr_mode_${index}_vr_title`]}>
+            <InputLabel id={`vr-title-label-${index}`}>VR Title</InputLabel>
+            <Select
+              labelId={`vr-title-label-${index}`}
+              value={vr.vr_title}
+              label="VR Title *"
+              onChange={(e) => handleVRChange(index, "vr_title", e.target.value)}
+            >
+              <MenuItem value="Garbh Grah">Garbh Grah</MenuItem>
+              <MenuItem value="Sarovar">Sarovar</MenuItem>
+              <MenuItem value="Entry Gate">Entry Gate</MenuItem>
+              <MenuItem value="Mandap">Mandap</MenuItem>
+              <MenuItem value="Parikrama">Parikrama</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+
+         <Grid item xs={12} md={4}>
+          <TextField
+            label="Fake User Count"
+            type="number"
+            variant="outlined"
+            fullWidth
+            value={vr.vr_darshan_fake_user}
+            onChange={(e) => handleVRChange(index, "vr_darshan_fake_user", e.target.value)}
+          />
+        </Grid>
+
+        {/* VR Image Upload */}
+        <Grid item xs={12} md={4}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item>
+              <label
+                htmlFor={`vr_image_upload_${index}`}
+                style={{
+                  display: "inline-block",
+                  cursor: "pointer",
+                  border: "1px solid #C4C4C4",
+                  borderRadius: "4px",
+                  padding: "6px 10px",
+                }}
+              >
+                Upload VR Image
+              </label>
+              <input
+                id={`vr_image_upload_${index}`}
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => {
+                  if (e.target.files[0]) {
+                    handleVRChange(index, "vr_image", e.target.files[0]);
+                  }
+                }}
+              />
+            </Grid>
+
+            {vr.vr_image && (
+              <Grid item>
+                <Avatar
+                  src={vr.vr_image}
+                  variant="square"
+                  style={{ width: "60px", height: "60px", borderRadius: "5px" }}
+                />
+              </Grid>
+            )}
+
+            {inputFieldDetail.vr_mode.length > 1 && (
+              <Grid item>
+                <div
+                  onClick={() => removeVRMode(index)}
+                  style={{ cursor: "pointer", color: "red", fontWeight: "bold" }}
+                >
+                  <CrossSvg />
+                </div>
+              </Grid>
+            )}
+          </Grid>
+        </Grid>
+
+        {/* Tags */}
+        <Grid item xs={12}>
+          <TextField
+            label="Tags (comma separated)"
+            variant="outlined"
+            fullWidth
+            value={vr.tags}
+            onChange={(e) => handleVRChange(index, "tags", e.target.value)}
+          />
+        </Grid>
+
+        {/* Fake User Count */}
+        {/* <Grid item xs={12} md={4}>
+          <TextField
+            label="Fake User Count"
+            type="number"
+            variant="outlined"
+            fullWidth
+            value={vr.vr_darshan_fake_user}
+            onChange={(e) => handleVRChange(index, "vr_darshan_fake_user", e.target.value)}
+          />
+        </Grid> */}
+      </Grid>
+    </div>
+  ))}
+
+  {/* Add More Button */}
+  <div
+    onClick={addVRMode}
+    style={{
+      cursor: "pointer",
+      fontWeight: "600",
+      color: Color.primary,
+      marginTop: "10px",
+      userSelect: "none",
+    }}
+  >
+    + Add Another VR Mode
+  </div>
+</Grid>
+
+
+                        {/* Temple VR Darshan Section */}
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                label="Temple VR Darshan Price"
+                                variant="outlined"
+                                fullWidth
+                                type="number"
+                                value={inputFieldDetail.temple_vr_darshan.price}
+                                onChange={(e) => handleTempleVRDarshan("price", Number(e.target.value))}
+                            // inputProps={{ min: 0, step: "0.01" }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <FormControl fullWidth>
+                                <InputLabel id="temple_vr_type_label">Price Type</InputLabel>
+                                <Select
+                                    labelId="temple_vr_type_label"
+                                    value={inputFieldDetail.temple_vr_darshan.type}
+                                    label="Price Type"
+                                    onChange={(e) => handleTempleVRDarshan("type", e.target.value)}
+                                >
+                                    <MenuItem value="Add">Add</MenuItem>
+                                    <MenuItem value="Deduct">Deduct</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
+
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Grid container sx={{ justifyContent: "space-between" }}>
+                                <div onClick={handleSubmit} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "10px 20px", borderRadius: "5px", cursor: "pointer", fontSize: "15px" }}>Submit</div>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-            </div >
+
+
+
+
+
+                </div >
+                {/* VR Mode Section */}
+            </Grid>
         </>
     );
 };
 
 export default AddDarshan;
+
