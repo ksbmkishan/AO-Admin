@@ -305,7 +305,7 @@ function* createTempleLiveLink(action) {
         const { payload } = action;
         console.log("Payload ::: ", payload);
 
-        const { data } = yield postAPI(create_temple_live_link, payload?.data);
+        const { data } = yield postAPI(create_temple_live_link, payload?.formData);
         console.log("Create Temple Live Link Saga Response ::: ", data);
 
         if (data?.success) {
