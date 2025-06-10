@@ -65,8 +65,9 @@ const AddDarshan = ({ mode }) => {
         bulkVideoUpload.map(value => ({ file: base_url + value })) : []);
 
     const [modal, setModal] = useState(false);
+    const [modalVideo, setModalVideo] = useState(false);
     const [imageView, setImageView] = useState(null);
-
+    const [imageViewVideo, setImageViewVideo] = useState(null);
     // console.log('bulkImage :: ', bulkImage);
 
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
@@ -225,6 +226,17 @@ const AddDarshan = ({ mode }) => {
         setImageView(data);
     }
 
+    const handleModalVideoClose = () => {
+        setModalVideo(false);
+        setImageViewVideo();
+    }
+
+    const handleModalVideoOpen = (data) => {
+        console.log('data ', data);
+        setModalVideo(true);
+        setImageViewVideo(data);
+    }
+
     // cropper
     const inputRef = useRef();
     const [imageSrc, setImageSrc] = useState(null);
@@ -232,6 +244,7 @@ const AddDarshan = ({ mode }) => {
     const [zoom, setZoom] = useState(1);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [modalOpen, setModalOpen] = useState(false);
+
 
     const [scale, setScale] = useState(1);
     const [rotation, setRotation] = useState(0);
@@ -271,7 +284,7 @@ const AddDarshan = ({ mode }) => {
 
         const img = imgRef.current;
         const scaleFactor = scale;
-        const rotationInRad = (rotation * Math.PI) / 180;
+        const rotationInRad = (rotation * Math.PI) / 120;
 
         const width = img.naturalWidth * scaleFactor;
         const height = img.naturalHeight * scaleFactor;
@@ -495,7 +508,7 @@ const AddDarshan = ({ mode }) => {
                                 <div key={index} style={{ position: "relative" }} onClick={() => handleModalOpen(value?.file)}>
                                     <Avatar src={value.file} style={{ height: '150px', width: "250px", borderRadius: "initial" }} />
                                     <div onClick={(e) => {
-                                         e.stopPropagation();
+                                        e.stopPropagation();
                                         value?.bytes ?
                                             setBulkImage(bulkImage.filter((curr, currIndex) => currIndex !== index)) : handleImageDelete(value?.file)
                                     }} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
@@ -520,7 +533,7 @@ const AddDarshan = ({ mode }) => {
                         <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
                             {bulkVideo.length > 0 && bulkVideo.map((value, index) => {
                                 return (
-                                    <div key={index} style={{ position: "relative" }}>
+                                    <div key={index} style={{ position: "relative" }} onClick={() => handleModalVideoOpen(value)}>
                                         <video controls style={{ height: '200px', maxWidth: '300px' }}>
                                             {value?.file ?
                                                 <source src={value?.file} /> :
@@ -910,8 +923,8 @@ const AddDarshan = ({ mode }) => {
                                             zIndex: 1,
                                         }}
                                     />
-                                   
-                                   <img
+
+                                    <img
                                         src={imageView}
                                         alt="Main Image"
                                         style={{
@@ -923,16 +936,16 @@ const AddDarshan = ({ mode }) => {
                                             zIndex: 1,
                                         }}
                                     />
-                                   
-                                   
+
+
                                 </div>
 
                             </Grid>
 
                         </DialogContent>
                     </Dialog>
-                : 
-                <Dialog open={modal} PaperProps={{ sx: { maxWidth: { xs: '190vw', sm: '150vw' }, minWidth: { xs: '200vw', sm: '32vw' } } }}>
+                    :
+                    <Dialog open={modal} PaperProps={{ sx: { maxWidth: { xs: '190vw', sm: '150vw' }, minWidth: { xs: '200vw', sm: '32vw' } } }}>
                         <DialogContent>
                             <Grid container sx={{ alignItems: "center" }} spacing={3}>
                                 <Grid item lg={12} md={12} sm={12} xs={12} style={{ fontSize: "22px", fontWeight: "500", color: Color.black }}>
@@ -943,7 +956,7 @@ const AddDarshan = ({ mode }) => {
                                 </Grid>
                             </Grid>
 
-                            
+
 
                             <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
 
@@ -984,8 +997,8 @@ const AddDarshan = ({ mode }) => {
                                             zIndex: 1,
                                         }}
                                     />
-                                   
-                                   <img
+
+                                    <img
                                         src={imageView}
                                         alt="Main Image"
                                         style={{
@@ -996,8 +1009,141 @@ const AddDarshan = ({ mode }) => {
                                             zIndex: 1,
                                         }}
                                     />
-                                   
-                                   
+
+
+                                </div>
+
+                            </Grid>
+
+                        </DialogContent>
+                    </Dialog>
+                }
+
+
+
+                {/* Video Mandir */}
+                {inputFieldDetail?.temple == "Sanatan" ?
+                    <Dialog open={modalVideo} PaperProps={{ sx: { maxWidth: { xs: '190vw', sm: '150vw' }, minWidth: { xs: '200vw', sm: '32vw' } } }}>
+                        <DialogContent>
+                            <Grid container sx={{ alignItems: "center" }} spacing={3}>
+                                <Grid item lg={12} md={12} sm={12} xs={12} style={{ fontSize: "22px", fontWeight: "500", color: Color.black }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: "10px" }}>
+                                        <div>Video View</div>
+                                        <div onClick={() => handleModalVideoClose()} style={{ cursor: "pointer" }}><CrossSvg /></div>
+                                    </div>
+                                </Grid>
+                            </Grid>
+
+                            <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
+                                <div
+                                    style={{
+                                        position: "relative",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        marginTop: "20px",
+                                        borderRadius: "12px",
+                                        overflow: "hidden",
+                                        width: "100%",
+                                        maxWidth: "400px",
+                                        aspectRatio: "9 / 16",
+                                        marginInline: "auto",
+                                        backgroundColor: "#000", // fallback in case video doesn't load
+                                    }}
+                                >
+                                    {/* Background video */}
+                                    <video
+                                        controls
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "contain",
+                                            zIndex: 4,
+                                            
+                                          
+                                        }}
+                                    >
+                                        <source src={imageViewVideo?.file} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+
+                                    {/* Foreground frame/image */}
+                                    <img
+                                        src="/images/mandirmin.png"
+                                        alt="Mandir Foreground"
+                                        style={{
+                                            position: "absolute",
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                            zIndex: 2,
+                                        }}
+                                    />
+                                </div>
+                            </Grid>
+
+
+                        </DialogContent>
+                    </Dialog>
+                    :
+                    <Dialog open={modalVideo} PaperProps={{ sx: { maxWidth: { xs: '190vw', sm: '150vw' }, minWidth: { xs: '200vw', sm: '32vw' } } }}>
+                        <DialogContent>
+                            <Grid container sx={{ alignItems: "center" }} spacing={3}>
+                                <Grid item lg={12} md={12} sm={12} xs={12} style={{ fontSize: "22px", fontWeight: "500", color: Color.black }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: "10px" }}>
+                                        <div>Image View</div>
+                                        <div onClick={() => handleModalVideoClose()} style={{ cursor: "pointer" }}><CrossSvg /></div>
+                                    </div>
+                                </Grid>
+                            </Grid>
+
+
+
+                            <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
+
+                                <div
+                                    style={{
+                                        position: "relative",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        marginTop: "20px",
+                                        borderRadius: "12px",
+                                        overflow: "hidden",
+                                        width: "100%",
+                                        maxWidth: "400px", // adjust as needed for max width
+                                        aspectRatio: "9 / 16", // portrait mobile ratio
+                                        marginInline: "auto", // center in container
+                                    }}
+                                >
+                                    <img
+                                        src="/images/outernavgarhnew.png"
+                                        alt="Mandir Foreground"
+                                        style={{
+                                            position: "absolute",
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                            zIndex: 2,
+                                        }}
+                                    />
+                                    <img
+                                        src="/images/innernavgarh3.png"
+                                        alt="Mandir Background"
+                                        style={{
+                                            position: "absolute",
+                                            width: "100%",
+                                            height: "60%",
+                                            objectFit: "fill",
+                                            zIndex: 1,
+                                        }}
+                                    />
+
+                                    <video controls style={{ height: '200px', maxWidth: '300px', zIndex: 1 }}>
+                                        <source src={base_url + imageViewVideo} />
+                                    </video>
+
+
                                 </div>
 
                             </Grid>
@@ -1022,199 +1168,199 @@ const AddDarshan = ({ mode }) => {
                             Height: {(dimensions.height * scale).toFixed(0)}px
                         </div>
 
-                {inputFieldDetail?.temple == "Sanatan" ? 
-                        <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
+                        {inputFieldDetail?.temple == "Sanatan" ?
+                            <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
 
-                            <div
-                                style={{
-                                    position: "relative",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    marginTop: "20px",
-                                    borderRadius: "12px",
-                                    overflow: "hidden",
-                                    height: "850px", // or auto
-                                }}
-                            >
-                                <img
-                                    src="/images/mandirmin.png"
-                                    alt="Mandir Background"
+                                <div
                                     style={{
-                                        position: "absolute",
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "fill",
-                                        zIndex: 2,
+                                        position: "relative",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        marginTop: "20px",
+                                        borderRadius: "12px",
+                                        overflow: "hidden",
+                                        height: "850px", // or auto
                                     }}
-                                />
-                                <img
-                                    src="/images/mandirbackground.jpg"
-                                    alt="Mandir Background"
-                                    style={{
-                                        position: "absolute",
-                                        width: "88%",
-                                        height: "50%",
-                                        objectFit: "fill",
-                                        zIndex: 1,
-                                        marginTop: "200px",
-                                    }}
-                                />
+                                >
+                                    <img
+                                        src="/images/mandirmin.png"
+                                        alt="Mandir Background"
+                                        style={{
+                                            position: "absolute",
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "fill",
+                                            zIndex: 2,
+                                        }}
+                                    />
+                                    <img
+                                        src="/images/mandirbackground.jpg"
+                                        alt="Mandir Background"
+                                        style={{
+                                            position: "absolute",
+                                            width: "88%",
+                                            height: "50%",
+                                            objectFit: "fill",
+                                            zIndex: 1,
+                                            marginTop: "200px",
+                                        }}
+                                    />
 
-                                {imageSrc && (
-                                    <>
-                                        <img
-                                            ref={imgRef}
-                                            src={imageSrc}
-                                            alt="Uploaded"
-                                            style={{
-                                                position: 'absolute',
-                                                zIndex: 1,
-                                                transform: `
+                                    {imageSrc && (
+                                        <>
+                                            <img
+                                                ref={imgRef}
+                                                src={imageSrc}
+                                                alt="Uploaded"
+                                                style={{
+                                                    position: 'absolute',
+                                                    zIndex: 1,
+                                                    transform: `
                                                 translate(${translate[0]}px, ${translate[1]}px)
                                                 scale(${scale})
                                                 rotate(${rotation}deg)
                                                 `,
-                                                transformOrigin: "center center",
-                                                maxWidth: '100%',
-                                                maxHeight: '100%',
-                                                pointerEvents: 'none', // so Moveable can handle drag
-                                                width: '400px', // fixed width for consistency
-                                                height: '400px', // fixed height for consistency
-                                                marginTop: '200px',
-                                            }}
-                                        />
-                                        <Moveable
-                                            target={imgRef}
-                                            draggable
-                                            scalable
-                                            rotatable
-                                            onDrag={({ beforeTranslate }) => {
-                                                setTranslate(beforeTranslate);
-                                            }}
-                                            onScale={({ scale }) => {
-                                                setScale(scale[0]); // uniform scale
-                                            }}
-                                            onRotate={({ beforeRotate }) => {
-                                                setRotation(beforeRotate);
-                                            }}
-                                            origin={false}
-                                            keepRatio={true}
-                                            throttleDrag={1}
-                                            throttleScale={0.01}
-                                            throttleRotate={0.2}
-                                            zoom={1}
-                                        />
-                                    </>
-                                )}
+                                                    transformOrigin: "center center",
+                                                    maxWidth: '100%',
+                                                    maxHeight: '100%',
+                                                    pointerEvents: 'none', // so Moveable can handle drag
+                                                    width: '400px', // fixed width for consistency
+                                                    height: '400px', // fixed height for consistency
+                                                    marginTop: '250px',
+                                                }}
+                                            />
+                                            <Moveable
+                                                target={imgRef}
+                                                draggable
+                                                scalable
+                                                rotatable
+                                                onDrag={({ beforeTranslate }) => {
+                                                    setTranslate(beforeTranslate);
+                                                }}
+                                                onScale={({ scale }) => {
+                                                    setScale(scale[0]); // uniform scale
+                                                }}
+                                                onRotate={({ beforeRotate }) => {
+                                                    setRotation(beforeRotate);
+                                                }}
+                                                origin={false}
+                                                keepRatio={true}
+                                                throttleDrag={1}
+                                                throttleScale={0.01}
+                                                throttleRotate={0.2}
+                                                zoom={1}
+                                            />
+                                        </>
+                                    )}
 
-                            </div>
-                            <div style={{ display: 'flex', gap: 10, marginTop: 10, zIndex: 4 }}>
-                                <button onClick={() => setTranslate(([x, y]) => [x, y - 10])}>⬆ Up</button>
-                                <button onClick={() => setTranslate(([x, y]) => [x - 10, y])}>⬅ Left</button>
-                                <button onClick={() => setTranslate(([x, y]) => [x + 10, y])}>➡ Right</button>
-                                <button onClick={() => setTranslate(([x, y]) => [x, y + 10])}>⬇ Down</button>
-                            </div>
-                            <button onClick={handleSave}>💾 Save Transformed Image</button>
+                                </div>
+                                <div style={{ display: 'flex', gap: 10, marginTop: 10, zIndex: 4 }}>
+                                    <button onClick={() => setTranslate(([x, y]) => [x, y - 3])}>⬆ Up</button>
+                                    <button onClick={() => setTranslate(([x, y]) => [x - 3, y])}>⬅ Left</button>
+                                    <button onClick={() => setTranslate(([x, y]) => [x + 3, y])}>➡ Right</button>
+                                    <button onClick={() => setTranslate(([x, y]) => [x, y + 3])}>⬇ Down</button>
+                                </div>
+                                <button onClick={handleSave}>💾 Save Transformed Image</button>
 
-                        </Grid>
-                        : 
-                        <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
+                            </Grid>
+                            :
+                            <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
 
-                            <div
-                                style={{
-                                    position: "relative",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    marginTop: "20px",
-                                    borderRadius: "12px",
-                                    overflow: "hidden",
-                                    height: "850px", // or auto
-                                     aspectRatio: "9 / 16",
-                                }}
-                            >
-                                <img
-                                    src="/images/outernavgarhnew.png"
-                                    alt="Mandir Background"
+                                <div
                                     style={{
-                                        position: "absolute",
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "fill",
-                                        zIndex: 2,
+                                        position: "relative",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        marginTop: "20px",
+                                        borderRadius: "12px",
+                                        overflow: "hidden",
+                                        height: "850px", // or auto
+                                        aspectRatio: "9 / 16",
                                     }}
-                                />
-                                <img
-                                    src="/images/innernavgarh3.png"
-                                    alt="Mandir Background"
-                                    style={{
-                                        position: "absolute",
-                                        width: "100%",
-                                        height: "60%",
-                                        objectFit: "fill",
-                                        zIndex: 1,
-                                       
-                                    }}
-                                />
+                                >
+                                    <img
+                                        src="/images/outernavgarhnew.png"
+                                        alt="Mandir Background"
+                                        style={{
+                                            position: "absolute",
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "fill",
+                                            zIndex: 2,
+                                        }}
+                                    />
+                                    <img
+                                        src="/images/innernavgarh3.png"
+                                        alt="Mandir Background"
+                                        style={{
+                                            position: "absolute",
+                                            width: "100%",
+                                            height: "60%",
+                                            objectFit: "fill",
+                                            zIndex: 1,
 
-                                {imageSrc && (
-                                    <>
-                                        <img
-                                            ref={imgRef}
-                                            src={imageSrc}
-                                            alt="Uploaded"
-                                            style={{
-                                                position: 'absolute',
-                                                zIndex: 1,
-                                                transform: `
+                                        }}
+                                    />
+
+                                    {imageSrc && (
+                                        <>
+                                            <img
+                                                ref={imgRef}
+                                                src={imageSrc}
+                                                alt="Uploaded"
+                                                style={{
+                                                    position: 'absolute',
+                                                    zIndex: 1,
+                                                    transform: `
                                                 translate(${translate[0]}px, ${translate[1]}px)
                                                 scale(${scale})
                                                 rotate(${rotation}deg)
                                                 `,
-                                                transformOrigin: "center center",
-                                                maxWidth: '100%',
-                                                maxHeight: '100%',
-                                                pointerEvents: 'none', // so Moveable can handle drag
-                                               width: '400px', // fixed width for consistency
-                                                  height: '400px', // fixed height for consistency
-                                               
-                                            }}  
-                                        />
-                                        <Moveable
-                                            target={imgRef}
-                                            draggable
-                                            scalable
-                                            rotatable
-                                            onDrag={({ beforeTranslate }) => {
-                                                setTranslate(beforeTranslate);
-                                            }}
-                                            onScale={({ scale }) => {
-                                                setScale(scale[0]); // uniform scale
-                                            }}
-                                            onRotate={({ beforeRotate }) => {
-                                                setRotation(beforeRotate);
-                                            }}
-                                            origin={false}
-                                            keepRatio={true}
-                                            throttleDrag={1}
-                                            throttleScale={0.01}
-                                            throttleRotate={0.2}
-                                            zoom={1}
-                                        />
-                                    </>
-                                )}
+                                                    transformOrigin: "center center",
+                                                    maxWidth: '100%',
+                                                    maxHeight: '100%',
+                                                    pointerEvents: 'none', // so Moveable can handle drag
+                                                    width: '400px', // fixed width for consistency
+                                                    height: '400px', // fixed height for consistency
 
-                            </div>
-                            <div style={{ display: 'flex', gap: 10, marginTop: 10, zIndex: 4 }}>
-                                <button onClick={() => setTranslate(([x, y]) => [x, y - 10])}>⬆ Up</button>
-                                <button onClick={() => setTranslate(([x, y]) => [x - 10, y])}>⬅ Left</button>
-                                <button onClick={() => setTranslate(([x, y]) => [x + 10, y])}>➡ Right</button>
-                                <button onClick={() => setTranslate(([x, y]) => [x, y + 10])}>⬇ Down</button>
-                            </div>
-                            <button onClick={handleSave}>💾 Save Transformed Image</button>
+                                                }}
+                                            />
+                                            <Moveable
+                                                target={imgRef}
+                                                draggable
+                                                scalable
+                                                rotatable
+                                                onDrag={({ beforeTranslate }) => {
+                                                    setTranslate(beforeTranslate);
+                                                }}
+                                                onScale={({ scale }) => {
+                                                    setScale(scale[0]); // uniform scale
+                                                }}
+                                                onRotate={({ beforeRotate }) => {
+                                                    setRotation(beforeRotate);
+                                                }}
+                                                origin={false}
+                                                keepRatio={true}
+                                                throttleDrag={1}
+                                                throttleScale={0.01}
+                                                throttleRotate={0.2}
+                                                zoom={1}
+                                            />
+                                        </>
+                                    )}
 
-                        </Grid>
+                                </div>
+                                <div style={{ display: 'flex', gap: 10, marginTop: 10, zIndex: 4 }}>
+                                    <button onClick={() => setTranslate(([x, y]) => [x, y - 10])}>⬆ Up</button>
+                                    <button onClick={() => setTranslate(([x, y]) => [x - 10, y])}>⬅ Left</button>
+                                    <button onClick={() => setTranslate(([x, y]) => [x + 10, y])}>➡ Right</button>
+                                    <button onClick={() => setTranslate(([x, y]) => [x, y + 10])}>⬇ Down</button>
+                                </div>
+                                <button onClick={handleSave}>💾 Save Transformed Image</button>
+
+                            </Grid>
                         }
                     </DialogContent>
                 </Dialog>
