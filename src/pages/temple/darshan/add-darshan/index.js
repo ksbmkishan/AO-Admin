@@ -256,7 +256,7 @@ const AddDarshan = ({ mode }) => {
 
 
 
-    console.log("Image Src :: ", dimensions);
+    console.log("Image Src :: ", scale, rotation, translate, dimensions);
 
 
     const imgRef = useRef(null);
@@ -265,10 +265,32 @@ const AddDarshan = ({ mode }) => {
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
+
+        // Read the file as Data URL
         const imageDataUrl = await readFile(file);
-        setImageSrc(imageDataUrl);
-        setModalOpen(true);
+
+        const img = new Image();
+        img.src = imageDataUrl;
+
+        img.onload = () => {
+            console.log("Image width:", img.width, "Image height:", img.height);
+
+            setDimensions({
+                width: img.width,
+                height: img.height
+            });
+
+            const scaleX = img.width / 1024;
+
+            const scaleY =  img.height / 1024;
+
+            setScale(Math.max(scaleX, scaleY));
+
+            setImageSrc(imageDataUrl);
+            setModalOpen(true);
+        };
     };
+
 
     const handleModalImageClose = () => {
         setModalOpen(false);
@@ -289,6 +311,8 @@ const AddDarshan = ({ mode }) => {
         const width = img.naturalWidth * scaleFactor;
         const height = img.naturalHeight * scaleFactor;
 
+        //  const width = dimensions.width * scaleFactor;
+        // const height = dimensions.height * scaleFactor;
         // Set canvas size with padding for rotation
         canvas.width = width + 200;
         canvas.height = height + 200;
@@ -301,10 +325,7 @@ const AddDarshan = ({ mode }) => {
         // Draw the image centered
         ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
 
-        const dataUrl = canvas.toDataURL("image/png");
-
-        // You can use this for preview or upload
-        // console.log("Saved Image:", dataUrl);
+        
 
         // Get final data URL (JPEG or PNG)
         canvas.toBlob((blob) => {
@@ -1181,6 +1202,7 @@ const AddDarshan = ({ mode }) => {
                                         borderRadius: "12px",
                                         overflow: "hidden",
                                         height: "850px", // or auto
+                                         aspectRatio: "9 / 16", 
                                     }}
                                 >
                                     <img
@@ -1203,7 +1225,7 @@ const AddDarshan = ({ mode }) => {
                                             height: "50%",
                                             objectFit: "fill",
                                             zIndex: 1,
-                                            marginTop: "200px",
+                                            marginTop: "40%",
                                         }}
                                     />
 
@@ -1225,9 +1247,9 @@ const AddDarshan = ({ mode }) => {
                                                     maxWidth: '100%',
                                                     maxHeight: '100%',
                                                     pointerEvents: 'none', // so Moveable can handle drag
-                                                    width: '400px', // fixed width for consistency
-                                                    height: '400px', // fixed height for consistency
-                                                    marginTop: '250px',
+                                                    width: `${dimensions.width}`, // fixed width for consistency
+                                                    height: `${dimensions.height}`, // fixed height for consistency
+                                                    marginTop: '200px',
                                                 }}
                                             />
                                             <Moveable
@@ -1322,8 +1344,9 @@ const AddDarshan = ({ mode }) => {
                                                     maxWidth: '100%',
                                                     maxHeight: '100%',
                                                     pointerEvents: 'none', // so Moveable can handle drag
-                                                    width: '400px', // fixed width for consistency
-                                                    height: '400px', // fixed height for consistency
+                                                    width: `${dimensions.width}`, // fixed width for consistency
+                                                    height: `${dimensions.height}`, // fixed height for consistency
+                                                    marginTop: '200px',
 
                                                 }}
                                             />
