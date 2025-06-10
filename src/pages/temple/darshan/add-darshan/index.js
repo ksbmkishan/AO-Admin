@@ -533,7 +533,7 @@ const AddDarshan = ({ mode }) => {
                         <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
                             {bulkVideo.length > 0 && bulkVideo.map((value, index) => {
                                 return (
-                                    <div key={index} style={{ position: "relative" }} onClick={() => handleModalVideoOpen(value)}>
+                                    <div key={index} style={{ position: "relative" }} >
                                         <video controls style={{ height: '200px', maxWidth: '300px' }}>
                                             {value?.file ?
                                                 <source src={value?.file} /> :

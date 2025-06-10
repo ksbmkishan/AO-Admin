@@ -17,11 +17,12 @@ const AddItems = ({ mode }) => {
     title: stateData?.itemName || '',
     price: stateData?.itemPrice || '',
     paymentType: stateData?.payment || '',
-    duration: stateData?.duration || ''
+    duration: stateData?.duration || '',
+    keywords: stateData?.keywords || ''
   });
 
   const [inputFieldError, setInputFieldError] = useState({
-    image: '', title: '', price: '', paymentType: '', duration: ''
+    image: '', title: '', price: '', paymentType: '', duration: '', keywords: ''
   });
 
   const [image, setImage] = useState({
@@ -115,6 +116,7 @@ const AddItems = ({ mode }) => {
     formData.append("itemPrice", price || 0);
     formData.append("payment", paymentType);
     formData.append("duration", duration || 0);
+    formData.append("keywords", inputFieldDetail.keywords || '');
 
     if (image?.bytes) formData.append("itemImage", image.bytes);
     if (audio?.bytes) formData.append("audio", audio.bytes);
@@ -167,6 +169,11 @@ const AddItems = ({ mode }) => {
         <Grid item xs={12}>
           <TextField label="Title *" fullWidth name="title" value={inputFieldDetail.title}
             onChange={handleInputField} error={!!inputFieldError.title} helperText={inputFieldError.title} />
+        </Grid>
+
+         <Grid item xs={12}>
+          <TextField label="Keywords" fullWidth name="keywords" type="text" value={inputFieldDetail.keywords}
+            onChange={handleInputField} error={!!inputFieldError.keywords} helperText={inputFieldError.keywords} />
         </Grid>
 
         <Grid item xs={12}>
