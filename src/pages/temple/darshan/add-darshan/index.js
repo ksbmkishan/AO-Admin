@@ -8,12 +8,10 @@ import { CrossSvg, UploadImageSvg } from "../../../../assets/svg";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
 import * as TempleActions from '../../../../redux/actions/templeAction';
 import { api_urls } from "../../../../utils/api-urls";
-import ReactQuill from 'react-quill'; // import the Quill component
 import 'react-quill/dist/quill.snow.css';
 import RichTextEditor from 'react-rte';
-import Cropper from 'react-easy-crop';
-import getCroppedImg from "../../../../utils/cropImage";
 import Moveable from "react-moveable";
+import { Rnd } from "react-rnd"
 
 const AddDarshan = ({ mode }) => {
     const navigate = useNavigate();
@@ -247,19 +245,33 @@ const AddDarshan = ({ mode }) => {
 
 
     const [scale, setScale] = useState(1);
+    const [orginalScale, setOrginalScale] = useState(1);
     const [rotation, setRotation] = useState(0);
     const [translate, setTranslate] = useState([0, 0]);
 
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-
-
-
-
-    console.log("Image Src :: ", scale, rotation, translate, dimensions);
-
-
     const imgRef = useRef(null);
+
+    useEffect(() => {
+        if (!imgRef.current) return;
+
+        const img = imgRef.current;
+
+        if (scale && imgRef.current) {
+            console.log("Image Ref :: ", scale);
+            setDimensions({
+                width: img.offsetWidth * scale,
+                height: img.offsetHeight * scale,
+            });
+        }
+    }, [scale, imgRef.current]);
+
+
+    console.log("Image Src :: ", scale, translate, dimensions);
+
+
+
 
 
     const handleFileChange = async (e) => {
@@ -275,16 +287,27 @@ const AddDarshan = ({ mode }) => {
         img.onload = () => {
             console.log("Image width:", img.width, "Image height:", img.height);
 
+            if (img.width > 900 || img.height > 1300) {
+                alert("Image size should not be more than 900x1300px in width or height.");
+                return;
+            } else if (img.width < 400 || img.height < 500) {
+                alert("Image size should not be less than 400x500px in width or height.");
+                return;
+            }
+
             setDimensions({
                 width: img.width,
                 height: img.height
             });
+           
+            const width = 1024;
+            const height = 1024;
 
-            const scaleX = img.width / 1024;
+            const scaleX = width / img.width;
+            const scaleY = height / img.height;
 
-            const scaleY =  img.height / 1024;
+            setScale(scaleX - scaleY)
 
-            setScale(Math.max(scaleX, scaleY));
 
             setImageSrc(imageDataUrl);
             setModalOpen(true);
@@ -300,53 +323,128 @@ const AddDarshan = ({ mode }) => {
         setCrop({ x: 0, y: 0 });
     };
 
+    // const handleSave = () => {
+    //     const canvas = document.createElement("canvas");
+    //     const ctx = canvas.getContext("2d");
+
+    //     const img = imgRef.current;
+    //     const scaleFactor = scale;
+    //     const rotationInRad = (rotation * Math.PI) / 120;
+
+    //     const width = img.naturalWidth * scaleFactor;
+    //     const height = img.naturalHeight * scaleFactor;
+
+    //     canvas.width = width + 200;
+    //     canvas.height = height + 200;
+
+    //     console.log("Canvas Size:",width,height, canvas.width, canvas.height);
+
+    //     // Translate to center and apply transform
+    //     ctx.translate(canvas.width / 2 + translate[0], canvas.height / 2 + translate[1]);
+    //     ctx.rotate(rotationInRad);
+    //     ctx.scale(scaleFactor, scaleFactor);
+
+    //     // Draw the image centered
+    //     ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
+
+
+
+    //     // Get final data URL (JPEG or PNG)
+    //     canvas.toBlob((blob) => {
+    //         if (blob) {
+    //             // You can use this blob to upload via FormData
+    //             const file = new File([blob], 'transformed-image.png', { type: 'image/png' });
+
+    //             console.log("Saved Blob File:", file);
+
+    //             // For example, to preview it:
+    //             const imageURL = URL.createObjectURL(file);
+    //             const updatedImage = {
+    //                 file: imageURL, // preview
+    //                 bytes: file     // blob as File
+    //             };
+    //             setBulkImage(prev => [...prev, updatedImage]);
+    //         }
+    //     }, 'image/png', 10);
+    //     setModalOpen(false);
+    //     setImageSrc(null);
+
+    // };
+
     const handleSave = () => {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
 
         const img = imgRef.current;
-        const scaleFactor = scale;
-        const rotationInRad = (rotation * Math.PI) / 120;
+        if (!img) return; // safety check
 
+        const scaleFactor = scale;
+        const rotationInRad = (rotation * Math.PI) / 180; // Fixed: 120 to 180 for proper degree conversion
+
+        // Calculate dimensions after scaling
         const width = img.naturalWidth * scaleFactor;
         const height = img.naturalHeight * scaleFactor;
+        console.log("Image Dimensions:", dimensions.width, dimensions.height);
+        //  if( dimensions.width < 400 || dimensions.height < 500) {
+        //         alert("Image size should not be less than 400x500px in width or height.");
+        //         return;
+        //     }
 
-        //  const width = dimensions.width * scaleFactor;
-        // const height = dimensions.height * scaleFactor;
-        // Set canvas size with padding for rotation
-        canvas.width = width + 200;
-        canvas.height = height + 200;
+        // Calculate canvas size to fit rotated image
+        const rotatedWidth = Math.abs(width * Math.cos(rotationInRad)) + Math.abs(height * Math.sin(rotationInRad));
+        const rotatedHeight = Math.abs(height * Math.cos(rotationInRad)) + Math.abs(width * Math.sin(rotationInRad));
+        console.log("Rotated Dimensions:", rotatedWidth, rotatedHeight);
 
-        // Translate to center and apply transform
-        ctx.translate(canvas.width / 2 + translate[0], canvas.height / 2 + translate[1]);
+        canvas.width = rotatedWidth + img.naturalWidth / 2; // Add some padding
+        canvas.height = rotatedHeight + img.naturalWidth / 2;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Move to center of canvas
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+
+        // Apply rotation
         ctx.rotate(rotationInRad);
+
+        // Apply scale
         ctx.scale(scaleFactor, scaleFactor);
 
-        // Draw the image centered
+        const halfHeight = img.naturalHeight / 2;
+
+        const offset = -img.naturalHeight * scale + halfHeight;
+
+        // Apply translation (after rotation)
+        console.log("Translate Values:", translate[0], translate[1], "Scale Factor:", scaleFactor);
+        if (orginalScale > scaleFactor && img.naturalHeight > 1024) {
+
+            ctx.translate(translate[0] / scaleFactor, translate[1] / scaleFactor + img.naturalHeight / 10); // Adjusted to center the image better
+        } else if (orginalScale > scaleFactor && img.naturalHeight < 1024) {
+            console.log(offset, "Image Height Adjustment");
+            ctx.translate(translate[0] / scaleFactor, translate[1] / scaleFactor - offset); // Adjusted to center the image better
+        }
+        else {
+            ctx.translate(translate[0] / scaleFactor, translate[1] / scaleFactor);
+        }
+
+
+        // Draw image centered
         ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
 
-        
-
-        // Get final data URL (JPEG or PNG)
+        // Convert to blob
         canvas.toBlob((blob) => {
             if (blob) {
-                // You can use this blob to upload via FormData
                 const file = new File([blob], 'transformed-image.png', { type: 'image/png' });
-
-                console.log("Saved Blob File:", file);
-
-                // For example, to preview it:
                 const imageURL = URL.createObjectURL(file);
-                const updatedImage = {
-                    file: imageURL, // preview
-                    bytes: file     // blob as File
-                };
-                setBulkImage(prev => [...prev, updatedImage]);
+                setBulkImage(prev => [...prev, {
+                    file: imageURL,
+                    bytes: file
+                }]);
             }
-        }, 'image/png', 10);
+        }, 'image/png', 1.0); // Changed quality to 1.0 (max)
+
         setModalOpen(false);
         setImageSrc(null);
-
     };
 
 
@@ -938,8 +1036,8 @@ const AddDarshan = ({ mode }) => {
                                         style={{
                                             position: "absolute",
                                             width: "88%",
-                                            height: "60%",
-                                            marginTop: "150px",
+                                            height: "50%",
+                                            marginTop: "165px",
                                             objectFit: "fill",
                                             zIndex: 1,
                                         }}
@@ -952,7 +1050,7 @@ const AddDarshan = ({ mode }) => {
                                             position: "relative",
                                             height: "55%",
                                             width: "100%",
-                                            marginTop: "45%",
+                                            marginTop: "40%",
                                             objectFit: "contain",
                                             zIndex: 1,
                                         }}
@@ -1080,8 +1178,6 @@ const AddDarshan = ({ mode }) => {
                                             height: "100%",
                                             objectFit: "contain",
                                             zIndex: 4,
-                                            
-                                          
                                         }}
                                     >
                                         <source src={imageViewVideo?.file} type="video/mp4" />
@@ -1185,8 +1281,8 @@ const AddDarshan = ({ mode }) => {
                         </Grid>
 
                         <div style={{ marginTop: 10, fontWeight: '500' }}>
-                            Width: {(dimensions.width * scale).toFixed(0)}px &nbsp; | &nbsp;
-                            Height: {(dimensions.height * scale).toFixed(0)}px
+                            Width: {(dimensions.width).toFixed(0)}px &nbsp; | &nbsp;
+                            Height: {(dimensions.height).toFixed(0)}px
                         </div>
 
                         {inputFieldDetail?.temple == "Sanatan" ?
@@ -1202,7 +1298,7 @@ const AddDarshan = ({ mode }) => {
                                         borderRadius: "12px",
                                         overflow: "hidden",
                                         height: "850px", // or auto
-                                         aspectRatio: "9 / 16", 
+                                        aspectRatio: "9 / 16",
                                     }}
                                 >
                                     <img
@@ -1225,12 +1321,43 @@ const AddDarshan = ({ mode }) => {
                                             height: "50%",
                                             objectFit: "fill",
                                             zIndex: 1,
-                                            marginTop: "40%",
+                                            marginTop: "41%",
                                         }}
                                     />
 
                                     {imageSrc && (
-                                        <>
+                                        // <Rnd
+                                        //     size={{ width: dimensions.width, height: dimensions.height }}
+                                        //     position={{ x: translate[0], y: translate[1] }}
+                                        //     onDragStop={(e, d) => setTranslate([d.x, d.y])}
+                                        //     onResizeStop={(e, direction, ref, delta, position) => {
+                                        //         console.log(ref ,'  ref   ',position);
+                                        //         setDimensions({
+                                        //             width: parseFloat(ref.style.width),
+                                        //             height: parseFloat(ref.style.height),
+                                        //         });
+                                        //         setTranslate([position.x, position.y]);
+                                        //     }}
+                                        //     bounds="parent"
+                                        //     style={{
+                                        //         zIndex: 3,
+                                        //         transform: `scale(${scale}) rotate(${rotation}deg)`,
+                                        //         transformOrigin: "center center",
+                                        //     }}
+                                        // >
+                                        //     <img
+                                        //         ref={imgRef}
+                                        //         src={imageSrc}
+                                        //         alt="Uploaded"
+                                        //         style={{
+                                        //             width: "100%",
+                                        //             height: "100%",
+                                        //             objectFit: "contain",
+                                        //             pointerEvents: "none",
+                                        //         }}
+                                        //     />
+                                        // </Rnd>
+                                         <>
                                             <img
                                                 ref={imgRef}
                                                 src={imageSrc}
@@ -1250,17 +1377,19 @@ const AddDarshan = ({ mode }) => {
                                                     width: `${dimensions.width}`, // fixed width for consistency
                                                     height: `${dimensions.height}`, // fixed height for consistency
                                                     marginTop: '200px',
+
                                                 }}
                                             />
                                             <Moveable
                                                 target={imgRef}
-                                                draggable
-                                                scalable
-                                                rotatable
+                                                draggable={false}
+                                                scalable={false}
+                                                rotatable={false}
                                                 onDrag={({ beforeTranslate }) => {
                                                     setTranslate(beforeTranslate);
                                                 }}
                                                 onScale={({ scale }) => {
+
                                                     setScale(scale[0]); // uniform scale
                                                 }}
                                                 onRotate={({ beforeRotate }) => {
@@ -1277,11 +1406,11 @@ const AddDarshan = ({ mode }) => {
                                     )}
 
                                 </div>
-                                <div style={{ display: 'flex', gap: 10, marginTop: 10, zIndex: 4 }}>
-                                    <button onClick={() => setTranslate(([x, y]) => [x, y - 3])}>⬆ Up</button>
-                                    <button onClick={() => setTranslate(([x, y]) => [x - 3, y])}>⬅ Left</button>
-                                    <button onClick={() => setTranslate(([x, y]) => [x + 3, y])}>➡ Right</button>
-                                    <button onClick={() => setTranslate(([x, y]) => [x, y + 3])}>⬇ Down</button>
+                               <div style={{ display: 'flex', gap: 10, marginTop: 10, zIndex: 4 }}>
+                                    <button onClick={() => setTranslate(([x, y]) => [x, y - 10])}>⬆ Up</button>
+                                    <button onClick={() => setTranslate(([x, y]) => [x - 10, y])}>⬅ Left</button>
+                                    <button onClick={() => setTranslate(([x, y]) => [x + 10, y])}>➡ Right</button>
+                                    <button onClick={() => setTranslate(([x, y]) => [x, y + 10])}>⬇ Down</button>
                                 </div>
                                 <button onClick={handleSave}>💾 Save Transformed Image</button>
 
@@ -1346,19 +1475,18 @@ const AddDarshan = ({ mode }) => {
                                                     pointerEvents: 'none', // so Moveable can handle drag
                                                     width: `${dimensions.width}`, // fixed width for consistency
                                                     height: `${dimensions.height}`, // fixed height for consistency
-                                                    marginTop: '200px',
+                                                   
 
                                                 }}
                                             />
                                             <Moveable
                                                 target={imgRef}
-                                                draggable
-                                                scalable
-                                                rotatable
+                                               
                                                 onDrag={({ beforeTranslate }) => {
                                                     setTranslate(beforeTranslate);
                                                 }}
                                                 onScale={({ scale }) => {
+
                                                     setScale(scale[0]); // uniform scale
                                                 }}
                                                 onRotate={({ beforeRotate }) => {
