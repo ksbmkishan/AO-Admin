@@ -350,3 +350,7 @@ export const get_app_tutorials = 'admin/get_app_tutorials'
 export const delete_app_tutorials = 'admin/delete_app_tutorials'
 
 export const get_all_country = 'https://api.countrystatecity.in/v1/countries'
+
+
+// Recharge Services History
+export const get_recharge_services_history = "admin/getRechargeHistory";

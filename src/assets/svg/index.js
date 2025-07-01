@@ -234,6 +234,41 @@ export const NotificationRouteSvg = ({ w = '25', h = '25' }) => {
     )
 };
 
+export const RechargeHistorySvg = ({ w = '25', h = '25' }) => {
+  return (
+    <svg width={w} height={h} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Circular border */}
+      <circle cx="32" cy="32" r="30" fill="#fff" stroke="#D56A14" strokeWidth="4" />
+
+      {/* Document / Receipt */}
+      <rect x="18" y="16" width="28" height="32" rx="2" fill="#D56A14" />
+      <line x1="22" y1="22" x2="42" y2="22" stroke="#fff" strokeWidth="2" />
+      <line x1="22" y1="28" x2="42" y2="28" stroke="#fff" strokeWidth="2" />
+      <line x1="22" y1="34" x2="36" y2="34" stroke="#fff" strokeWidth="2" />
+
+      {/* Clock/history arrow */}
+      <path
+        d="M40 44c-2 2-5.33 3.2-8 2.5C28 45.5 26 42 26 38h-2l3.5-4L31 38h-2c0 2.5 1.5 4.5 4 5s5-.5 7-2"
+        stroke="#fff"
+        strokeWidth="2"
+        fill="none"
+      />
+
+      {/* Symbols for services (abstract icons) */}
+      {/* Flame (GAS) */}
+      <path d="M28 20c0-2 2-4 2-4s2 2 2 4a2 2 0 1 1-4 0z" fill="#fff" />
+
+      {/* Plug (ELECTRICITY) */}
+      <path d="M36 20v-4M38 20v-4M37 20v3" stroke="#fff" strokeWidth="2" />
+
+      {/* Satellite (DTH) */}
+      <circle cx="24" cy="40" r="2" fill="#fff" />
+      <path d="M24 40c4-4 10-6 16-4" stroke="#fff" strokeWidth="1.5" />
+    </svg>
+  );
+};
+
+
 export const LetterToGodSvg = ({ w = '25', h = '25' }) => {
   return (
     <svg width={w} height={h} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">

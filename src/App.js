@@ -139,6 +139,15 @@ import GetAllAIQAs from "./pages/letter-to-god/qa/AiQA";
 import ManagePlans from "./pages/letter-to-god/plan/Manage-Plan";
 import PlanPurchasedHistory from "./pages/letter-to-god/plan/PlanPurchasedHistory";
 
+
+// Recharge Services History
+
+import MobileRechargeHistory from "./pages/recharge-history/MobileRechargeHistory";
+import DTHRechargeHistory from "./pages/recharge-history/DTHRechargeHistory";
+import FastagRechargeHistory from "./pages/recharge-history/FastagHistory";
+import ElectricityHistory from "./pages/recharge-history/ElectricityHistory";
+import GasHistory from "./pages/recharge-history/GasHistory";
+
 function App() {
 
   useEffect(() => {
@@ -252,6 +261,15 @@ function App() {
            <Route path="/letter-to-god/ai-qa" element={<GetAllAIQAs />} />
            <Route path="/letter-to-god/manage-plan" element={<ManagePlans />} />
            <Route path="/letter-to-god/Purhcased-history" element={<PlanPurchasedHistory/>} />
+
+
+          {/*Recharge Services History*/}
+           <Route path="/mobile_recharge_history" element={<MobileRechargeHistory />} />
+           <Route path="/dth_recharge_history" element={<DTHRechargeHistory />} />
+           <Route path="/fastag_recharge_history" element={<FastagRechargeHistory />} />
+           <Route path="/electricity_history" element={<ElectricityHistory />} />
+           <Route path="/gas_history" element={<GasHistory />} />
+           
           
           {/* Skill */}
           <Route path="/skill" element={<Skill />} />

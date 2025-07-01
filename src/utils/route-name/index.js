@@ -1,4 +1,4 @@
-import { AnnouncementRouteSvg, AstrologerRouteSvg, BannerRouteSvg, BlogsRouteSvg, CustomerRouteSvg, GiftRouteSvg, HistoryRouteSvg, LanguageRouteSvg, LiveRouteSvg, MainExpertiesRouteSvg, NotificationRouteSvg, OtherRouteSvg, PoojaRouteSvg, RatingRouteSvg, RechargeRouteSvg, RemediesRouteSvg, SkillRouteSvg, LetterToGodSvg } from '../../assets/svg';
+import { AnnouncementRouteSvg, AstrologerRouteSvg, BannerRouteSvg, BlogsRouteSvg, CustomerRouteSvg, GiftRouteSvg, HistoryRouteSvg, LanguageRouteSvg, LiveRouteSvg, MainExpertiesRouteSvg, NotificationRouteSvg, OtherRouteSvg, PoojaRouteSvg, RatingRouteSvg, RechargeRouteSvg, RemediesRouteSvg, SkillRouteSvg, LetterToGodSvg, RechargeHistorySvg } from '../../assets/svg';
 
 export const RouteName = [
     {
@@ -159,6 +159,42 @@ export const RouteName = [
 
 
     // Letter To God
+
+    // Services History
+               
+    {
+        name: "Services History",
+        icon: <RechargeHistorySvg/>,
+        subRoutes: [
+            {
+                path: "/mobile_recharge_history",
+                name: "Mobile Recharge History",
+                icon: <OtherRouteSvg />,
+            },
+            {
+                path: "/fastag_recharge_history",
+                name: "Fastag Recharge History",
+                icon: <OtherRouteSvg />,
+            },
+             {
+                path: "/dth_recharge_history",
+                name: "DTH Recharge History",
+                icon: <OtherRouteSvg />,
+            },
+            {
+                path: "/electricity_history",
+                name: "Electricity History",
+                icon: <OtherRouteSvg />,
+            },
+            {
+                path: "/gas_history",
+                name: "Gas History",
+                icon: <OtherRouteSvg />,
+            },
+        ],
+    },
+
+    // Services History
     {
         path: "/skill",
         name: "Skill",

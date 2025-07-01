@@ -14,6 +14,7 @@ import dashboardSaga from "./dashboardSaga";
 import reportSaga from "./reportsSaga";
 import languageSaga from "./languageSaga"
 import rechargeSaga from "./rechargeSaga";
+import rechargeServiceHistorySaga from "./rechargeServicesHistorySaga";
 import giftSaga from "./giftSaga";
 import pageSaga from "./pageSaga";
 import appAstrokunjSaga from "./appAstrokunjSaga";
@@ -41,6 +42,7 @@ export default function* rootSaga() {
     reportSaga(),
     languageSaga(),
     rechargeSaga(),
+    rechargeServiceHistorySaga(),
     giftSaga(),
     pageSaga(),
     appAstrokunjSaga(),

@@ -16,6 +16,7 @@ import notification from './notification'
 import reports from "./reports";
 import language from './language';
 import recharge from "./recharge";
+import rechargeServicesHistory from "./rechargeServicesHistory";
 import gift from "./gift";
 import pages from "./pages";
 import appAstrokunj from "./appAstrokunj";
@@ -44,6 +45,7 @@ const rootReducer = combineReducers({
   reports,
   language,
   recharge,
+  rechargeServicesHistory,
   gift,
   pages,
   appAstrokunj,
