@@ -18,11 +18,12 @@ const AddItems = ({ mode }) => {
     price: stateData?.itemPrice || '',
     paymentType: stateData?.payment || '',
     duration: stateData?.duration || '',
-    keywords: stateData?.keywords || ''
+    keywords: stateData?.keywords || '',
+    animationType: stateData?.animationType || ''
   });
 
   const [inputFieldError, setInputFieldError] = useState({
-    image: '', title: '', price: '', paymentType: '', duration: '', keywords: ''
+    image: '', title: '', price: '', paymentType: '', duration: '', keywords: '', animationType: ''
   });
 
   const [image, setImage] = useState({
@@ -74,7 +75,7 @@ const AddItems = ({ mode }) => {
 
   const handleValidation = () => {
     let isValid = true;
-    const { title, price, paymentType, duration, _id } = inputFieldDetail;
+    const { title, price, paymentType, duration, _id,animationType } = inputFieldDetail;
 
     if (!title) {
       handleInputFieldError("title", "Please Enter Title");
@@ -102,6 +103,11 @@ const AddItems = ({ mode }) => {
       isValid = false;
     }
 
+    if(!animationType) {
+      handleInputFieldError("animationType","Please Select Animation Type");
+      isValid = false;
+    }
+
     return isValid;
   };
 
@@ -109,7 +115,7 @@ const AddItems = ({ mode }) => {
     e.preventDefault();
     if (!handleValidation()) return;
 
-    const { title, price, paymentType, duration, _id } = inputFieldDetail;
+    const { title, price, paymentType, duration, _id,animationType } = inputFieldDetail;
 
     const formData = new FormData();
     formData.append("itemName", title);
@@ -117,6 +123,7 @@ const AddItems = ({ mode }) => {
     formData.append("payment", paymentType);
     formData.append("duration", duration || 0);
     formData.append("keywords", inputFieldDetail.keywords || '');
+    formData.append("animationType", animationType || '');
 
     if (image?.bytes) formData.append("itemImage", image.bytes);
     if (audio?.bytes) formData.append("audio", audio.bytes);
@@ -194,6 +201,21 @@ const AddItems = ({ mode }) => {
               <MenuItem value="">-- Select Payment Type --</MenuItem>
               <MenuItem value="add">Add</MenuItem>
               <MenuItem value="deduct">Deduct</MenuItem>
+            </Select>
+            {inputFieldError.paymentType && <div style={{ color: "red", fontSize: 12 }}>{inputFieldError.paymentType}</div>}
+          </FormControl>
+        </Grid>
+
+        <Grid item xs={12}>
+          <FormControl fullWidth>
+            <InputLabel>Animation Type *</InputLabel>
+            <Select name="animationType" value={inputFieldDetail.animationType}
+              onChange={handleInputField} error={!!inputFieldError.animationType}>
+              <MenuItem value="">-- Select Animation Type --</MenuItem>
+              <MenuItem value="round">Round</MenuItem>
+              <MenuItem value="pendulum">Pendulum</MenuItem>
+              <MenuItem value="cracking">Cracking</MenuItem>
+              <MenuItem value="updown">Up Down</MenuItem>
             </Select>
             {inputFieldError.paymentType && <div style={{ color: "red", fontSize: 12 }}>{inputFieldError.paymentType}</div>}
           </FormControl>

@@ -32,6 +32,38 @@ export const RouteName = [
             },
         ],
     },
+    // {
+    //     name: "Panchang",
+    //     icon: <OtherRouteSvg />,
+    //     subRoutes: [
+    //         {
+    //             path: "admin/panchang/monthly",
+    //             name: "Monthly Panchang",
+    //             icon: <OtherRouteSvg />,
+    //         },
+    //         {
+    //             path: "admin/panchang/muhurat-vivah",
+    //             name: "Muhurat Vivah Panchang",
+    //             icon: <OtherRouteSvg />,
+    //         },
+    //         {
+    //             path: "admin/panchang/muhurat-vaahan",
+    //             name: "Muhurat Vaahan Panchang",
+    //             icon: <OtherRouteSvg />,
+    //         },
+    //         {
+    //             path: "admin/panchang/muhurat-sampatti",
+    //             name: "Muhurat Sampatti Panchang",
+    //             icon: <OtherRouteSvg />,
+    //         },
+    //         {
+    //             path: "admin/panchang/muhurat-grah-pravesh",
+    //             name: "Muhurat Grah Pravesh Panchang",
+    //             icon: <OtherRouteSvg />,
+    //         },
+    //     ],
+    // },
+   
     {
         path: "/banner",
         name: "Banner",

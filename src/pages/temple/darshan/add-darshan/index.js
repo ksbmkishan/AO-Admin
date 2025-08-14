@@ -299,7 +299,7 @@
 //                 width: img.width,
 //                 height: img.height
 //             });
-           
+
 //             const width = 1024;
 //             const height = 1024;
 
@@ -1475,13 +1475,13 @@
 //                                                     pointerEvents: 'none', // so Moveable can handle drag
 //                                                     width: `${dimensions.width}`, // fixed width for consistency
 //                                                     height: `${dimensions.height}`, // fixed height for consistency
-                                                   
+
 
 //                                                 }}
 //                                             />
 //                                             <Moveable
 //                                                 target={imgRef}
-                                               
+
 //                                                 onDrag={({ beforeTranslate }) => {
 //                                                     setTranslate(beforeTranslate);
 //                                                 }}
@@ -1552,6 +1552,7 @@ import 'react-quill/dist/quill.snow.css';
 import RichTextEditor from 'react-rte';
 import Moveable from "react-moveable";
 import { Rnd } from "react-rnd"
+import { usePhotoEditor } from 'react-photo-editor';
 
 const AddDarshan = ({ mode }) => {
     const navigate = useNavigate();
@@ -1575,17 +1576,21 @@ const AddDarshan = ({ mode }) => {
         bhjanlyrics: stateData ? RichTextEditor.createValueFromString(stateData?.bhjanlyrics, 'html') : RichTextEditor.createEmptyValue(),
         vr_mode: stateData?.vr_mode?.length ? stateData.vr_mode.map(vr => ({
             vr_title: vr.vr_title || "",
-            vr_image: vr.vr_image || null,
+            vr_image: base_url + vr.vr_image || null,
             vr_image_file: null,
             tags: Array.isArray(vr.tags) ? vr.tags.join(",") : vr.tags || "",
-            vr_type: vr.vr_type || "VR"
+            vr_type: vr.vr_type || "VR",
+            vr_visible_puja: vr.vr_visible_puja || 0,
+            vr_darshan_fake_user: vr.vr_darshan_fake_user || 0,
         })) : [
             {
                 vr_title: "",
                 vr_image: null,
                 vr_image_file: null,
                 tags: "",
-                vr_type: "VR"
+                vr_type: "VR",
+                vr_visible_puja:  0,
+                vr_darshan_fake_user: 0,
             }
         ],
         temple_vr_darshan: {
@@ -1610,7 +1615,7 @@ const AddDarshan = ({ mode }) => {
 
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value })); //* Handle Input Field : Error
-
+    console.log('inputFieldDetail. ',inputFieldDetail)
     //     // VR Mode Handlers
     const handleVRChange = (index, field, value) => {
         const updatedVR = [...inputFieldDetail.vr_mode];
@@ -1777,9 +1782,8 @@ const AddDarshan = ({ mode }) => {
 
     // cropper
     const inputRef = useRef();
-    const [imageSrc, setImageSrc] = useState(null);
+    const [file, setImageSrcUpload] = useState(null);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-    const [zoom, setZoom] = useState(1);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -1788,10 +1792,43 @@ const AddDarshan = ({ mode }) => {
     const [orginalScale, setOrginalScale] = useState(1);
     const [rotation, setRotation] = useState(0);
     const [translate, setTranslate] = useState([0, 0]);
+    const [edit, setEdit] = useState(false);
 
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
     const imgRef = useRef(null);
+
+    const {
+        canvasRef,
+        imageSrc,
+        brightness,
+        setBrightness,
+        contrast,
+        setContrast,
+        saturate,
+        setSaturate,
+        grayscale,
+        setGrayscale,
+        rotate,
+        setRotate,
+        flipHorizontal,
+        setFlipHorizontal,
+        flipVertical,
+        setFlipVertical,
+        zoom,
+        setZoom,
+        setMode,
+        setLineColor,
+        lineColor,
+        setLineWidth,
+        lineWidth,
+        handlePointerDown,
+        handlePointerUp,
+        handlePointerMove,
+        handleWheel,
+        downloadImage,
+        resetFilters,
+    } = usePhotoEditor({ file });
 
     useEffect(() => {
         if (!imgRef.current) return;
@@ -1808,16 +1845,11 @@ const AddDarshan = ({ mode }) => {
     }, [scale, imgRef.current]);
 
 
-    console.log("Image Src :: ", scale, translate, dimensions);
-
-
-
-
-
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
+        setImageSrcUpload(file)
         // Read the file as Data URL
         const imageDataUrl = await readFile(file);
 
@@ -1839,7 +1871,7 @@ const AddDarshan = ({ mode }) => {
                 width: img.width,
                 height: img.height
             });
-           
+
             const width = 1024;
             const height = 1024;
 
@@ -1849,7 +1881,7 @@ const AddDarshan = ({ mode }) => {
             setScale(scaleX - scaleY)
 
 
-            setImageSrc(imageDataUrl);
+
             setModalOpen(true);
         };
     };
@@ -1857,11 +1889,15 @@ const AddDarshan = ({ mode }) => {
 
     const handleModalImageClose = () => {
         setModalOpen(false);
-        setImageSrc(null);
+        setImageSrcUpload(null);
         setCroppedAreaPixels(null);
         setZoom(1);
         setCrop({ x: 0, y: 0 });
     };
+
+    const handleEdit = () => {
+        setEdit(!edit);
+    }
 
     // const handleSave = () => {
     //     const canvas = document.createElement("canvas");
@@ -1912,80 +1948,32 @@ const AddDarshan = ({ mode }) => {
     // };
 
     const handleSave = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        const img = imgRef.current;
-        if (!img) return; // safety check
-
-        const scaleFactor = scale;
-        const rotationInRad = (rotation * Math.PI) / 180; // Fixed: 120 to 180 for proper degree conversion
-
-        // Calculate dimensions after scaling
-        const width = img.naturalWidth * scaleFactor;
-        const height = img.naturalHeight * scaleFactor;
-        console.log("Image Dimensions:", dimensions.width, dimensions.height);
-        //  if( dimensions.width < 400 || dimensions.height < 500) {
-        //         alert("Image size should not be less than 400x500px in width or height.");
-        //         return;
-        //     }
-
-        // Calculate canvas size to fit rotated image
-        const rotatedWidth = Math.abs(width * Math.cos(rotationInRad)) + Math.abs(height * Math.sin(rotationInRad));
-        const rotatedHeight = Math.abs(height * Math.cos(rotationInRad)) + Math.abs(width * Math.sin(rotationInRad));
-        console.log("Rotated Dimensions:", rotatedWidth, rotatedHeight);
-
-        canvas.width = rotatedWidth + img.naturalWidth / 2; // Add some padding
-        canvas.height = rotatedHeight + img.naturalWidth / 2;
-
-        // Clear canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Move to center of canvas
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-
-        // Apply rotation
-        ctx.rotate(rotationInRad);
-
-        // Apply scale
-        ctx.scale(scaleFactor, scaleFactor);
-
-        const halfHeight = img.naturalHeight / 2;
-
-        const offset = -img.naturalHeight * scale + halfHeight;
-
-        // Apply translation (after rotation)
-        console.log("Translate Values:", translate[0], translate[1], "Scale Factor:", scaleFactor);
-        if (orginalScale > scaleFactor && img.naturalHeight > 1024) {
-
-            ctx.translate(translate[0] / scaleFactor, translate[1] / scaleFactor + img.naturalHeight / 10); // Adjusted to center the image better
-        } else if (orginalScale > scaleFactor && img.naturalHeight < 1024) {
-            console.log(offset, "Image Height Adjustment");
-            ctx.translate(translate[0] / scaleFactor, translate[1] / scaleFactor - offset); // Adjusted to center the image better
-        }
-        else {
-            ctx.translate(translate[0] / scaleFactor, translate[1] / scaleFactor);
+        if (!canvasRef.current) {
+            alert("Canvas not ready");
+            return;
         }
 
+        const canvas = canvasRef.current;
 
-        // Draw image centered
-        ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
-
-        // Convert to blob
         canvas.toBlob((blob) => {
             if (blob) {
+                // You can use this blob to upload via FormData
                 const file = new File([blob], 'transformed-image.png', { type: 'image/png' });
-                const imageURL = URL.createObjectURL(file);
-                setBulkImage(prev => [...prev, {
-                    file: imageURL,
-                    bytes: file
-                }]);
-            }
-        }, 'image/png', 1.0); // Changed quality to 1.0 (max)
 
+                console.log("Saved Blob File:", file);
+
+                // For example, to preview it:
+                const imageURL = URL.createObjectURL(file);
+                const updatedImage = {
+                    file: imageURL, // preview
+                    bytes: file     // blob as File
+                };
+                setBulkImage(prev => [...prev, updatedImage]);
+            }
+        }, 'image/png', 10);
         setModalOpen(false);
-        setImageSrc(null);
-    };
+        setImageSrcUpload(null);
+    }
 
 
     //! Handle Submit - Creating Darshan
@@ -1994,7 +1982,7 @@ const AddDarshan = ({ mode }) => {
         console.log("Darshan Data :: ", { ...inputFieldDetail, image, bulkImage, bulkVideo })
         const { title, description, temple, aarti, aartilyrics, chalisa, chalisalyrics, mantralink, mantralyrics, bhajan, bhjanlyrics } = inputFieldDetail;
 
-        console.log('Audio ', bulkVideo)
+        console.log('Vr Mode ', inputFieldDetail.vr_mode)
 
         if (handleValidation()) {
 
@@ -2020,6 +2008,7 @@ const AddDarshan = ({ mode }) => {
                     formData.append(`vr_mode[${i}][tags]`, vr.tags);
                     formData.append(`vr_mode[${i}][vr_type]`, vr.vr_type);
                     formData.append(`vr_mode[${i}][vr_darshan_fake_user]`, vr.vr_darshan_fake_user);
+                    formData.append(`vr_mode[${i}][vr_visible_puja]`, vr.vr_visible_puja);
                     if (vr.vr_image_file) {
                         formData.append(`vr_mode[${i}].vr_image`, vr.vr_image_file);
                     }
@@ -2064,6 +2053,7 @@ const AddDarshan = ({ mode }) => {
                     formData.append(`vr_mode[${i}][tags]`, vr.tags);
                     formData.append(`vr_mode[${i}][vr_type]`, vr.vr_type);
                     formData.append(`vr_mode[${i}][vr_darshan_fake_user]`, vr.vr_darshan_fake_user);
+                     formData.append(`vr_mode[${i}][vr_visible_puja]`, vr.vr_visible_puja);
                     if (vr.vr_image_file) {
                         formData.append(`vr_mode[${i}].vr_image`, vr.vr_image_file);
                     }
@@ -2391,6 +2381,21 @@ const AddDarshan = ({ mode }) => {
                                         </FormControl>
                                     </Grid>
 
+                                     <Grid item xs={12} md={4}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id={`vr_visible_puja-${index}`}>VR Visible Puja</InputLabel>
+                                        <Select
+                                            labelId={`vr_visible_puja-${index}`}
+                                            value={vr.vr_visible_puja}
+                                            label="VR Visible Puja"
+                                            onChange={(e) => handleVRChange(index,"vr_visible_puja", e.target.value)}
+                                        >
+                                            <MenuItem value="1">Yes</MenuItem>
+                                            <MenuItem value="0">No</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
                                     <Grid item xs={12} md={4}>
                                         <TextField
                                             label="Fake User Count"
@@ -2398,10 +2403,10 @@ const AddDarshan = ({ mode }) => {
                                             variant="outlined"
                                             fullWidth
                                             value={vr.vr_darshan_fake_user}
+                                            id={`fake-user-count-${index}`}
                                             onChange={(e) => handleVRChange(index, "vr_darshan_fake_user", e.target.value)}
                                         />
                                     </Grid>
-
                                     {/* VR Image Upload */}
                                     <Grid item xs={12} md={4}>
                                         <Grid container spacing={2} alignItems="center">
@@ -2824,6 +2829,11 @@ const AddDarshan = ({ mode }) => {
                             Width: {(dimensions.width).toFixed(0)}px &nbsp; | &nbsp;
                             Height: {(dimensions.height).toFixed(0)}px
                         </div>
+                        <div style={{}}>
+                            <button onClick={handleEdit}>
+                                {edit ? `Show` : `Edit`}
+                            </button>
+                        </div>
 
                         {inputFieldDetail?.temple == "Sanatan" ?
                             <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
@@ -2837,7 +2847,7 @@ const AddDarshan = ({ mode }) => {
                                         marginTop: "20px",
                                         borderRadius: "12px",
                                         overflow: "hidden",
-                                        height: "850px", // or auto
+                                        height: "20%", // or auto
                                         aspectRatio: "9 / 16",
                                     }}
                                 >
@@ -2866,93 +2876,53 @@ const AddDarshan = ({ mode }) => {
                                     />
 
                                     {imageSrc && (
-                                        // <Rnd
-                                        //     size={{ width: dimensions.width, height: dimensions.height }}
-                                        //     position={{ x: translate[0], y: translate[1] }}
-                                        //     onDragStop={(e, d) => setTranslate([d.x, d.y])}
-                                        //     onResizeStop={(e, direction, ref, delta, position) => {
-                                        //         console.log(ref ,'  ref   ',position);
-                                        //         setDimensions({
-                                        //             width: parseFloat(ref.style.width),
-                                        //             height: parseFloat(ref.style.height),
-                                        //         });
-                                        //         setTranslate([position.x, position.y]);
-                                        //     }}
-                                        //     bounds="parent"
-                                        //     style={{
-                                        //         zIndex: 3,
-                                        //         transform: `scale(${scale}) rotate(${rotation}deg)`,
-                                        //         transformOrigin: "center center",
-                                        //     }}
-                                        // >
-                                        //     <img
-                                        //         ref={imgRef}
-                                        //         src={imageSrc}
-                                        //         alt="Uploaded"
-                                        //         style={{
-                                        //             width: "100%",
-                                        //             height: "100%",
-                                        //             objectFit: "contain",
-                                        //             pointerEvents: "none",
-                                        //         }}
-                                        //     />
-                                        // </Rnd>
-                                         <>
-                                            <img
-                                                ref={imgRef}
-                                                src={imageSrc}
-                                                alt="Uploaded"
+                                        <div
+                                            style={{
+                                                position: 'relative',
+                                                width: '100%',
+                                                height: '100%',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                zIndex: edit ? 40 : 1,
+
+                                            }}>
+                                            <canvas
                                                 style={{
-                                                    position: 'absolute',
-                                                    zIndex: 1,
-                                                    transform: `
-                                                translate(${translate[0]}px, ${translate[1]}px)
-                                                scale(${scale})
-                                                rotate(${rotation}deg)
-                                                `,
-                                                    transformOrigin: "center center",
-                                                    maxWidth: '100%',
-                                                    maxHeight: '100%',
-                                                    pointerEvents: 'none', // so Moveable can handle drag
-                                                    width: `${dimensions.width}`, // fixed width for consistency
-                                                    height: `${dimensions.height}`, // fixed height for consistency
-                                                    marginTop: '200px',
-
+                                                    width: '100%',
+                                                    height: '55%',
+                                                    maxHeight: '42rem',
+                                                    maxWidth: '46rem',
+                                                    touchAction: 'auto',
+                                                    marginTop: '40%'
+                                                    // backgroundColor:'red'
                                                 }}
+                                                ref={canvasRef}
+                                                onPointerDown={handlePointerDown}
+                                                onPointerMove={handlePointerMove}
+                                                onPointerUp={handlePointerUp}
+                                                onWheel={handleWheel}
                                             />
-                                            <Moveable
-                                                target={imgRef}
-                                                draggable={false}
-                                                scalable={false}
-                                                rotatable={false}
-                                                onDrag={({ beforeTranslate }) => {
-                                                    setTranslate(beforeTranslate);
-                                                }}
-                                                onScale={({ scale }) => {
-
-                                                    setScale(scale[0]); // uniform scale
-                                                }}
-                                                onRotate={({ beforeRotate }) => {
-                                                    setRotation(beforeRotate);
-                                                }}
-                                                origin={false}
-                                                keepRatio={true}
-                                                throttleDrag={1}
-                                                throttleScale={0.01}
-                                                throttleRotate={0.2}
-                                                zoom={1}
-                                            />
-                                        </>
+                                        </div>
                                     )}
 
                                 </div>
-                               <div style={{ display: 'flex', gap: 10, marginTop: 10, zIndex: 4 }}>
-                                    <button onClick={() => setTranslate(([x, y]) => [x, y - 10])}>⬆ Up</button>
-                                    <button onClick={() => setTranslate(([x, y]) => [x - 10, y])}>⬅ Left</button>
-                                    <button onClick={() => setTranslate(([x, y]) => [x + 10, y])}>➡ Right</button>
-                                    <button onClick={() => setTranslate(([x, y]) => [x, y + 10])}>⬇ Down</button>
-                                </div>
-                                <button onClick={handleSave}>💾 Save Transformed Image</button>
+
+                                <button
+                                    onClick={handleSave}
+
+                                    style={{
+                                        marginTop: '20px',
+                                        padding: '10px 20px',
+                                        backgroundColor: '#10b981',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+
+                                    }}
+                                >
+                                    💾 Save Transformed Image
+                                </button>
 
                             </Grid>
                             :
@@ -2995,60 +2965,53 @@ const AddDarshan = ({ mode }) => {
                                     />
 
                                     {imageSrc && (
-                                        <>
-                                            <img
-                                                ref={imgRef}
-                                                src={imageSrc}
-                                                alt="Uploaded"
+                                        <div
+                                            style={{
+                                                position: 'relative',
+                                                width: '100%',
+                                                height: '100%',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                zIndex: edit ? 40 : 1,
+
+                                            }}>
+                                            <canvas
                                                 style={{
-                                                    position: 'absolute',
-                                                    zIndex: 1,
-                                                    transform: `
-                                                translate(${translate[0]}px, ${translate[1]}px)
-                                                scale(${scale})
-                                                rotate(${rotation}deg)
-                                                `,
-                                                    transformOrigin: "center center",
-                                                    maxWidth: '100%',
-                                                    maxHeight: '100%',
-                                                    pointerEvents: 'none', // so Moveable can handle drag
-                                                    width: `${dimensions.width}`, // fixed width for consistency
-                                                    height: `${dimensions.height}`, // fixed height for consistency
-                                                   
-
+                                                    width: '100%',
+                                                    height: '55%',
+                                                    maxHeight: '42rem',
+                                                    maxWidth: '46rem',
+                                                    touchAction: 'auto',
+                                                    marginTop: '-10%'
+                                                    // backgroundColor:'red'
                                                 }}
+                                                ref={canvasRef}
+                                                onPointerDown={handlePointerDown}
+                                                onPointerMove={handlePointerMove}
+                                                onPointerUp={handlePointerUp}
+                                                onWheel={handleWheel}
                                             />
-                                            <Moveable
-                                                target={imgRef}
-                                               
-                                                onDrag={({ beforeTranslate }) => {
-                                                    setTranslate(beforeTranslate);
-                                                }}
-                                                onScale={({ scale }) => {
-
-                                                    setScale(scale[0]); // uniform scale
-                                                }}
-                                                onRotate={({ beforeRotate }) => {
-                                                    setRotation(beforeRotate);
-                                                }}
-                                                origin={false}
-                                                keepRatio={true}
-                                                throttleDrag={1}
-                                                throttleScale={0.01}
-                                                throttleRotate={0.2}
-                                                zoom={1}
-                                            />
-                                        </>
+                                        </div>
                                     )}
 
                                 </div>
-                                <div style={{ display: 'flex', gap: 10, marginTop: 10, zIndex: 4 }}>
-                                    <button onClick={() => setTranslate(([x, y]) => [x, y - 10])}>⬆ Up</button>
-                                    <button onClick={() => setTranslate(([x, y]) => [x - 10, y])}>⬅ Left</button>
-                                    <button onClick={() => setTranslate(([x, y]) => [x + 10, y])}>➡ Right</button>
-                                    <button onClick={() => setTranslate(([x, y]) => [x, y + 10])}>⬇ Down</button>
-                                </div>
-                                <button onClick={handleSave}>💾 Save Transformed Image</button>
+
+                                <button
+                                    onClick={handleSave}
+
+                                    style={{
+                                        marginTop: '20px',
+                                        padding: '10px 20px',
+                                        backgroundColor: '#10b981',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+
+                                    }}
+                                >
+                                    💾 Save Transformed Image
+                                </button>
 
                             </Grid>
                         }

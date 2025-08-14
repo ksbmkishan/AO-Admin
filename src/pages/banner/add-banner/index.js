@@ -179,8 +179,14 @@ const AddBanner = () => {
                             >
                                 <MenuItem disabled>---Select Redirect Page---</MenuItem>
                                 <MenuItem value="customer_home">Customer Home</MenuItem>
-                                {/* <MenuItem value="astrologer_profile">Astrologers Profile</MenuItem>
-                                <MenuItem value="astrologer_home">Astrologers Home</MenuItem> */}
+                                <MenuItem value="Recharge-home">Recharge-home</MenuItem>
+                                <MenuItem value="Recharge-prepaid">Recharge-prepaid</MenuItem>
+                                <MenuItem value="Recharge-postpaid">Recharge-postpaid</MenuItem>
+                                <MenuItem value="Dth">Dth</MenuItem>
+                                <MenuItem value="Gas">Gas</MenuItem>
+                                <MenuItem value="Electricity">Electricity</MenuItem>
+                                <MenuItem value="Fastag">Fastag</MenuItem>
+
                             </Select>
                         </FormControl>
                         {inputFieldError?.redirectPage && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "500" }}>{inputFieldError?.redirectPage}</div>}

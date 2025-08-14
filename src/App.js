@@ -147,6 +147,12 @@ import DTHRechargeHistory from "./pages/recharge-history/DTHRechargeHistory";
 import FastagRechargeHistory from "./pages/recharge-history/FastagHistory";
 import ElectricityHistory from "./pages/recharge-history/ElectricityHistory";
 import GasHistory from "./pages/recharge-history/GasHistory";
+import Panchang from "./pages/panchang/panchang-monthly";
+import MuhuratVivah from "./pages/panchang/muhurat-vivah";
+import MuhuratVaahan from "./pages/panchang/muhurat-vaahan";
+import MuhuratSampatti from "./pages/panchang/muhurat-sampatti";
+import MuhuratGrahPravesh from "./pages/panchang/muhurat-grahpravesh";
+
 
 function App() {
 
@@ -357,6 +363,13 @@ function App() {
           <Route path="/AddHowToUse" element={<AddHowToUse />} />
           <Route path="/receiptSummary" element={<ReceiptSummary />} />
           <Route path="/saleSummary" element={<SaleSummary />} />
+
+          {/* Panchang */}
+          <Route path="/admin/panchang/monthly" element={<Panchang />} />
+          <Route path="/admin/panchang/muhurat-vivah" element={<MuhuratVivah />} />
+          <Route path="/admin/panchang/muhurat-vaahan" element={<MuhuratVaahan />} />
+          <Route path="/admin/panchang/muhurat-sampatti" element={<MuhuratSampatti />} />
+          <Route path="/admin/panchang/muhurat-grah-pravesh" element={<MuhuratGrahPravesh />} />
         </Route>
 
         <Route path="/login" element={<Login />} />
