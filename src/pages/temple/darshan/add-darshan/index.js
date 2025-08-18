@@ -1845,46 +1845,39 @@ const AddDarshan = ({ mode }) => {
     }, [scale, imgRef.current]);
 
 
-    const handleFileChange = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+   const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-        setImageSrcUpload(file)
-        // Read the file as Data URL
-        const imageDataUrl = await readFile(file);
+    setImageSrcUpload(file); // store file in state
 
-        const img = new Image();
-        img.src = imageDataUrl;
+    // Read file as Data URL
+    const imageDataUrl = await readFile(file);
 
-        img.onload = () => {
-            console.log("Image width:", img.width, "Image height:", img.height);
+    const img = new Image();
+    img.src = imageDataUrl;
 
-            // if (img.width > 900 || img.height > 1300) {
-            //     alert("Image size should not be more than 900x1300px in width or height.");
-            //     return;
-            // } else if (img.width < 400 || img.height < 500) {
-            //     alert("Image size should not be less than 400x500px in width or height.");
-            //     return;
-            // }
+    img.onload = () => {
+        console.log("Image width:", img.width, "Image height:", img.height);
 
-            setDimensions({
-                width: img.width,
-                height: img.height
-            });
+        setDimensions({
+            width: img.width,
+            height: img.height
+        });
 
-            const width = 1024;
-            const height = 1024;
+        const width = 1024;
+        const height = 1024;
+        const scaleX = width / img.width;
+        const scaleY = height / img.height;
 
-            const scaleX = width / img.width;
-            const scaleY = height / img.height;
-
-            setScale(scaleX - scaleY)
-
-
-
-            setModalOpen(true);
-        };
+        setScale(scaleX - scaleY);
+        setModalOpen(true);
     };
+
+    // ✅ Reset input so same file can be selected again
+    e.target.value = "";
+};
+
 
 
     const handleModalImageClose = () => {
@@ -1899,54 +1892,7 @@ const AddDarshan = ({ mode }) => {
         setEdit(!edit);
     }
 
-    // const handleSave = () => {
-    //     const canvas = document.createElement("canvas");
-    //     const ctx = canvas.getContext("2d");
-
-    //     const img = imgRef.current;
-    //     const scaleFactor = scale;
-    //     const rotationInRad = (rotation * Math.PI) / 120;
-
-    //     const width = img.naturalWidth * scaleFactor;
-    //     const height = img.naturalHeight * scaleFactor;
-
-    //     canvas.width = width + 200;
-    //     canvas.height = height + 200;
-
-    //     console.log("Canvas Size:",width,height, canvas.width, canvas.height);
-
-    //     // Translate to center and apply transform
-    //     ctx.translate(canvas.width / 2 + translate[0], canvas.height / 2 + translate[1]);
-    //     ctx.rotate(rotationInRad);
-    //     ctx.scale(scaleFactor, scaleFactor);
-
-    //     // Draw the image centered
-    //     ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
-
-
-
-    //     // Get final data URL (JPEG or PNG)
-    //     canvas.toBlob((blob) => {
-    //         if (blob) {
-    //             // You can use this blob to upload via FormData
-    //             const file = new File([blob], 'transformed-image.png', { type: 'image/png' });
-
-    //             console.log("Saved Blob File:", file);
-
-    //             // For example, to preview it:
-    //             const imageURL = URL.createObjectURL(file);
-    //             const updatedImage = {
-    //                 file: imageURL, // preview
-    //                 bytes: file     // blob as File
-    //             };
-    //             setBulkImage(prev => [...prev, updatedImage]);
-    //         }
-    //     }, 'image/png', 10);
-    //     setModalOpen(false);
-    //     setImageSrc(null);
-
-    // };
-
+    
     const handleSave = () => {
         if (!canvasRef.current) {
             alert("Canvas not ready");
@@ -2026,6 +1972,8 @@ const AddDarshan = ({ mode }) => {
                     data: formData,
                     onComplete: () => navigate("/temple/darshan")
                 }
+
+                console.log('payload :: ', payload);
 
                 //! Dispatching API for Updating Darshan
                 dispatch(TempleActions.createTempleDarshan(payload))
@@ -2830,7 +2778,16 @@ const AddDarshan = ({ mode }) => {
                             Height: {(dimensions.height).toFixed(0)}px
                         </div>
                         <div style={{}}>
-                            <button onClick={handleEdit}>
+                            <button onClick={handleEdit}
+                            style={{
+                                        marginTop: '20px',
+                                        padding: '10px 20px',
+                                        backgroundColor: '#10b981',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+
+                                    }}>
                                 {edit ? `Show` : `Edit`}
                             </button>
                         </div>
