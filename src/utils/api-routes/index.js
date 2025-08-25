@@ -100,6 +100,12 @@ export const create_testimonial = 'api/admin/add-testimonial';
 export const update_testimonial = 'api/admin/update-testimonial';
 export const delete_testimonial = 'api/admin/delete-testimonial';
 
+//! Temple Foundation
+export const get_temple_foundation = 'api/admin/get-all-temple-foundation';
+export const create_temple_foundation = 'api/admin/add-temple-foundation';
+export const update_temple_foundation = 'api/admin/update-temple-foundation';
+export const delete_temple_foundation = 'api/admin/delete-temple-foundation';
+
 //! Religious
 export const get_religious_category = 'api/admin//get_all_religious_categories';
 export const create_religious_category = 'api/admin/create_religious_category';

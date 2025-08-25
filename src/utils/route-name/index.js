@@ -248,6 +248,11 @@ export const RouteName = [
         icon: <OtherRouteSvg />,
     },
     {
+        path: "/templeFoundation",
+        name: "Temple Foundation",
+        icon: <OtherRouteSvg />
+    },
+    {
         name: "Religious",
         icon: <OtherRouteSvg />,
         subRoutes: [

@@ -152,6 +152,8 @@ import MuhuratVivah from "./pages/panchang/muhurat-vivah";
 import MuhuratVaahan from "./pages/panchang/muhurat-vaahan";
 import MuhuratSampatti from "./pages/panchang/muhurat-sampatti";
 import MuhuratGrahPravesh from "./pages/panchang/muhurat-grahpravesh";
+import TempleFoundation from "./pages/templeFoundation";
+import AddTempleFoundation from "./pages/templeFoundation/add-templeFoundation";
 
 
 function App() {
@@ -286,6 +288,11 @@ function App() {
           <Route path="/testimonial" element={<Testimonial />} />
           <Route path="/testimonial/add-testimonial" element={<AddTestimonial mode="Add" />} />
           <Route path="/testimonial/edit-testimonial" element={<AddTestimonial mode="Edit" />} />
+
+          {/* Testimonial  */}
+          <Route path="/templeFoundation" element={<TempleFoundation />} />
+          <Route path="/templeFoundation/add-testimonial" element={<AddTempleFoundation mode="Add" />} />
+          <Route path="/templeFoundation/edit-testimonial" element={<AddTempleFoundation mode="Edit" />} />
 
           {/* Religious */}
           <Route path="/religious/category" element={<ReligiousCategory />} />

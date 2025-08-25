@@ -26,6 +26,7 @@ import liveSaga from "./liveSaga";
 import testimonialSaga from "./testimonialSaga";
 import religiousSaga from "./religiousSaga";
 import panchangSaga from "./panchangSaga";
+import templeFoundationSaga from "./templeFoundationSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -54,5 +55,6 @@ export default function* rootSaga() {
     testimonialSaga(),
     religiousSaga(),
     panchangSaga(),
+    templeFoundationSaga(),
   ]);
 }
