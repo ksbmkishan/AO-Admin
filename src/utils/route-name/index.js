@@ -161,21 +161,6 @@ export const RouteName = [
                 icon: <OtherRouteSvg />,
             },
             {
-                path: "/letter-to-god/tags",
-                name: "Tags",
-                icon: <OtherRouteSvg />,
-            },
-             {
-                path: "/letter-to-god/qa",
-                name: "QA",
-                icon: <OtherRouteSvg />,
-            },
-            {
-                path: "/letter-to-god/ai-qa",
-                name: "AI-QA",
-                icon: <OtherRouteSvg />,
-            },
-            {
                 path: "/letter-to-god/manage-plan",
                 name: "Manage-Plan",
                 icon: <OtherRouteSvg />,
@@ -185,6 +170,11 @@ export const RouteName = [
                 path:'/letter-to-god/Purhcased-history',
                 name:"Purchased-History",
                 icon: <OtherRouteSvg/>
+            },
+            {
+                path:'/letter-to-god/prompt',
+                name:"Prompt",
+                icon: <OtherRouteSvg />
             }
         ],
     },

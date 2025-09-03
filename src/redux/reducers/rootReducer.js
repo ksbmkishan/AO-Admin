@@ -28,6 +28,7 @@ import testimonialReducer from "./testimonialReducer";
 import religiousReducer from "./religiousReducer";
 import panchangReducer from "./panchang";
 import templeFoundationReducer from "./templeFoundationReducer";
+import letterToGodReducer from "./letterToGod";
 
 const rootReducer = combineReducers({
   commonReducer,
@@ -58,6 +59,7 @@ const rootReducer = combineReducers({
   religiousReducer,
   panchangReducer,
   templeFoundationReducer,
+  letterToGodReducer
 });
 
 export default rootReducer;

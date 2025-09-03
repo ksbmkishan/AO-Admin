@@ -138,6 +138,7 @@ import AddQA from "./pages/letter-to-god/qa/AddQA";
 import GetAllAIQAs from "./pages/letter-to-god/qa/AiQA";
 import ManagePlans from "./pages/letter-to-god/plan/Manage-Plan";
 import PlanPurchasedHistory from "./pages/letter-to-god/plan/PlanPurchasedHistory";
+import Prompt from "./pages/letter-to-god/prompt";
 
 
 // Recharge Services History
@@ -269,6 +270,7 @@ function App() {
            <Route path="/letter-to-god/ai-qa" element={<GetAllAIQAs />} />
            <Route path="/letter-to-god/manage-plan" element={<ManagePlans />} />
            <Route path="/letter-to-god/Purhcased-history" element={<PlanPurchasedHistory/>} />
+           <Route path="/letter-to-god/prompt" element={<Prompt />} />
 
 
           {/*Recharge Services History*/}
