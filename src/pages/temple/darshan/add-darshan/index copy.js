@@ -1,18 +1,16 @@
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Grid, TextField, Avatar, FormControl, InputLabel, Select, MenuItem, DialogContent, Dialog, Slider } from "@mui/material";
 import { Color } from "../../../../assets/colors";
-import { base_url, img_url } from "../../../../utils/api-routes";
+import { base_url } from "../../../../utils/api-routes";
 import { CrossSvg, UploadImageSvg } from "../../../../assets/svg";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
 import * as TempleActions from '../../../../redux/actions/templeAction';
 import { api_urls } from "../../../../utils/api-urls";
 import 'react-quill/dist/quill.snow.css';
 import RichTextEditor from 'react-rte';
-import Moveable from "react-moveable";
-import { Rnd } from "react-rnd"
 import { usePhotoEditor } from 'react-photo-editor';
 
 const AddDarshan = ({ mode }) => {
@@ -167,8 +165,7 @@ const AddDarshan = ({ mode }) => {
         }
     };
 
-
-    //! Handle validation
+    //! Handle Validation
     const handleValidation = () => {
         let isValid = true;
         const { title } = inputFieldDetail;
@@ -261,37 +258,7 @@ const AddDarshan = ({ mode }) => {
 
     const imgRef = useRef(null);
 
-    const {
-        canvasRef,
-        imageSrc,
-        brightness,
-        setBrightness,
-        contrast,
-        setContrast,
-        saturate,
-        setSaturate,
-        grayscale,
-        setGrayscale,
-        rotate,
-        setRotate,
-        flipHorizontal,
-        setFlipHorizontal,
-        flipVertical,
-        setFlipVertical,
-        zoom,
-        setZoom,
-        setMode,
-        setLineColor,
-        lineColor,
-        setLineWidth,
-        lineWidth,
-        handlePointerDown,
-        handlePointerUp,
-        handlePointerMove,
-        handleWheel,
-        downloadImage,
-        resetFilters,
-    } = usePhotoEditor({ file });
+    const { canvasRef, imageSrc, brightness, setBrightness, contrast, setContrast, saturate, setSaturate, grayscale, setGrayscale, rotate, setRotate, flipHorizontal, setFlipHorizontal, flipVertical, setFlipVertical, zoom, setZoom, setMode, setLineColor, lineColor, setLineWidth, lineWidth, handlePointerDown, handlePointerUp, handlePointerMove, handleWheel, downloadImage, resetFilters, } = usePhotoEditor({ file });
 
     useEffect(() => {
         if (!imgRef.current) return;
@@ -312,9 +279,7 @@ const AddDarshan = ({ mode }) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        setImageSrcUpload(file); // store file in state
-
-        // Read file as Data URL
+        setImageSrcUpload(file);
         const imageDataUrl = await readFile(file);
 
         const img = new Image();
@@ -322,11 +287,7 @@ const AddDarshan = ({ mode }) => {
 
         img.onload = () => {
             console.log("Image width:", img.width, "Image height:", img.height);
-
-            setDimensions({
-                width: img.width,
-                height: img.height
-            });
+            setDimensions({ width: img.width, height: img.height });
 
             const width = 1024;
             const height = 1024;
@@ -336,12 +297,8 @@ const AddDarshan = ({ mode }) => {
             setScale(scaleX - scaleY);
             setModalOpen(true);
         };
-
-        // ✅ Reset input so same file can be selected again
         e.target.value = "";
     };
-
-
 
     const handleModalImageClose = () => {
         setModalOpen(false);
@@ -355,7 +312,6 @@ const AddDarshan = ({ mode }) => {
         setEdit(!edit);
     }
 
-
     const handleSave = () => {
         if (!canvasRef.current) {
             alert("Canvas not ready");
@@ -363,27 +319,19 @@ const AddDarshan = ({ mode }) => {
         }
 
         const canvas = canvasRef.current;
-
         canvas.toBlob((blob) => {
             if (blob) {
-                // You can use this blob to upload via FormData
                 const file = new File([blob], 'transformed-image.png', { type: 'image/png' });
-
                 console.log("Saved Blob File:", file);
 
-                // For example, to preview it:
                 const imageURL = URL.createObjectURL(file);
-                const updatedImage = {
-                    file: imageURL, // preview
-                    bytes: file     // blob as File
-                };
+                const updatedImage = { file: imageURL, bytes: file };
                 setBulkImage(prev => [...prev, updatedImage]);
             }
         }, 'image/png', 10);
         setModalOpen(false);
         setImageSrcUpload(null);
     }
-
 
     //! Handle Submit - Creating Darshan
     const handleSubmit = async (e) => {
@@ -584,10 +532,7 @@ const AddDarshan = ({ mode }) => {
                         {/* <input id="upload-bulk-image" multiple type="file" onChange={handleBulkImage} ref={inputRef} hidden /> */}
                         <input id="upload-bulk-image" multiple type="file" onChange={handleFileChange} ref={inputRef} hidden />
 
-
                     </Grid>
-
-
 
                     <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
                         <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
@@ -946,6 +891,7 @@ const AddDarshan = ({ mode }) => {
                         </Grid>
                     </Grid>
                 </Grid>
+
                 {inputFieldDetail?.temple == "Sanatan" ?
                     <Dialog open={modal} PaperProps={{ sx: { maxWidth: { xs: '190vw', sm: '150vw' }, minWidth: { xs: '200vw', sm: '32vw' } } }}>
                         <DialogContent>
@@ -959,64 +905,12 @@ const AddDarshan = ({ mode }) => {
                             </Grid>
 
                             <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
-
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        marginTop: "20px",
-                                        borderRadius: "12px",
-                                        overflow: "hidden",
-                                        width: "100%",
-                                        maxWidth: "400px", // adjust as needed for max width
-                                        aspectRatio: "9 / 16", // portrait mobile ratio
-                                        marginInline: "auto", // center in container
-                                    }}
-                                >
-                                    <img
-                                        src="/images/mandirmin.png"
-                                        alt="Mandir Foreground"
-                                        style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                            zIndex: 2,
-                                        }}
-                                    />
-                                    <img
-                                        src="/images/mandirbackground.jpg"
-                                        alt="Mandir Background"
-                                        style={{
-                                            position: "absolute",
-                                            width: "88%",
-                                            height: "50%",
-                                            marginTop: "165px",
-                                            objectFit: "fill",
-                                            zIndex: 1,
-                                        }}
-                                    />
-
-                                    <img
-                                        src={imageView}
-                                        alt="Main Image"
-                                        style={{
-                                            position: "relative",
-                                            height: "55%",
-                                            width: "100%",
-                                            marginTop: "40%",
-                                            objectFit: "contain",
-                                            zIndex: 1,
-                                        }}
-                                    />
-
-
+                                <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px", borderRadius: "12px", overflow: "hidden", width: "100%", maxWidth: "400px", aspectRatio: "9 / 16", marginInline: "auto", }}>
+                                    <img src="/images/mandirmin.png" alt="Mandir Foreground" style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover", zIndex: 2, }} />
+                                    <img src="/images/mandirbackground.jpg" alt="Mandir Background" style={{ position: "absolute", width: "88%", height: "50%", marginTop: "165px", objectFit: "fill", zIndex: 1, }} />
+                                    <img src={imageView} alt="Main Image" style={{ position: "relative", height: "55%", width: "100%", marginTop: "40%", objectFit: "contain", zIndex: 1, }} />
                                 </div>
-
                             </Grid>
-
                         </DialogContent>
                     </Dialog>
                     :
@@ -1031,73 +925,16 @@ const AddDarshan = ({ mode }) => {
                                 </Grid>
                             </Grid>
 
-
-
                             <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
-
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        marginTop: "20px",
-                                        borderRadius: "12px",
-                                        overflow: "hidden",
-                                        width: "100%",
-                                        maxWidth: "400px", // adjust as needed for max width
-                                        aspectRatio: "9 / 16", // portrait mobile ratio
-                                        marginInline: "auto", // center in container
-                                    }}
-                                >
-                                    <img
-                                        src="/images/outernavgarhnew.png"
-                                        alt="Mandir Foreground"
-                                        style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "contain",
-                                            zIndex: 2,
-                                        }}
-                                    />
-                                    <img
-                                        src="/images/innernavgarh3.png"
-                                        alt="Mandir Background"
-                                        style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            height: "49%",
-                                            objectFit: "contain",
-                                            zIndex: 1,
-                                        }}
-                                    />
-
-                                    <img
-                                        src={imageView}
-                                        alt="Main Image"
-                                        style={{
-                                            position: "relative",
-                                            height: "65%",
-                                            width: "100%",
-                                            objectFit: "contain",
-                                            zIndex: 1,
-                                            marginTop: '-5%'
-                                            // backgroundColor:'red'
-
-                                        }}
-                                    />
-
-
+                                <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px", borderRadius: "12px", overflow: "hidden", width: "100%", maxWidth: "400px", aspectRatio: "9 / 16", marginInline: "auto", }} >
+                                    <img src="/images/outernavgarhnew.png" alt="Mandir Foreground" style={{ position: "absolute", width: "100%", height: "100%", objectFit: "contain", zIndex: 2, }} />
+                                    <img src="/images/innernavgarh3.png" alt="Mandir Background" style={{ position: "absolute", width: "100%", height: "49%", objectFit: "contain", zIndex: 1, }} />
+                                    <img src={imageView} alt="Main Image" style={{ position: "relative", height: "65%", width: "100%", objectFit: "contain", zIndex: 1, marginTop: '-5%' }} />
                                 </div>
-
                             </Grid>
-
                         </DialogContent>
                     </Dialog>
                 }
-
-
 
                 {/* Video Mandir */}
                 {inputFieldDetail?.temple == "Sanatan" ?
@@ -1113,52 +950,17 @@ const AddDarshan = ({ mode }) => {
                             </Grid>
 
                             <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        marginTop: "20px",
-                                        borderRadius: "12px",
-                                        overflow: "hidden",
-                                        width: "100%",
-                                        maxWidth: "400px",
-                                        aspectRatio: "9 / 16",
-                                        marginInline: "auto",
-                                        backgroundColor: "#000", // fallback in case video doesn't load
-                                    }}
-                                >
+                                <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px", borderRadius: "12px", overflow: "hidden", width: "100%", maxWidth: "400px", aspectRatio: "9 / 16", marginInline: "auto", backgroundColor: "#000", }}>
                                     {/* Background video */}
-                                    <video
-                                        controls
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "contain",
-                                            zIndex: 4,
-                                        }}
-                                    >
+                                    <video controls style={{ width: "100%", height: "100%", objectFit: "contain", zIndex: 4 }}>
                                         <source src={imageViewVideo?.file} type="video/mp4" />
                                         Your browser does not support the video tag.
                                     </video>
 
                                     {/* Foreground frame/image */}
-                                    <img
-                                        src="/images/mandirmin.png"
-                                        alt="Mandir Foreground"
-                                        style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                            zIndex: 2,
-                                        }}
-                                    />
+                                    <img src="/images/mandirmin.png" alt="Mandir Foreground" style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover", zIndex: 2, }} />
                                 </div>
                             </Grid>
-
-
                         </DialogContent>
                     </Dialog>
                     :
@@ -1173,57 +975,16 @@ const AddDarshan = ({ mode }) => {
                                 </Grid>
                             </Grid>
 
-
-
                             <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
-
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        marginTop: "20px",
-                                        borderRadius: "12px",
-                                        overflow: "hidden",
-                                        width: "100%",
-                                        maxWidth: "400px", // adjust as needed for max width
-                                        aspectRatio: "9 / 16", // portrait mobile ratio
-                                        marginInline: "auto", // center in container
-                                    }}
-                                >
-                                    <img
-                                        src="/images/outernavgarhnew.png"
-                                        alt="Mandir Foreground"
-                                        style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                            zIndex: 2,
-                                        }}
-                                    />
-                                    <img
-                                        src="/images/innernavgarh3.png"
-                                        alt="Mandir Background"
-                                        style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            height: "60%",
-                                            objectFit: "fill",
-                                            zIndex: 1,
-                                        }}
-                                    />
+                                <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px", borderRadius: "12px", overflow: "hidden", width: "100%", maxWidth: "400px", aspectRatio: "9 / 16", marginInline: "auto", }} >
+                                    <img src="/images/outernavgarhnew.png" alt="Mandir Foreground" style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover", zIndex: 2, }} />
+                                    <img src="/images/innernavgarh3.png" alt="Mandir Background" style={{ position: "absolute", width: "100%", height: "60%", objectFit: "fill", zIndex: 1, }} />
 
                                     <video controls style={{ height: '200px', maxWidth: '300px', zIndex: 1 }}>
                                         <source src={base_url + imageViewVideo} />
                                     </video>
-
-
                                 </div>
-
                             </Grid>
-
                         </DialogContent>
                     </Dialog>
                 }
@@ -1243,83 +1004,21 @@ const AddDarshan = ({ mode }) => {
                             Width: {(dimensions.width).toFixed(0)}px &nbsp; | &nbsp;
                             Height: {(dimensions.height).toFixed(0)}px
                         </div>
-                        <div style={{}}>
-                            <button onClick={handleEdit}
-                                style={{
-                                    marginTop: '20px',
-                                    padding: '10px 20px',
-                                    backgroundColor: '#10b981',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '4px',
 
-                                }}>
-                                {edit ? `Show` : `Edit`}
-                            </button>
+                        <div style={{}}>
+                            <button onClick={handleEdit} style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '4px' }}>     {edit ? `Show` : `Edit`} </button>
                         </div>
 
                         {inputFieldDetail?.temple == "Sanatan" ?
                             <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
-
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        marginTop: "20px",
-                                        borderRadius: "12px",
-                                        overflow: "hidden",
-                                        height: "20%", // or auto
-                                        aspectRatio: "9 / 16",
-                                    }}
-                                >
-                                    <img
-                                        src="/images/mandirmin.png"
-                                        alt="Mandir Background"
-                                        style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "fill",
-                                            zIndex: 2,
-                                        }}
-                                    />
-                                    <img
-                                        src="/images/mandirbackground.jpg"
-                                        alt="Mandir Background"
-                                        style={{
-                                            position: "absolute",
-                                            width: "88%",
-                                            height: "50%",
-                                            objectFit: "fill",
-                                            zIndex: 1,
-                                            marginTop: "41%",
-                                        }}
-                                    />
+                                <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px", borderRadius: "12px", overflow: "hidden", height: "20%", aspectRatio: "9 / 16", }}>
+                                    <img src="/images/mandirmin.png" alt="Mandir Background" style={{ position: "absolute", width: "100%", height: "100%", objectFit: "fill", zIndex: 2, }} />
+                                    <img src="/images/mandirbackground.jpg" alt="Mandir Background" style={{ position: "absolute", width: "88%", height: "50%", objectFit: "fill", zIndex: 1, marginTop: "41%", }} />
 
                                     {imageSrc && (
-                                        <div
-                                            style={{
-                                                position: 'relative',
-                                                width: '100%',
-                                                height: '100%',
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                zIndex: edit ? 40 : 1,
-
-                                            }}>
+                                        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: edit ? 40 : 1 }}>
                                             <canvas
-                                                style={{
-                                                    width: '100%',
-                                                    height: '55%',
-                                                    maxHeight: '42rem',
-                                                    maxWidth: '46rem',
-                                                    touchAction: 'auto',
-                                                    marginTop: '40%'
-                                                    // backgroundColor:'red'
-                                                }}
+                                                style={{ width: '100%', height: '55%', maxHeight: '42rem', maxWidth: '46rem', touchAction: 'auto', marginTop: '40%' }}
                                                 ref={canvasRef}
                                                 onPointerDown={handlePointerDown}
                                                 onPointerMove={handlePointerMove}
@@ -1328,7 +1027,6 @@ const AddDarshan = ({ mode }) => {
                                             />
                                         </div>
                                     )}
-
                                 </div>
 
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -1336,84 +1034,18 @@ const AddDarshan = ({ mode }) => {
                                     <input type="range" min="0.1" max="3" step="0.1" value={zoom} onChange={(e) => setZoom(Number(e.target.value))} />
                                 </div>
 
-                                <button
-                                    onClick={handleSave}
-
-                                    style={{
-                                        marginTop: '20px',
-                                        padding: '10px 20px',
-                                        backgroundColor: '#10b981',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '4px',
-
-                                    }}
-                                >
-                                    💾 Save Transformed Image
-                                </button>
-
+                                <button onClick={handleSave} style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '4px', }}>💾 Save Transformed Image</button>
                             </Grid>
                             :
                             <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
-
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        marginTop: "20px",
-                                        borderRadius: "12px",
-                                        overflow: "hidden",
-                                        height: "850px", // or auto
-                                        aspectRatio: "9 / 16",
-
-                                    }}
-                                >
-                                    <img
-                                        src="/images/outernavgarhnew.png"
-                                        alt="Mandir Background"
-                                        style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "fill",
-                                            zIndex: 2,
-                                        }}
-                                    />
-                                    <img
-                                        src="/images/innernavgarh3.png"
-                                        alt="Mandir Background"
-                                        style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            height: "50%",
-                                            objectFit: "fill",
-                                            zIndex: 1,
-                                        }}
-                                    />
+                                <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px", borderRadius: "12px", overflow: "hidden", height: "850px", aspectRatio: "9 / 16", }} >
+                                    <img src="/images/outernavgarhnew.png" alt="Mandir Background" style={{ position: "absolute", width: "100%", height: "100%", objectFit: "fill", zIndex: 2, }} />
+                                    <img src="/images/innernavgarh3.png" alt="Mandir Background" style={{ position: "absolute", width: "100%", height: "50%", objectFit: "fill", zIndex: 1, }} />
 
                                     {imageSrc && (
-                                        <div
-                                            style={{
-                                                position: 'relative',
-                                                width: '100%',
-                                                height: '100%',
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                zIndex: edit ? 40 : 1,
-                                            }}>
+                                        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: edit ? 40 : 1, }} >
                                             <canvas
-                                                style={{
-                                                    width: '100%',
-                                                    height: '65%',
-                                                    maxHeight: '42rem',
-                                                    maxWidth: '46rem',
-                                                    touchAction: 'auto',
-                                                    marginTop: '-5%'
-                                                    // backgroundColor:'red'
-                                                }}
+                                                style={{ width: '100%', height: '65%', maxHeight: '42rem', maxWidth: '46rem', touchAction: 'auto', marginTop: '-5%' }}
                                                 ref={canvasRef}
                                                 onPointerDown={handlePointerDown}
                                                 onPointerMove={handlePointerMove}
@@ -1422,7 +1054,6 @@ const AddDarshan = ({ mode }) => {
                                             />
                                         </div>
                                     )}
-
                                 </div>
 
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -1430,22 +1061,7 @@ const AddDarshan = ({ mode }) => {
                                     <input type="range" min="0.1" max="3" step="0.1" value={zoom} onChange={(e) => setZoom(Number(e.target.value))} />
                                 </div>
 
-                                <button
-                                    onClick={handleSave}
-
-                                    style={{
-                                        marginTop: '20px',
-                                        padding: '10px 20px',
-                                        backgroundColor: '#10b981',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '4px',
-
-                                    }}
-                                >
-                                    💾 Save Transformed Image
-                                </button>
-
+                                <button onClick={handleSave} style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '4px', }} >💾 Save Transformed Image </button>
                             </Grid>
                         }
                     </DialogContent>
