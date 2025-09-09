@@ -2,6 +2,7 @@ import * as actionTypes from "../action-types";
 
 const initialState = {
   appBannerData: null,
+  appTeerthDhamData: null,
 };
 
 const banners = (state = initialState, actions) => {
@@ -12,6 +13,12 @@ const banners = (state = initialState, actions) => {
       return {
         ...state,
         appBannerData: payload,
+      };
+    }
+    case actionTypes.SET_APP_TEERTH_DHAM: {
+      return {
+        ...state,
+        appTeerthDhamData: payload,
       };
     }
 

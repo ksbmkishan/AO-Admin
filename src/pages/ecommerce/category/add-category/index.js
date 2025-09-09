@@ -1,25 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Grid, TextField, Avatar } from "@mui/material";
+import { Grid, TextField, Avatar, CircularProgress, Box } from "@mui/material";
 import { UploadImageSvg } from "../../../../assets/svg";
 import * as EcommerceActions from '../../../../redux/actions/ecommerceAction';
 import { Color } from "../../../../assets/colors";
 import { base_url } from "../../../../utils/api-routes";
 import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-pattern";
 import Swal from "sweetalert2";
+import RichTextEditor from "react-rte";
 
 const AddCategory = ({ mode }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const stateData = location.state && location.state.stateData;
-    console.log("State Data ::: ", stateData);
+    const [loading, setLoading] = useState(false);
 
-    const [categoryDetail, setCategoryDetail] = useState({ title: stateData ? stateData?.categoryName : '' });
-    const [inputFieldError, setInputFieldError] = useState({ title: '', image: '' });
-    // const [image, setImage] = useState({ file: '', bytes: '' });
-    const [image, setImage] = useState({ file: stateData ? base_url + stateData?.image : '', bytes: '' });
+    const [categoryDetail, setCategoryDetail] = useState({ 
+        title: stateData ? stateData?.categoryName : '',  
+        description: stateData && stateData.description 
+            ? RichTextEditor.createValueFromString(stateData.description, 'html') 
+            : RichTextEditor.createEmptyValue() 
+    });
+    
+    const [inputFieldError, setInputFieldError] = useState({ title: '', image: '', description: '' });
+    const [image, setImage] = useState({ 
+        file: stateData ? base_url + stateData?.image : '', 
+        bytes: '' 
+    });
 
     //* Handle Input Field : Error
     const handleInputFieldError = (input, value) => {
@@ -60,23 +69,31 @@ const AddCategory = ({ mode }) => {
     //! Handle validation
     const handleValidation = () => {
         let isValid = true;
-        const { title } = categoryDetail;
+        const { title, description } = categoryDetail;
         const { file } = image;
+
+        // Reset errors
+        setInputFieldError({ title: '', image: '', description: '' });
 
         if (!title) {
             handleInputFieldError("title", "Please Enter Title")
             isValid = false;
-        }
-        if (!Regex_Accept_Alpha_Dot_Comma_Space.test(title)) {
+        } else if (!Regex_Accept_Alpha_Dot_Comma_Space.test(title)) {
             handleInputFieldError("title", "Please Enter Valid Title")
             isValid = false;
-        }
-        if (title.toString().length > 70) {
+        } else if (title.toString().length > 70) {
             handleInputFieldError("title", "Please Enter Title Less Than 70 Letter")
             isValid = false;
         }
+
         if (!file) {
             handleInputFieldError("image", "Please Upload Image")
+            isValid = false;
+        }
+
+        // Check if description is empty
+        if (!description || description.toString('html').replace(/<(.|\n)*?>/g, '').trim().length === 0) {
+            handleInputFieldError("description", "Please Enter Description")
             isValid = false;
         }
 
@@ -87,35 +104,53 @@ const AddCategory = ({ mode }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (handleValidation()) {
-            console.log("Category Data :: ", { ...categoryDetail, image })
-            const { title } = categoryDetail;
+            setLoading(true);
+            const { title, description } = categoryDetail;
 
-            if (stateData) {
-                let formData = new FormData()
-                formData.append("categoryId", stateData?._id);
-                formData.append("categoryName", title)
-                formData.append("image", image?.bytes);
+            try {
+                if (stateData) {
+                    let formData = new FormData()
+                    formData.append("categoryId", stateData?._id);
+                    formData.append("categoryName", title)
+                    if (image.bytes) {
+                        formData.append("image", image?.bytes);
+                    }
+                    formData.append("description", description.toString('html'));
 
-                const payload = {
-                    data: formData,
-                    onComplete: () => navigate("/ecommerce/category")
+                    const payload = {
+                        data: formData,
+                        onComplete: () => {
+                            setLoading(false);
+                            navigate("/ecommerce/category");
+                        }
+                    }
+                    dispatch(EcommerceActions.updateEcommerceCategory(payload))
+                } else {
+                    let formData = new FormData()
+                    formData.append("categoryName", title)
+                    formData.append("image", image?.bytes);
+                    formData.append("description", description.toString('html'));
+
+                    const payload = {
+                        data: formData,
+                        onComplete: () => {
+                            setLoading(false);
+                            navigate("/ecommerce/category");
+                        }
+                    }
+
+                    //! Dispatching API for Creating Category
+                    dispatch(EcommerceActions.createEcommerceCategory(payload))
                 }
-                dispatch(EcommerceActions.updateEcommerceCategory(payload))
-
-            } else {
-                let formData = new FormData()
-                formData.append("categoryName", title)
-                formData.append("image", image?.bytes);
-
-                const payload = {
-                    data: formData,
-                    onComplete: () => navigate("/ecommerce/category")
-                }
-
-                //! Dispatching API for Creating Category
-                dispatch(EcommerceActions.createEcommerceCategory(payload))
+            } catch (error) {
+                setLoading(false);
+                Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
             }
         }
+    };
+
+    const handleCancel = () => {
+        navigate("/ecommerce/category");
     };
 
     return (
@@ -131,7 +166,18 @@ const AddCategory = ({ mode }) => {
                         <div style={{ color: "#000", border: "1px solid #C4C4C4", borderRadius: "3px" }}>
                             {image?.file ?
                                 <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px", cursor: "pointer" }}>
-                                    <Avatar src={image.file} style={{ height: '300px', width: "300px", borderRadius: "initial" }} />
+                                    <Avatar 
+                                        src={image.file} 
+                                        style={{ 
+                                            height: '300px', 
+                                            width: "300px", 
+                                            borderRadius: "initial",
+                                            objectFit: 'contain'
+                                        }} 
+                                    />
+                                    <div style={{ marginTop: '10px', color: Color.primary }}>
+                                        Click or drag to change image
+                                    </div>
                                 </label>
                                 :
                                 <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center", padding: "100px 0", cursor: "pointer" }}>
@@ -146,7 +192,9 @@ const AddCategory = ({ mode }) => {
 
                     <Grid item lg={12} md={12} sm={12} xs={12} >
                         <TextField
-                            label={<>Title <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            label={<>Title <span style={{ color: "red" }}>*</span></>} 
+                            variant='outlined' 
+                            fullWidth
                             name='title'
                             value={categoryDetail?.title}
                             onChange={handleInputField}
@@ -156,9 +204,68 @@ const AddCategory = ({ mode }) => {
                         />
                     </Grid>
 
+                    {/* Description */}
+                    <Grid item lg={12} md={12} sm={12} xs={12} style={{ marginTop: "20px" }}>
+                        <label>
+                            Description <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <RichTextEditor
+                            value={categoryDetail.description}
+                            onChange={(value) =>
+                                setCategoryDetail((prev) => ({ ...prev, description: value }))
+                            }
+                            editorStyle={{ 
+                                minHeight: "200px", 
+                                border: inputFieldError.description ? '1px solid #D32F2F' : '1px solid #C4C4C4',
+                                borderRadius: '4px'
+                            }}
+                            onFocus={() => handleInputFieldError("description", null)}
+                        />
+                        {inputFieldError.description && (
+                            <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px" }}>
+                                {inputFieldError.description}
+                            </div>
+                        )}
+                    </Grid>
+
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <Grid container sx={{ justifyContent: "space-between" }}>
-                            <div onClick={handleSubmit} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "10px 20px", borderRadius: "5px", cursor: "pointer", fontSize: "15px" }}>Submit</div>
+                            <Box display="flex" gap={2}>
+                                <div 
+                                    onClick={handleSubmit} 
+                                    style={{ 
+                                        fontWeight: "500", 
+                                        backgroundColor: Color.primary, 
+                                        color: Color.white, 
+                                        padding: "10px 20px", 
+                                        borderRadius: "5px", 
+                                        cursor: "pointer", 
+                                        fontSize: "15px",
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        minWidth: '100px',
+                                        justifyContent: 'center'
+                                    }}
+                                >
+                                    {loading ? <CircularProgress size={20} color="inherit" /> : 'Submit'}
+                                </div>
+                                <div 
+                                    onClick={handleCancel} 
+                                    style={{ 
+                                        fontWeight: "500", 
+                                        backgroundColor: '#f5f5f5', 
+                                        color: Color.black, 
+                                        padding: "10px 20px", 
+                                        borderRadius: "5px", 
+                                        cursor: "pointer", 
+                                        fontSize: "15px",
+                                        border: '1px solid #ddd'
+                                    }}
+                                >
+                                    Cancel
+                                </div>
+                            </Box>
                         </Grid>
                     </Grid>
                 </Grid>

@@ -155,6 +155,8 @@ import MuhuratSampatti from "./pages/panchang/muhurat-sampatti";
 import MuhuratGrahPravesh from "./pages/panchang/muhurat-grahpravesh";
 import TempleFoundation from "./pages/templeFoundation";
 import AddTempleFoundation from "./pages/templeFoundation/add-templeFoundation";
+import TeerthDham from "./pages/TeerthDham";
+import AddTeerthDham from "./pages/TeerthDham/add-teerth-dham";
 
 
 function App() {
@@ -291,7 +293,12 @@ function App() {
           <Route path="/testimonial/add-testimonial" element={<AddTestimonial mode="Add" />} />
           <Route path="/testimonial/edit-testimonial" element={<AddTestimonial mode="Edit" />} />
 
-          {/* Testimonial  */}
+          {/* Teerth Dham */}
+          <Route path="/teerthDham" element={<TeerthDham />} />
+          <Route path="/teerthDham/add-teerthDham" element={<AddTeerthDham mode="Add" />} />
+          <Route path="/teerthDham/edit-teerthDham" element={<AddTeerthDham mode="Edit" />} />
+
+          {/* Foundation  */}
           <Route path="/templeFoundation" element={<TempleFoundation />} />
           <Route path="/templeFoundation/add-testimonial" element={<AddTempleFoundation mode="Add" />} />
           <Route path="/templeFoundation/edit-testimonial" element={<AddTempleFoundation mode="Edit" />} />

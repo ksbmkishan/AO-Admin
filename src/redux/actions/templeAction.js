@@ -32,6 +32,10 @@ export const deleteTempleImage = payload => ({
     type: actionTypes.DELETE_TEMPLE_IMAGE, payload
 });
 
+export const updateTempleDarshanImage = payload => ({
+    type: actionTypes.UPDATE_TEMPLE_DARSHAN_IMAGE, payload
+});
+
 export const deleteTempleVideo = payload => ({
     type: actionTypes.DELETE_TEMPLE_VIDEO, payload
 })

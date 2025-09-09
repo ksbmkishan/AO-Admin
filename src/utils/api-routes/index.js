@@ -154,6 +154,7 @@ export const update_temple_darshan = '';
 export const delete_temple_darshan = (id) => `api/admin/delete-darshan/${id}`;
 export const darshan_Delete_Image = 'api/admin/darshanDeleteImage';
 export const darshan_Delete_Video = 'api/admin/darshanDeleteVideo';
+export const darshan_Update_image = 'api/admin/darshanUpdateImage';
 
 //? Asset Category
 export const get_temple_assets = 'api/admin/get-pooja-items';
@@ -185,6 +186,14 @@ export const update_banner = "admin/update-banners"
 export const delete_banner = "admin/delete-banners"
 export const get_banners = 'admin/get-banners'
 export const change_banner_status = 'api/admin/update_banner_status';
+
+//! Teerth_Dham
+export const get_app_teerth_dham = 'admin/get-app-Teerth-dham'
+export const add_teerth_dham = "admin/add-Teerth-dham"
+export const update_teerth_dham = "admin/update-Teerth-dham"
+export const delete_teerth_dham = "admin/delete-Teerth-dham"
+export const get_teerth_dham = 'admin/get-Teerth-dham'
+export const change_teerth_dham_status = 'api/admin/update_Teerth_dham_status';
 
 //! Astro-Mall
 export const get_ecommerce_category = 'api/ecommerce/get_all_categories';

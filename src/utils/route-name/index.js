@@ -238,6 +238,11 @@ export const RouteName = [
         icon: <OtherRouteSvg />,
     },
     {
+        path: "/teerthDham",
+        name: "Teerth Dham",
+        icon: <OtherRouteSvg />,
+    },
+    {
         path: "/templeFoundation",
         name: "Temple Foundation",
         icon: <OtherRouteSvg />

@@ -29,3 +29,34 @@ export const changeBannerStatus = payload => ({
     type: actionTypes.CHANGE_BANNER_STATUS,
     payload
 });
+
+//! Teerth_Dham
+export const uploadAppTeerthDham = payload => ({
+    type: actionTypes.UPLOAD_APP_TEERTH_DHAM,
+    payload
+})
+
+export const uploadWebTeerthDham = payload => ({
+    type: actionTypes.UPLOAD_WEB_TEERTH_DHAM,
+    payload
+})
+
+export const getAppTeerthDham = payload => ({
+    type: actionTypes.GET_APP_TEERTH_DHAM,
+    payload
+})
+
+export const deleteTeerthDham = payload => ({
+    type: actionTypes.DELETE_TEERTH_DHAM,
+    payload
+})
+
+export const editTeerthDham = payload => ({
+    type: actionTypes.EDIT_TEERTH_DHAM,
+    payload
+})
+
+export const changeTeerthDhamStatus = payload => ({
+    type: actionTypes.CHANGE_TEERTH_DHAM_STATUS,
+    payload
+});
