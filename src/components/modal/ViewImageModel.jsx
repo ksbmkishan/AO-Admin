@@ -46,7 +46,6 @@ function ViewImageModel({ modalOpen, handleModalImageClose, imageSrc, dimensions
                                 marginTop: "20px",
                                 borderRadius: "12px",
                                 overflow: "hidden",
-                                height: "20%", // or auto
                                 aspectRatio: "9 / 16",
                             }}
                         >
