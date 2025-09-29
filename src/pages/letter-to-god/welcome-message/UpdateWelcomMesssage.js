@@ -45,7 +45,7 @@ const UpdateWelcomeMessage = () => {
 
     try {
       const response = await axios.post(
-        'https://astrooneapi.ksdelhi.net/api/chatbot/admin/update_welcome_message',
+        'https://api.astroone.in/api/chatbot/admin/update_welcome_message',
         { welcomeMessage: messages }
       );
 

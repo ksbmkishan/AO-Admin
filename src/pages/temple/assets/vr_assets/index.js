@@ -18,7 +18,7 @@ const Items = () => {
     // Fetch VR Pooja items
     const fetchItems = async () => {
         try {
-            const res = await axios.get("https://astrooneapi.ksdelhi.net/api/admin/get_vr_items");
+            const res = await axios.get("https://api.astroone.in/api/admin/get_vr_items");
             if (res?.data?.success) {
                 setVrPoojaItems(res.data.data);
             }
@@ -36,7 +36,7 @@ const Items = () => {
         if (!window.confirm("Are you sure you want to delete this item?")) return;
 
         try {
-            const response = await axios.delete(`https://astrooneapi.ksdelhi.net/api/admin/delete_vr_item/${id}`);
+            const response = await axios.delete(`https://api.astroone.in/api/admin/delete_vr_item/${id}`);
             if (response.data.success) {
                 alert("Item deleted successfully.");
                 fetchItems(); // Refresh list
@@ -60,13 +60,13 @@ const Items = () => {
         { name: 'Payment Type', selector: row => row?.payment || 'N/A' },
         {
             name: 'Image',
-            selector: row => <Avatar src={`https://astrooneapi.ksdelhi.net/${row?.itemImage}`} />,
+            selector: row => <Avatar src={`https://api.astroone.in/${row?.itemImage}`} />,
         },
         {
             name: 'Audio',
             selector: row => row?.audio ? (
                 <audio controls style={{ height: "30px" }}>
-                    <source src={`https://astrooneapi.ksdelhi.net/${row.audio}`} type="audio/mp3" />
+                    <source src={`https://api.astroone.in/${row.audio}`} type="audio/mp3" />
                     Your browser does not support the audio element.
                 </audio>
             ) : 'N/A',

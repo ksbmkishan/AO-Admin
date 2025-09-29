@@ -38,7 +38,7 @@ const PlanPurchasedHistory = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://astrooneapi.ksdelhi.net/api/chatbot/admin/get_all_purchase_history`,
+        `https://api.astroone.in/api/chatbot/admin/get_all_purchase_history`,
         {
           params: {
             page,

@@ -14,7 +14,7 @@ const ShowReferral = () => {
   const fetchReferralDetails = async () => {
     try {
       const response = await axios.post(
-        "https://astrooneapi.ksdelhi.net/api/customers/track-referrers",
+        "https://api.astroone.in/api/customers/track-referrers",
         { referral_code },
         { headers: { "Content-Type": "application/json" } }
       );

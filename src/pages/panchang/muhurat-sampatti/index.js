@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -15,11 +14,13 @@ const MuhuratSampatti = () => {
   const [inputFieldDetail, setInputFieldDetail] = useState({
     description: RichTextEditor.createEmptyValue(),
     year: "2025",
+    lang: "en", // default language
   });
-  console.log(inputFieldDetail);
+
   const [inputFieldError, setInputFieldError] = useState({
     description: "",
     year: "",
+    lang: "",
   });
 
   // Initial fetch
@@ -28,35 +29,51 @@ const MuhuratSampatti = () => {
   }, [dispatch]);
 
   // Sync redux → local state
-useEffect(() => {
-  if (panchangSampatti) {
-    setInputFieldDetail(prev => ({
-      description: panchangSampatti.description
-        ? RichTextEditor.createValueFromString(panchangSampatti.description, "html")
-        : RichTextEditor.createEmptyValue(),
-      year: panchangSampatti.year?.toString() || prev?.year,
-    }));
-  }
-}, [panchangSampatti]);
+  useEffect(() => {
+    if (panchangSampatti) {
+      setInputFieldDetail((prev) => ({
+        description: panchangSampatti.description
+          ? RichTextEditor.createValueFromString(panchangSampatti.description, "html")
+          : RichTextEditor.createEmptyValue(),
+        year: panchangSampatti.year?.toString() || prev.year,
+        lang: panchangSampatti.lang || prev.lang,
+      }));
+    }
+  }, [panchangSampatti]);
 
   const handleInputFieldError = (input, value) =>
-   
     setInputFieldError((prev) => ({ ...prev, [input]: value }));
 
-  const handleInputField = (e) => {
+  const handleYearChange = (e) => {
     const { value } = e.target;
     setInputFieldDetail((prev) => ({ ...prev, year: value }));
-
     dispatch(PanchangActions.getPanchangSampatti({ year: Number(value) }));
   };
 
+  // Update language handler
+  const handleLangChange = (e) => {
+    const { value } = e.target;
+    setInputFieldDetail((prev) => ({ ...prev, lang: value }));
+
+    // Fetch description for selected year + language
+    dispatch(PanchangActions.getPanchangSampatti({
+      year: Number(inputFieldDetail.year),
+      lang: value
+    }));
+  };
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { description, year } = inputFieldDetail;
+    const { description, year, lang } = inputFieldDetail;
 
     // simple validation
     if (!year) {
       setInputFieldError((prev) => ({ ...prev, year: "Year is required" }));
+      return;
+    }
+    if (!lang) {
+      setInputFieldError((prev) => ({ ...prev, lang: "Language is required" }));
       return;
     }
     if (!description || !description.toString("html").trim()) {
@@ -73,6 +90,7 @@ useEffect(() => {
     }
     formData.append("description", description.toString("html"));
     formData.append("year", year);
+    formData.append("lang", lang);
 
     dispatch(
       PanchangActions.onPanchangSampatti({
@@ -92,17 +110,17 @@ useEffect(() => {
         borderRadius: "10px",
       }}
     >
-      {/* Year */}
+      {/* Year Selector */}
       <Grid item lg={4} md={12} sm={12} xs={12}>
         <FormControl fullWidth>
-          <InputLabel id="select-label">Select Year</InputLabel>
+          <InputLabel id="select-year-label">Select Year</InputLabel>
           <Select
             label="Select Year"
             variant="outlined"
             fullWidth
             name="year"
             value={inputFieldDetail.year}
-            onChange={handleInputField}
+            onChange={handleYearChange}
             error={!!inputFieldError.year}
             onFocus={() => handleInputFieldError("year", null)}
           >
@@ -125,6 +143,41 @@ useEffect(() => {
             }}
           >
             {inputFieldError.year}
+          </div>
+        )}
+      </Grid>
+
+      {/* Language Selector */}
+      <Grid item lg={4} md={12} sm={12} xs={12} style={{ marginTop: "20px" }}>
+        <FormControl fullWidth>
+          <InputLabel id="select-lang-label">Select Language</InputLabel>
+          <Select
+            label="Select Language"
+            variant="outlined"
+            fullWidth
+            name="lang"
+            value={inputFieldDetail.lang}
+            onChange={handleLangChange}
+            error={!!inputFieldError.lang}
+            onFocus={() => handleInputFieldError("lang", null)}
+          >
+            <MenuItem disabled value="">
+              ---Select language---
+            </MenuItem>
+            <MenuItem value="en">English</MenuItem>
+            <MenuItem value="hi">Hindi</MenuItem>
+          </Select>
+        </FormControl>
+        {inputFieldError.lang && (
+          <div
+            style={{
+              color: "#D32F2F",
+              fontSize: "13px",
+              padding: "5px 15px 0 12px",
+              fontWeight: "500",
+            }}
+          >
+            {inputFieldError.lang}
           </div>
         )}
       </Grid>

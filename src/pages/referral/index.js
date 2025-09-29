@@ -17,7 +17,7 @@ const ReferralTable = () => {
     const fetchTopReferrers = async () => {
         try {
             const response = await axios.get(
-                "https://astrooneapi.ksdelhi.net/api/customers/top-referrers",
+                "https://api.astroone.in/api/customers/top-referrers",
                 {}
             );
             console.log("response :::>>>", response)
@@ -31,7 +31,7 @@ const ReferralTable = () => {
     const fetchReferralDetails = async (referralCode) => {
         try {
             const response = await axios.post(
-                "https://astrooneapi.ksdelhi.net/api/customers/track-referrers",
+                "https://api.astroone.in/api/customers/track-referrers",
                 { referral_code: referralCode },
                 { headers: { "Content-Type": "application/json" } }
             );

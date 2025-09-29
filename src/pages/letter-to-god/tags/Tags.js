@@ -27,7 +27,7 @@ import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 
-const baseURL = "https://astrooneapi.ksdelhi.net/api/chatbot";
+const baseURL = "https://api.astroone.in/api/chatbot";
 
 const CategoryManager = () => {
   const [categories, setCategories] = useState([]);

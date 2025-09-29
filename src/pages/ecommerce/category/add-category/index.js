@@ -26,7 +26,7 @@ const AddCategory = ({ mode }) => {
     
     const [inputFieldError, setInputFieldError] = useState({ title: '', image: '', description: '' });
     const [image, setImage] = useState({ 
-        file: stateData ? base_url + stateData?.image : '', 
+        file: stateData ? stateData?.image : '', 
         bytes: '' 
     });
 

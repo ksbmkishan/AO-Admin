@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { img_url } from "../../../utils/api-routes";
+import { base_url, img_url } from "../../../utils/api-routes";
 import logo from '../../../assets/images/logo.png';
 import { EditSvg, DeleteSvg } from "../../../assets/svg/index.js";
 import MainDatatable from "../../../components/common/MainDatatable.jsx";
@@ -30,7 +30,7 @@ const ReligiouSubcategory = () => {
         { name: 'Category Name', selector: row => row?.categoryId?.categoryName },
         { name: 'Title', selector: row => row?.subCategoryName },
         { name: 'Description', selector: row => row?.description ? <div style={{ cursor: "pointer" }} onClick={() => openModal(row?.description)}>{row.description}</div> : 'N/A' },
-        { name: 'Image', cell: row => <img src={row?.image ? img_url + row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
+        { name: 'Image', cell: row => <img src={row?.image ? base_url + row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >

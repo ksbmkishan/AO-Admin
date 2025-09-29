@@ -22,7 +22,7 @@ const WelcomeMessagePage = () => {
 
   const fetchWelcomeMessage = async () => {
     try {
-      const res = await axios.get("https://astrooneapi.ksdelhi.net/api/chatbot/user/get_welcome_message");
+      const res = await axios.get("https://api.astroone.in/api/chatbot/user/get_welcome_message");
       if (res.data.success) {
         setMessage(res.data.data.welcomeMessage);
         setOriginal(res.data.data.welcomeMessage);
@@ -39,7 +39,7 @@ const WelcomeMessagePage = () => {
   const handleUpdate = async () => {
     try {
       const payload = { welcomeMessage: message };
-      const res = await axios.post("https://astrooneapi.ksdelhi.net/api/chatbot/admin/update_welcome_message", payload);
+      const res = await axios.post("https://api.astroone.in/api/chatbot/admin/update_welcome_message", payload);
       if (res.data.success) {
         setSnackbar({ open: true, message: "Message updated successfully", severity: "success" });
         setOriginal(message);

@@ -14,7 +14,12 @@ const AddRemedies = ({ mode }) => {
     console.log("State Data ::: ", stateData);
     const dispatch = useDispatch();
 
-    const [remediesDetail, setRemediesDetail] = useState({ title: stateData ? stateData?.title : '', description: stateData ? stateData?.description : '' });
+    const [remediesDetail, setRemediesDetail] = useState({
+        title: stateData ? stateData?.title : '',
+        description: stateData ? stateData?.description : '',
+        description_hi: stateData ? stateData?.description_hi : ''
+    });
+
     const [inputFieldError, setInputFieldError] = useState({ title: '', image: '' });
     const [image, setImage] = useState({ file: stateData ? img_url + stateData?.image : '', bytes: '' });
 
@@ -55,26 +60,34 @@ const AddRemedies = ({ mode }) => {
     };
 
     //! Handle Validation
+    // Validation
     const handleValidation = () => {
         let isValid = true;
-        const { title, description } = remediesDetail;
+        const { title, description, description_hi } = remediesDetail;
 
         if (!title) {
-            handleInputFieldError("title", "Please Enter Title")
+            handleInputFieldError("title", "Please Enter Title");
             isValid = false;
         }
         if (!Regex_Accept_Alpha.test(title)) {
-            handleInputFieldError("title", "Please Enter Valid Title")
+            handleInputFieldError("title", "Please Enter Valid Title");
             isValid = false;
         }
+
         if (!description) {
-            handleInputFieldError("description", "Please Enter Description")
+            handleInputFieldError("description", "Please Enter Description");
             isValid = false;
         }
         if (!Regex_Accept_Alpha.test(description)) {
-            handleInputFieldError("description", "Please Enter Valid Description")
+            handleInputFieldError("description", "Please Enter Valid Description");
             isValid = false;
         }
+
+        if (!description_hi) {
+            handleInputFieldError("description_hi", "Please Enter Description in Hindi");
+            isValid = false;
+        }
+        // अगर आप हिंदी description के लिए regex चाहते हैं तो यहाँ जोड़ सकते हैं
 
         return isValid;
     };
@@ -83,37 +96,24 @@ const AddRemedies = ({ mode }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (handleValidation()) {
-            console.log("Skill Data :: ", { ...remediesDetail, image })
-            const { title, description } = remediesDetail;
+            const { title, description, description_hi } = remediesDetail;
+            let formData = new FormData();
 
-            if (stateData) {
-                let formData = new FormData()
-                formData.append("remedyId", stateData?._id);
-                formData.append("title", title);
-                formData.append("description", description);
+            if (stateData) formData.append("remedyId", stateData?._id);
 
-                const payload = {
-                    data: formData,
-                    onComplete: () => navigate("/remedies")
-                }
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("description_hi", description_hi);
+            // formData.append("remedyIcon", image.bytes); // अगर image use करनी हो
 
-                //! Dispatching API for Creating Remedies
-                dispatch(RemediesActions.updateRemedies(payload))
-
-            } else {
-                let formData = new FormData()
-                formData.append("title", title);
-                formData.append("description", description);
-                // formData.append("remedyIcon", icon.bytes);
-
-                const payload = {
-                    data: formData,
-                    onComplete: () => navigate("/remedies")
-                }
-
-                //! Dispatching API for Creating Remedies
-                dispatch(RemediesActions.createRemedies(payload))
+            const payload = {
+                data: formData,
+                onComplete: () => navigate("/remedies")
             }
+
+            stateData
+                ? dispatch(RemediesActions.updateRemedies(payload))
+                : dispatch(RemediesActions.createRemedies(payload));
         }
     };
 
@@ -149,6 +149,20 @@ const AddRemedies = ({ mode }) => {
                             onFocus={() => handleInputFieldError("description", null)}
                         />
                     </Grid>
+
+                    <Grid item lg={12} md={12} sm={12} xs={12} >
+                        <TextField
+                            label={<>Description (Hindi) <span style={{ color: "red" }}>*</span></>}
+                            variant='outlined' fullWidth
+                            name='description_hi'
+                            value={remediesDetail?.description_hi}
+                            onChange={handleInputField}
+                            error={inputFieldError.description_hi ? true : false}
+                            helperText={inputFieldError.description_hi}
+                            onFocus={() => handleInputFieldError("description_hi", null)}
+                        />
+                    </Grid>
+
 
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <Grid container sx={{ justifyContent: "space-between" }}>

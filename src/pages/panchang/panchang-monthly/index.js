@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, Grid, InputLabel, MenuItem, Select, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import RichTextEditor from "react-rte";
 import { Color } from "../../../assets/colors";
 import * as PanchangActions from "../../../redux/actions/panchangActions";
@@ -11,11 +11,13 @@ const Panchang = () => {
   const dispatch = useDispatch();
   const { panchang } = useSelector((state) => state.panchangReducer);
 
+  const [lang, setLang] = useState("en"); // 🌐 language toggle
+
   const [inputFieldDetail, setInputFieldDetail] = useState({
     description: RichTextEditor.createEmptyValue(),
     year: "2025",
   });
-  console.log(inputFieldDetail);
+
   const [inputFieldError, setInputFieldError] = useState({
     description: "",
     year: "",
@@ -23,37 +25,34 @@ const Panchang = () => {
 
   // Initial fetch
   useEffect(() => {
-    dispatch(PanchangActions.getPanchang({ year: 2025 }));
-  }, [dispatch]);
+    dispatch(PanchangActions.getPanchang({ year: 2025, lang }));
+  }, [dispatch, lang]);
 
   // Sync redux → local state
-useEffect(() => {
-  if (panchang) {
-    setInputFieldDetail(prev => ({
-      description: panchang.description
-        ? RichTextEditor.createValueFromString(panchang.description, "html")
-        : RichTextEditor.createEmptyValue(),
-      year: panchang.year?.toString() || prev?.year,
-    }));
-  }
-}, [panchang]);
+  useEffect(() => {
+    if (panchang) {
+      setInputFieldDetail((prev) => ({
+        description: panchang.description
+          ? RichTextEditor.createValueFromString(panchang.description, "html")
+          : RichTextEditor.createEmptyValue(),
+        year: panchang.year?.toString() || prev?.year,
+      }));
+    }
+  }, [panchang]);
 
   const handleInputFieldError = (input, value) =>
-   
     setInputFieldError((prev) => ({ ...prev, [input]: value }));
 
   const handleInputField = (e) => {
     const { value } = e.target;
     setInputFieldDetail((prev) => ({ ...prev, year: value }));
-
-    dispatch(PanchangActions.getPanchang({ year: Number(value) }));
+    dispatch(PanchangActions.getPanchang({ year: Number(value), lang }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { description, year } = inputFieldDetail;
 
-    // simple validation
     if (!year) {
       setInputFieldError((prev) => ({ ...prev, year: "Year is required" }));
       return;
@@ -72,6 +71,7 @@ useEffect(() => {
     }
     formData.append("description", description.toString("html"));
     formData.append("year", year);
+    formData.append("lang", lang); // ✅ language info भेजा
 
     dispatch(
       PanchangActions.onPanchang({
@@ -91,6 +91,18 @@ useEffect(() => {
         borderRadius: "10px",
       }}
     >
+      {/* Language Toggle */}
+      <Grid item xs={12} style={{ marginBottom: "20px" }}>
+        <ToggleButtonGroup
+          value={lang}
+          exclusive
+          onChange={(e, newLang) => newLang && setLang(newLang)}
+        >
+          <ToggleButton value="en">English</ToggleButton>
+          <ToggleButton value="hi">हिन्दी</ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+
       {/* Year */}
       <Grid item lg={4} md={12} sm={12} xs={12}>
         <FormControl fullWidth>
@@ -131,7 +143,8 @@ useEffect(() => {
       {/* Description */}
       <Grid item lg={12} md={12} sm={12} xs={12} style={{ marginTop: "20px" }}>
         <label>
-          Description <span style={{ color: "red" }}>*</span>
+          Description ({lang === "en" ? "English" : "हिन्दी"}){" "}
+          <span style={{ color: "red" }}>*</span>
         </label>
         <RichTextEditor
           value={inputFieldDetail.description}

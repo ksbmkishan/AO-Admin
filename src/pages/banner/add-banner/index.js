@@ -15,7 +15,7 @@ const AddBanner = () => {
 
     const [bannerDetail, setBannerDetail] = useState({ redirectPage: stateData ? stateData?.redirectTo : '', bannerTitle: stateData ? stateData?.title : '', redirectUrl: stateData ? stateData?.redirectionUrl : '', priorityPage: stateData ? stateData?.priorityPage : '' });
     const [inputFieldError, setInputFieldError] = useState({ redirectPage: '', bannerTitle: '', redirectUrl: '', priorityPage: '', image: '', bulkImage: '' });
-    const [image, setImage] = useState({ file: stateData ? img_url + stateData?.bannerImage : '', bytes: '' });
+    const [image, setImage] = useState({ file: stateData ? stateData?.bannerImage : '', bytes: '' });
 
     console.log("priotoriy page no::::::::", bannerDetail);
 
@@ -186,6 +186,12 @@ const AddBanner = () => {
                                 <MenuItem value="Gas">Gas</MenuItem>
                                 <MenuItem value="Electricity">Electricity</MenuItem>
                                 <MenuItem value="Fastag">Fastag</MenuItem>
+                                <MenuItem value="Water">Water</MenuItem>
+                                <MenuItem value="Tax">Municipal Tax</MenuItem>
+                                <MenuItem value="Landline">Landline</MenuItem>
+                                <MenuItem value="Broadband">Broadband</MenuItem>
+                                <MenuItem value="gas-piped">Gas Piped</MenuItem>
+                                
 
                             </Select>
                         </FormControl>

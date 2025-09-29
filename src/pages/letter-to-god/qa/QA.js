@@ -9,7 +9,7 @@ const GetAllQAs = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('https://astrooneapi.ksdelhi.net/api/chatbot/admin/get_all_qa')
+    axios.get('https://api.astroone.in/api/chatbot/admin/get_all_qa')
       .then(res => {
         setQAs(res.data.data);
         setLoading(false);

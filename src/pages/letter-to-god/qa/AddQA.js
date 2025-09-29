@@ -22,7 +22,7 @@ const AddQA = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get('https://astrooneapi.ksdelhi.net/api/chatbot/user/get_all_category');
+        const res = await axios.get('https://api.astroone.in/api/chatbot/user/get_all_category');
         setCategories(res.data?.data || []);
       } catch (err) {
         console.error('Failed to load categories:', err);
@@ -54,7 +54,7 @@ const AddQA = () => {
     };
 
     try {
-      await axios.post('https://astrooneapi.ksdelhi.net/api/chatbot/admin/create_qa', payload);
+      await axios.post('https://api.astroone.in/api/chatbot/admin/create_qa', payload);
       setStatus('success');
       setTimeout(() => navigate('/letter-to-god/qa'), 1500);
     } catch (err) {

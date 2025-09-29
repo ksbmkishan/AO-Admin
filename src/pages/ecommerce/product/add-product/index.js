@@ -15,13 +15,13 @@ const AddProduct = ({ mode }) => {
     const dispatch = useDispatch();
     const location = useLocation();
     const stateData = location.state && location.state.stateData;
-    console.log(stateData);
+    console.log(stateData,'  ::: ');
     const { ecommerceCategoryData } = useSelector(state => state.ecommerceReducer);
 
     const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: stateData ? stateData?.category?._id : '', productName: stateData ? stateData?.name : '', price: stateData ? stateData?.price : '', commission: stateData ? stateData?.adminCommissionPercentage : '' });
     const [inputFieldError, setInputFieldError] = useState({ categoryId: '', productName: '', description: '', price: '', image: '', bulkImage: '' });
-    const [image, setImage] = useState({ file: stateData ? base_url + stateData?.image : '', bytes: '' });
-    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bannerImage?.map(value => { return { file: base_url + value, bytes: '' } }) : []); //* Mutliple File 
+    const [image, setImage] = useState({ file: stateData ? stateData?.image : '', bytes: '' });
+    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bannerImage?.map(value => { return { file: value, bytes: '' } }) : []); //* Mutliple File 
     const [description, setDescription] = useState(stateData ? RichTextEditor.createValueFromString(stateData?.description, 'html') : RichTextEditor.createEmptyValue());
 
     //* Handle Input Field : Error
@@ -129,6 +129,11 @@ const AddProduct = ({ mode }) => {
                 bulkImageArray.map((value, index) => (
                     formData.append(`bannerImage`, value)
                 ))
+
+                for (let pair of formData.entries()) {
+    console.log(pair[0], pair[1]);
+}
+
                 const payload = {
                     data: formData,
                     id: stateData?._id,

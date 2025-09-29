@@ -32,8 +32,8 @@ const Product = () => {
         }}></div> : 'N/A' },
         { name: 'Price', selector: row => row?.price },
         { name: 'Commission(%)', selector: row => row?.adminCommissionPercentage || 'N/A' },
-        { name: 'Image', cell: row => <img src={row?.image ? base_url + row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
-        { name: 'Bulk Image', cell: row => <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>{row?.bannerImage && row?.bannerImage?.length > 0 && row?.bannerImage?.map((value, index) => <img key={index} src={base_url + value} alt="Profile" style={{ width: '40px', height: '40px', borderRadius: '50%', border: `1px solid ${Color?.primary}` }} />)}</div>, width: '250px', center: true },
+        { name: 'Image', cell: row => <img src={row?.image ? row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
+        { name: 'Bulk Image', cell: row => <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>{row?.bannerImage && row?.bannerImage?.length > 0 && row?.bannerImage?.map((value, index) => <img key={index} src={value} alt="Profile" style={{ width: '40px', height: '40px', borderRadius: '50%', border: `1px solid ${Color?.primary}` }} />)}</div>, width: '250px', center: true },
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >

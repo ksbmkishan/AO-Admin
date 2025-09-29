@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -15,44 +14,69 @@ const MuhuratVivah = () => {
   const [inputFieldDetail, setInputFieldDetail] = useState({
     description: RichTextEditor.createEmptyValue(),
     year: "2025",
+    lang: "en",
   });
-  console.log(inputFieldDetail);
+
   const [inputFieldError, setInputFieldError] = useState({
     description: "",
     year: "",
+    lang: "",
   });
 
   // Initial fetch
   useEffect(() => {
-    dispatch(PanchangActions.getPanchangVivah({ year: 2025 }));
+    dispatch(
+      PanchangActions.getPanchangVivah({
+        year: 2025,
+        lang: inputFieldDetail?.lang,
+      })
+    );
   }, [dispatch]);
 
   // Sync redux → local state
-useEffect(() => {
-  if (panchangVivah) {
-    setInputFieldDetail(prev => ({
-      description: panchangVivah.description
-        ? RichTextEditor.createValueFromString(panchangVivah.description, "html")
-        : RichTextEditor.createEmptyValue(),
-      year: panchangVivah.year?.toString() || prev?.year,
-    }));
-  }
-}, [panchangVivah]);
+  useEffect(() => {
+    if (panchangVivah) {
+      setInputFieldDetail((prev) => ({
+        description: panchangVivah.description
+          ? RichTextEditor.createValueFromString(
+              panchangVivah.description,
+              "html"
+            )
+          : RichTextEditor.createEmptyValue(),
+        year: panchangVivah.year?.toString() || prev?.year,
+        lang: panchangVivah.lang || prev?.lang,
+      }));
+    }
+  }, [panchangVivah]);
 
   const handleInputFieldError = (input, value) =>
-   
     setInputFieldError((prev) => ({ ...prev, [input]: value }));
 
   const handleInputField = (e) => {
     const { value } = e.target;
     setInputFieldDetail((prev) => ({ ...prev, year: value }));
 
-    dispatch(PanchangActions.getPanchangVivah({ year: Number(value) }));
+    dispatch(
+      PanchangActions.getPanchangVivah({
+        year: Number(value),
+        lang: inputFieldDetail.lang,
+      })
+    );
+  };
+
+  const handleLangChange = (lang) => {
+    setInputFieldDetail((prev) => ({ ...prev, lang }));
+    dispatch(
+      PanchangActions.getPanchangVivah({
+        year: Number(inputFieldDetail.year),
+        lang,
+      })
+    );
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { description, year } = inputFieldDetail;
+    const { description, year, lang } = inputFieldDetail;
 
     // simple validation
     if (!year) {
@@ -73,6 +97,7 @@ useEffect(() => {
     }
     formData.append("description", description.toString("html"));
     formData.append("year", year);
+    formData.append("lang", lang);
 
     dispatch(
       PanchangActions.onPanchangVivah({
@@ -92,6 +117,39 @@ useEffect(() => {
         borderRadius: "10px",
       }}
     >
+      {/* Language Toggle */}
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        {["en", "hi"].map((lang) => (
+          <button
+            key={lang}
+            onClick={() => handleLangChange(lang)}
+            style={{
+              padding: "8px 16px",
+              borderRadius: "6px",
+              border: "1px solid lightgrey",
+              cursor: "pointer",
+              fontWeight: "500",
+              backgroundColor:
+                inputFieldDetail.lang === lang ? Color.primary : "#f9f9f9",
+              color: inputFieldDetail.lang === lang ? "#fff" : "#333",
+              transition: "all 0.2s ease-in-out",
+            }}
+            onMouseEnter={(e) => {
+              if (inputFieldDetail.lang !== lang) {
+                e.target.style.backgroundColor = "#e0e0e0";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (inputFieldDetail.lang !== lang) {
+                e.target.style.backgroundColor = "#f9f9f9";
+              }
+            }}
+          >
+            {lang === "en" ? "English" : "हिंदी"}
+          </button>
+        ))}
+      </div>
+
       {/* Year */}
       <Grid item lg={4} md={12} sm={12} xs={12}>
         <FormControl fullWidth>

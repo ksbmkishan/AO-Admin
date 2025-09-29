@@ -133,7 +133,8 @@ function* updateEcommerceProduct(action) {
             yield put({ type: actionTypes.GET_ECOMMERCE_PRODUCT, payload: null })
         }
     } catch (error) {
-        console.log("Update Product Saga Error ::: ", error?.response?.data)
+
+        console.log("Update Product Saga Error ::: ", error)
     }
 }
 

@@ -131,7 +131,7 @@ const AddItems = ({ mode }) => {
 
     try {
       const response = await axios.post(
-        "https://astrooneapi.ksdelhi.net/api/admin/add_vr_items",
+        "https://api.astroone.in/api/admin/add_vr_items",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

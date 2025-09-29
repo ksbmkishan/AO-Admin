@@ -19,7 +19,7 @@ const ManagePlans = () => {
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
-  const API_BASE = 'https://astrooneapi.ksdelhi.net/api/chatbot/admin';
+  const API_BASE = 'https://api.astroone.in/api/chatbot/admin';
 
   const fetchPlans = async () => {
     setLoading(true);
