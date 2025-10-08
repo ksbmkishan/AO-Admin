@@ -4,6 +4,7 @@ class _ApiRequest {
   post_header = "multipart/form-data";
   get_header = "application/json";
   postRequest = async ({ url = null, data = null, header = "form" }) => {
+    console.log(data, header);
     try {
       const response = await axios({
         method: "post",

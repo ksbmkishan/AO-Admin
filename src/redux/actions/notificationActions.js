@@ -20,3 +20,18 @@ export const getAstrologerNotification = payload =>({
     payload
 })
 
+export const onAaartiNotification = payload => ({
+    type: actionTypes.ON_AARTI_NOTIFICATIONS,
+    payload
+})
+
+export const getAartiNotifications = payload => ({
+    type: actionTypes.GET_AARTI_NOTIFICATIONS,
+    payload
+})
+
+export const deleteAartiNotification = payload => ({
+    type: actionTypes.DELETE_AARTI_NOTIFICATIONS,
+    payload
+})
+

@@ -275,6 +275,9 @@ export const get_all_users = "admin/get-all-user"
 export const add_notifications = "admin/add-notifications"
 export const get_all_notifications = "admin/get-all-notifications"
 
+export const get_aarti_notifications = 'admin/get_aarti_notification';
+export const add_update_notifications = 'admin/add_update_aarti_notification';
+
 export const get_all_customers = "customers/get-all-customers"
 export const ban_customer = "admin/change-banned-status"
 export const online_offline_customer = "admin/set-customer-online"

@@ -3,6 +3,7 @@ import * as actionTypes from "../action-types";
 const initialState = {
   customerNotificationData: [],
   astrologerNotificationData: [],
+  aartiNotification: [],
 };
 
 const notification = (state = initialState, actions) => {
@@ -22,6 +23,12 @@ const notification = (state = initialState, actions) => {
         astrologerNotificationData: payload,
       };
     }
+
+    case actionTypes.SET_AARTI_NOTIFICATIONS:
+      return {
+        ...state,
+        aartiNotification: payload
+      }
 
     default: {
       return state;

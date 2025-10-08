@@ -158,6 +158,9 @@ import AddTempleFoundation from "./pages/templeFoundation/add-templeFoundation";
 import TeerthDham from "./pages/TeerthDham";
 import AddTeerthDham from "./pages/TeerthDham/add-teerth-dham";
 
+//! Aarti Notification
+import AddAarti from "./pages/notification/aarti-notification";
+import AartiList from "./pages/notification/aarti-notification/aarti-list";
 
 function App() {
 
@@ -276,11 +279,7 @@ function App() {
 
 
           {/*Recharge Services History*/}
-           <Route path="/mobile_recharge_history" element={<MobileRechargeHistory />} />
-           <Route path="/dth_recharge_history" element={<DTHRechargeHistory />} />
-           <Route path="/fastag_recharge_history" element={<FastagRechargeHistory />} />
-           <Route path="/electricity_history" element={<ElectricityHistory />} />
-           <Route path="/gas_history" element={<GasHistory />} />
+           <Route path="/utility_recharge_history" element={<MobileRechargeHistory />} />
            
           
           {/* Skill */}
@@ -386,6 +385,10 @@ function App() {
           <Route path="/admin/panchang/muhurat-vaahan" element={<MuhuratVaahan />} />
           <Route path="/admin/panchang/muhurat-sampatti" element={<MuhuratSampatti />} />
           <Route path="/admin/panchang/muhurat-grah-pravesh" element={<MuhuratGrahPravesh />} />
+
+          {/*AddAarti*/}
+          <Route path="/admin/AddAarti-Notification" element={<AddAarti />} />
+          <Route path="/admin/AartiList" element={<AartiList />} />
         </Route>
 
         <Route path="/login" element={<Login />} />

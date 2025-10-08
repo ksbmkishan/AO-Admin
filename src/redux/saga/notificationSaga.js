@@ -7,8 +7,10 @@ import {
   takeLeading,
 } from "redux-saga/effects";
 import {
+  add_update_notifications,
   api_url,
   delete_review,
+  get_aarti_notifications,
   get_astrologer_notification,
   get_customer_notification,
   get_review,
@@ -19,6 +21,7 @@ import {
 import { ApiRequest } from "../../utils/api-function/apiRequest";
 import * as actionTypes from "../action-types";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 function* getCustomerNotification() {
   try {
@@ -133,6 +136,51 @@ function* sendAstrologerNotifications(actions) {
   }
 }
 
+function* aartiNotifications(actions) {
+  try {
+    const { payload } = actions;
+
+    console.log('payload :: ', ...payload?.data);
+   
+
+   const response = yield axios.post(
+  api_url + add_update_notifications,
+  payload?.data,
+  {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  }
+);
+    console.log(response,' :: response')
+    if(response?.data?.success) {
+       Swal.fire({
+        icon: "success",
+        title: "Notification Send Successfully",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+
+      yield put({ type: actionTypes.GET_AARTI_NOTIFICATIONS});
+      yield call(payload?.onComplete);
+    }
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+function* getAartiNotifications() {
+  try {
+    const {data} = yield ApiRequest.getRequest({
+      url: api_url + get_aarti_notifications,
+    });
+
+    yield put({ type: actionTypes.SET_AARTI_NOTIFICATIONS, payload: data});
+  } catch(e) {
+    console.log(e);
+  }
+}
+
 export default function* notificationSaga() {
   yield takeLeading(
     actionTypes.GET_CUSTOMER_NOTIFICATIONS,
@@ -151,4 +199,9 @@ export default function* notificationSaga() {
     actionTypes.SEND_ASTROLOGER_NOTIFICATIONS,
     sendAstrologerNotifications
   );
+
+  //! Aarti Notification
+  yield takeLeading(actionTypes.ON_AARTI_NOTIFICATIONS, aartiNotifications);
+  yield takeLeading(actionTypes.GET_AARTI_NOTIFICATIONS, getAartiNotifications);
+  
 }

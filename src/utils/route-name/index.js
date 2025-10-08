@@ -145,6 +145,11 @@ export const RouteName = [
                 name: "Astrologer Notification",
                 icon: <OtherRouteSvg />,
             },
+            {
+                path: "/admin/AartiList",
+                name: "Aarti Notification",
+                icon: <OtherRouteSvg />,
+            },
         ],
     },
 
@@ -185,35 +190,16 @@ export const RouteName = [
     // Services History
                
     {
-        name: "Services History",
+        name: "Utility Service History",
         icon: <RechargeHistorySvg/>,
-        subRoutes: [
-            {
-                path: "/mobile_recharge_history",
-                name: "Mobile Recharge History",
-                icon: <OtherRouteSvg />,
-            },
-            {
-                path: "/fastag_recharge_history",
-                name: "Fastag Recharge History",
-                icon: <OtherRouteSvg />,
-            },
-             {
-                path: "/dth_recharge_history",
-                name: "DTH Recharge History",
-                icon: <OtherRouteSvg />,
-            },
-            {
-                path: "/electricity_history",
-                name: "Electricity History",
-                icon: <OtherRouteSvg />,
-            },
-            {
-                path: "/gas_history",
-                name: "Gas History",
-                icon: <OtherRouteSvg />,
-            },
-        ],
+        path: "/utility_recharge_history",
+        // subRoutes: [
+        //     {
+        //         path: "/utility_recharge_history",
+        //         name: "Mobile Recharge History",
+        //         icon: <OtherRouteSvg />,
+        //     },
+        // ],
     },
 
     // Services History
