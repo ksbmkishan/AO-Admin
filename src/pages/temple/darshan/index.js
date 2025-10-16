@@ -29,7 +29,7 @@ const Darshan = () => {
         { name: 'S.No.', selector: row => templeDarshanData.indexOf(row) + 1, width: '80px' },
         { name: 'Temple', selector: row => row?.temple || 'N/A' },
         { name: 'Title', selector: row => row?.title || 'N/A' },
-        { name: 'Image', cell: row => <img src={row?.image ? api_urls + row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
+        { name: 'Image', cell: row => <img src={row?.image ? row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
         { name: 'Description', selector: row => row?.description ? <div onClick={() => dispatch(CommonActions?.openTextModal({ title: 'Description', text: row?.description, type:'editor' }))} style={{ cursor: 'pointer' }}  >{row?.description}</div> : 'N/A' },
         { name: 'Created Date', selector: row => moment(row?.createdAt)?.format('DD-MMM-YYYY') || 'N/A' },
         {

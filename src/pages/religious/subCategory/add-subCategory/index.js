@@ -21,7 +21,7 @@ const AddReligiousSubCategory = ({ mode }) => {
 
     const [productDetail, setProductDetail] = useState({ categoryId: stateData ? stateData?.categoryId?._id : '', subCategoryName: stateData ? stateData?.subCategoryName : '', description: stateData ? stateData?.description : '', link: stateData ? stateData?.link : '', purchasePrice: stateData ? stateData?.purchasePrice : '', refundDay: stateData ? stateData?.refundRequetDay : '', inventory: stateData ? stateData?.inventory : '', manufactureDate: stateData ? YYYYMMDD(stateData?.manufactureDate) : '', expiryDate: stateData ? YYYYMMDD(stateData?.expiryDate) : '' });
     const [inputFieldError, setInputFieldError] = useState({ categoryId: '', subCategoryId: '', subCategoryName: '', description: '', link: '', purchasePrice: '', refundDay: '', inventory: '', manufactureDate: '', expiryDate: '', image: '', bulkImage: '' });
-    const [image, setImage] = useState({ file: stateData ? base_url + stateData?.image : '', bytes: '' });
+    const [image, setImage] = useState({ file: stateData ? stateData?.image : '', bytes: '' });
     // const [bulkImage, setBulkImage] = useState([]); //* Mutliple File 
 
 

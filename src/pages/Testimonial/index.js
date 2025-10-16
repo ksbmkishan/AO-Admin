@@ -16,7 +16,7 @@ const Testimonial = () => {
         { name: 'S.No.', selector: row => testimonialData.indexOf(row) + 1 },
         { name: 'Title', selector: row => row?.name },
         { name: 'Rating', selector: row => row?.rating },
-        { name: 'Image', cell: row => <img src={row?.image && img_url + row?.image} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
+        { name: 'Image', cell: row => <img src={row?.image} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >

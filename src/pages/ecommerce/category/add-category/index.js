@@ -10,6 +10,7 @@ import { Regex_Accept_Alpha_Dot_Comma_Space } from "../../../../utils/regex-patt
 import Swal from "sweetalert2";
 import RichTextEditor from "react-rte";
 
+
 const AddCategory = ({ mode }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -17,18 +18,23 @@ const AddCategory = ({ mode }) => {
     const stateData = location.state && location.state.stateData;
     const [loading, setLoading] = useState(false);
 
-    const [categoryDetail, setCategoryDetail] = useState({ 
-        title: stateData ? stateData?.categoryName : '',  
-        description: stateData && stateData.description 
-            ? RichTextEditor.createValueFromString(stateData.description, 'html') 
-            : RichTextEditor.createEmptyValue() 
+    const [categoryDetail, setCategoryDetail] = useState({
+        title: stateData ? stateData?.categoryName : '',
+        description_en: stateData && stateData.description
+            ? RichTextEditor.createValueFromString(stateData.description, 'html')
+            : RichTextEditor.createEmptyValue(),
+        description_hi: stateData && stateData.description_hi
+            ? RichTextEditor.createValueFromString(stateData.description_hi, 'html')
+            : RichTextEditor.createEmptyValue(),
     });
-    
-    const [inputFieldError, setInputFieldError] = useState({ title: '', image: '', description: '' });
-    const [image, setImage] = useState({ 
-        file: stateData ? stateData?.image : '', 
-        bytes: '' 
+
+    const [inputFieldError, setInputFieldError] = useState({ title: '', image: '', description_en: '', description_hi: '' });
+    const [image, setImage] = useState({
+        file: stateData ? stateData?.image : '',
+        bytes: ''
     });
+
+     const [currentLang, setCurrentLang] = useState('en');
 
     //* Handle Input Field : Error
     const handleInputFieldError = (input, value) => {
@@ -69,7 +75,7 @@ const AddCategory = ({ mode }) => {
     //! Handle validation
     const handleValidation = () => {
         let isValid = true;
-        const { title, description } = categoryDetail;
+        const { title, description_en, description_hi } = categoryDetail;
         const { file } = image;
 
         // Reset errors
@@ -91,13 +97,41 @@ const AddCategory = ({ mode }) => {
             isValid = false;
         }
 
-        // Check if description is empty
-        if (!description || description.toString('html').replace(/<(.|\n)*?>/g, '').trim().length === 0) {
-            handleInputFieldError("description", "Please Enter Description")
+       // Validate based on current language or both
+        if (currentLang === 'en' && !description_en.getEditorState().getCurrentContent().hasText()) {
+            handleInputFieldError("description_en", "Please Enter Description in English")
+            isValid = false;
+        } else if (currentLang === 'hi' && !description_hi.getEditorState().getCurrentContent().hasText()) {
+            handleInputFieldError("description_hi", "Please Enter Description in Hindi")
             isValid = false;
         }
 
         return isValid;
+    };
+
+    //! Handle Description Change based on language
+    const handleDescriptionChange = (value) => {
+        if (currentLang === 'en') {
+            setCategoryDetail({ ...categoryDetail, description_en: value });
+            if (inputFieldError.description_en) {
+                handleInputFieldError("description_en", null);
+            }
+        } else {
+            setCategoryDetail({ ...categoryDetail, description_hi: value });
+            if (inputFieldError.description_hi) {
+                handleInputFieldError("description_hi", null);
+            }
+        }
+    };
+
+     //! Get current description value based on language
+    const getCurrentDescription = () => {
+        return currentLang === 'en' ? categoryDetail.description_en : categoryDetail.description_hi;
+    };
+
+    //! Get current description error based on language
+    const getCurrentDescriptionError = () => {
+        return currentLang === 'en' ? inputFieldError.description_en : inputFieldError.description_hi;
     };
 
     //! Handle Submit - Creating Category
@@ -105,7 +139,7 @@ const AddCategory = ({ mode }) => {
         e.preventDefault();
         if (handleValidation()) {
             setLoading(true);
-            const { title, description } = categoryDetail;
+            const { title, description_en, description_hi } = categoryDetail;
 
             try {
                 if (stateData) {
@@ -115,7 +149,8 @@ const AddCategory = ({ mode }) => {
                     if (image.bytes) {
                         formData.append("image", image?.bytes);
                     }
-                    formData.append("description", description.toString('html'));
+                    formData.append("description", description_en.toString('html'));
+                    formData.append("description_hi", description_hi.toString('html'))
 
                     const payload = {
                         data: formData,
@@ -129,7 +164,8 @@ const AddCategory = ({ mode }) => {
                     let formData = new FormData()
                     formData.append("categoryName", title)
                     formData.append("image", image?.bytes);
-                    formData.append("description", description.toString('html'));
+                    formData.append("description", description_en.toString('html'));
+                    formData.append("description_hi", description_hi.toString('html'));
 
                     const payload = {
                         data: formData,
@@ -166,14 +202,14 @@ const AddCategory = ({ mode }) => {
                         <div style={{ color: "#000", border: "1px solid #C4C4C4", borderRadius: "3px" }}>
                             {image?.file ?
                                 <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px", cursor: "pointer" }}>
-                                    <Avatar 
-                                        src={image.file} 
-                                        style={{ 
-                                            height: '300px', 
-                                            width: "300px", 
+                                    <Avatar
+                                        src={image.file}
+                                        style={{
+                                            height: '300px',
+                                            width: "300px",
                                             borderRadius: "initial",
                                             objectFit: 'contain'
-                                        }} 
+                                        }}
                                     />
                                     <div style={{ marginTop: '10px', color: Color.primary }}>
                                         Click or drag to change image
@@ -192,8 +228,8 @@ const AddCategory = ({ mode }) => {
 
                     <Grid item lg={12} md={12} sm={12} xs={12} >
                         <TextField
-                            label={<>Title <span style={{ color: "red" }}>*</span></>} 
-                            variant='outlined' 
+                            label={<>Title <span style={{ color: "red" }}>*</span></>}
+                            variant='outlined'
                             fullWidth
                             name='title'
                             value={categoryDetail?.title}
@@ -204,42 +240,74 @@ const AddCategory = ({ mode }) => {
                         />
                     </Grid>
 
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <div style={{ marginBottom: '10px' }}>
+                            <button
+                                type="button"
+                                onClick={() => setCurrentLang('en')}
+                                style={{
+                                    marginRight: '10px',
+                                    backgroundColor: currentLang === 'en' ? Color.primary : '#f0f0f0',
+                                    color: currentLang === 'en' ? '#fff' : '#000',
+                                    padding: '5px 10px',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                English
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setCurrentLang('hi')}
+                                style={{
+                                    backgroundColor: currentLang === 'hi' ? Color.primary : '#f0f0f0',
+                                    color: currentLang === 'hi' ? '#fff' : '#000',
+                                    padding: '5px 10px',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Hindi
+                            </button>
+                        </div>
+                    </Grid>
+
+
                     {/* Description */}
-                    <Grid item lg={12} md={12} sm={12} xs={12} style={{ marginTop: "20px" }}>
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
                         <label>
-                            Description <span style={{ color: "red" }}>*</span>
+                            Description {currentLang === 'en' ? '(English)' : '(Hindi)'} <span style={{ color: "red" }}>*</span>
                         </label>
+
                         <RichTextEditor
-                            value={categoryDetail.description}
-                            onChange={(value) =>
-                                setCategoryDetail((prev) => ({ ...prev, description: value }))
-                            }
-                            editorStyle={{ 
-                                minHeight: "200px", 
-                                border: inputFieldError.description ? '1px solid #D32F2F' : '1px solid #C4C4C4',
-                                borderRadius: '4px'
-                            }}
-                            onFocus={() => handleInputFieldError("description", null)}
+                            value={getCurrentDescription()}
+                            onChange={handleDescriptionChange}
+                            editorStyle={{ minHeight: '50vh', }}
+                            onFocus={() => handleInputFieldError(
+                                currentLang === 'en' ? "description_en" : "description_hi", 
+                                null
+                            )}
                         />
-                        {inputFieldError.description && (
-                            <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px" }}>
-                                {inputFieldError.description}
-                            </div>
+                        {/* Display error for current language */}
+                        {getCurrentDescriptionError() && (
+                            <span style={{ color: "red", display: "block", marginTop: "5px" }}>
+                                {getCurrentDescriptionError()}
+                            </span>
                         )}
                     </Grid>
 
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <Grid container sx={{ justifyContent: "space-between" }}>
                             <Box display="flex" gap={2}>
-                                <div 
-                                    onClick={handleSubmit} 
-                                    style={{ 
-                                        fontWeight: "500", 
-                                        backgroundColor: Color.primary, 
-                                        color: Color.white, 
-                                        padding: "10px 20px", 
-                                        borderRadius: "5px", 
-                                        cursor: "pointer", 
+                                <div
+                                    onClick={handleSubmit}
+                                    style={{
+                                        fontWeight: "500",
+                                        backgroundColor: Color.primary,
+                                        color: Color.white,
+                                        padding: "10px 20px",
+                                        borderRadius: "5px",
+                                        cursor: "pointer",
                                         fontSize: "15px",
                                         display: 'flex',
                                         alignItems: 'center',
@@ -250,15 +318,15 @@ const AddCategory = ({ mode }) => {
                                 >
                                     {loading ? <CircularProgress size={20} color="inherit" /> : 'Submit'}
                                 </div>
-                                <div 
-                                    onClick={handleCancel} 
-                                    style={{ 
-                                        fontWeight: "500", 
-                                        backgroundColor: '#f5f5f5', 
-                                        color: Color.black, 
-                                        padding: "10px 20px", 
-                                        borderRadius: "5px", 
-                                        cursor: "pointer", 
+                                <div
+                                    onClick={handleCancel}
+                                    style={{
+                                        fontWeight: "500",
+                                        backgroundColor: '#f5f5f5',
+                                        color: Color.black,
+                                        padding: "10px 20px",
+                                        borderRadius: "5px",
+                                        cursor: "pointer",
                                         fontSize: "15px",
                                         border: '1px solid #ddd'
                                     }}

@@ -30,6 +30,24 @@ export const UploadImageSvg = ({ w = '25', h = '25', color = '#000' }) => {
     )
 };
 
+export const UploadvideoSvg = ({ w = '25', h = '25', color = '#000' }) => {
+    return (
+        <>
+            <svg xmlns="http://www.w3.org/2000/svg" width={w} height={h} viewBox="0 0 24 24">
+                <g fill="none" stroke={color} strokeLinecap="round" strokeWidth="1.5">
+                    {/* Video rectangle */}
+                    <rect x="3.5" y="5" width="13" height="9" rx="2" strokeLinejoin="round"/>
+                    {/* Play button */}
+                    <polygon points="9,8 13,10.5 9,13" strokeLinejoin="round" fill={color}/>
+                    {/* Upload arrow */}
+                    <path strokeLinejoin="round" d="M19 19v-5m0 0l2 2m-2-2l-2 2"/>
+                </g>
+            </svg>
+        </>
+    );
+};
+
+
 export const CrossSvg = ({ w = '30', h = '30' }) => {
     return (
         <>

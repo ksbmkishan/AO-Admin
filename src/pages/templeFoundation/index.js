@@ -15,7 +15,7 @@ const TempleFoundation = () => {
     const columns = [
         { name: 'S.No.', selector: row => templeFoundation.indexOf(row) + 1 },
         { name: 'Name', selector: row => row?.name},
-        { name: 'Image', cell: row => <img src={row?.image && base_url + row?.image} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
+        { name: 'Image', cell: row => <img src={row?.image} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >

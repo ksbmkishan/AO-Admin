@@ -21,7 +21,7 @@ const AddItems = ({ mode }) => {
 
     const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: assetsId, title: stateData ? stateData?.itemName : '', price: stateData ? stateData?.itemPrice : '', paymentType: stateData ? stateData?.payment : '', duration: stateData ? stateData?.duration : '',_id: stateData ? stateData?._id : '' });
     const [inputFieldError, setInputFieldError] = useState({ image: '', categoryId: '', title: '', price: '', paymentType: '' ,duration:''});
-    const [image, setImage] = useState({ file: stateData ? base_url + stateData?.itemImage : '', bytes: '' });
+    const [image, setImage] = useState({ file: stateData ? stateData?.itemImage : '', bytes: '' });
 
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value })); //* Handle Input Field : Error

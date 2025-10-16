@@ -104,9 +104,9 @@ const AddAstrologer = ({ dispatch, skillsData, subSkillData, expertiesData, main
     }, [Object.keys(selectedCountryData).length]);
     console.log("StateData ::: ", stateData);
 
-    const [image, setImage] = useState({ file: stateData ? base_url + stateData?.profileImage : '', bytes: '' });
-    const [bankProof, setBankProof] = useState({ file: stateData ? base_url + stateData?.bank_proof_image : "", bytes: "" });
-    const [idProof, setIdProof] = useState({ file: stateData ? base_url + stateData?.id_proof_image : "", bytes: "" });
+    const [image, setImage] = useState({ file: stateData ? stateData?.profileImage : '', bytes: '' });
+    const [bankProof, setBankProof] = useState({ file: stateData ? stateData?.bank_proof_image : "", bytes: "" });
+    const [idProof, setIdProof] = useState({ file: stateData ? stateData?.id_proof_image : "", bytes: "" });
     const allowedImageTypes = ['image/jpeg', 'image/jpg', 'image/png']; // Allowed image file types
 
     const [inputFieldError, setInputFieldError] = useState({ image: '' });

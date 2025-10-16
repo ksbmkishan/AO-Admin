@@ -30,7 +30,7 @@ const ReligiouSubcategory = () => {
         { name: 'Category Name', selector: row => row?.categoryId?.categoryName },
         { name: 'Title', selector: row => row?.subCategoryName },
         { name: 'Description', selector: row => row?.description ? <div style={{ cursor: "pointer" }} onClick={() => openModal(row?.description)}>{row.description}</div> : 'N/A' },
-        { name: 'Image', cell: row => <img src={row?.image ? base_url + row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
+        { name: 'Image', cell: row => <img src={row?.image ?  row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >

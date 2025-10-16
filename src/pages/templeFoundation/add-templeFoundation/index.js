@@ -16,7 +16,7 @@ const AddTempleFoundation = () => {
 
     const [testimonialDetail, setTestimonialDetail] = useState({ name: stateData ? stateData?.name : '' });
     const [inputFieldError, setInputFieldError] = useState({ name: '', images: '' });
-    const [images, setImages] = useState({ file: stateData ? base_url + stateData?.image : '', bytes: '' });
+    const [images, setImages] = useState({ file: stateData ? stateData?.image : '', bytes: '' });
 
     //* Handle Input Field : Error
     const handleInputFieldError = (input, value) => {

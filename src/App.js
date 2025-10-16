@@ -162,6 +162,10 @@ import AddTeerthDham from "./pages/TeerthDham/add-teerth-dham";
 import AddAarti from "./pages/notification/aarti-notification";
 import AartiList from "./pages/notification/aarti-notification/aarti-list";
 
+//! Temple Video
+import Video from "./pages/temple/video";
+import AddVideo from "./pages/temple/video/add-video";
+
 function App() {
 
   useEffect(() => {
@@ -258,7 +262,7 @@ function App() {
           <Route path="/temple/live-link/edit-live-link" element={<TempleAddLiveLink mode={'Edit'} />} />
 
           <Route path="/temple/vardani-shivalya" element={<VardaniShivalya />} />
-          <Route path="/temple/vardani-shivalya/add-vardani-shivalya" element={<AddVardaniShivalya mode={'Add'} />} />
+          <Route path="/temple/vardani-shivalya/add-vardani-shivalya" element={<AddVardaniShivalya mode={'Edit'} />} />
 
           {/* Notification */}
           <Route path="/customer-notification" element={<CustomerNotification />} />
@@ -389,6 +393,12 @@ function App() {
           {/*AddAarti*/}
           <Route path="/admin/AddAarti-Notification" element={<AddAarti />} />
           <Route path="/admin/AartiList" element={<AartiList />} />
+
+          {/** Temple Video */}
+          <Route path="/temple/video" element={<Video />} />
+          <Route path="/temple/video/add-video" element={<AddVideo mode="Add" />} />
+          <Route path="/temple/video/edit-video" element={<AddVideo mode="Edit" />} />
+
         </Route>
 
         <Route path="/login" element={<Login />} />

@@ -15,14 +15,41 @@ const AddProduct = ({ mode }) => {
     const dispatch = useDispatch();
     const location = useLocation();
     const stateData = location.state && location.state.stateData;
-    console.log(stateData,'  ::: ');
+    console.log(stateData, '  ::: ');
     const { ecommerceCategoryData } = useSelector(state => state.ecommerceReducer);
 
-    const [inputFieldDetail, setInputFieldDetail] = useState({ categoryId: stateData ? stateData?.category?._id : '', productName: stateData ? stateData?.name : '', price: stateData ? stateData?.price : '', commission: stateData ? stateData?.adminCommissionPercentage : '' });
-    const [inputFieldError, setInputFieldError] = useState({ categoryId: '', productName: '', description: '', price: '', image: '', bulkImage: '' });
-    const [image, setImage] = useState({ file: stateData ? stateData?.image : '', bytes: '' });
-    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bannerImage?.map(value => { return { file: value, bytes: '' } }) : []); //* Mutliple File 
-    const [description, setDescription] = useState(stateData ? RichTextEditor.createValueFromString(stateData?.description, 'html') : RichTextEditor.createEmptyValue());
+    const [inputFieldDetail, setInputFieldDetail] = useState({ 
+        categoryId: stateData ? stateData?.category?._id : '', 
+        productName: stateData ? stateData?.name : '', 
+        price: stateData ? stateData?.price : '', 
+        commission: stateData ? stateData?.adminCommissionPercentage : '' 
+    });
+    const [inputFieldError, setInputFieldError] = useState({ 
+        categoryId: '', 
+        productName: '', 
+        description_en: '', 
+        description_hi: '', 
+        price: '', 
+        image: '', 
+        bulkImage: '',
+        commission: '' 
+    });
+    const [image, setImage] = useState({ 
+        file: stateData ? stateData?.image : '', 
+        bytes: null 
+    });
+    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bannerImage?.map(value => { 
+        return { file: value, bytes: null } 
+    }) : []);
+    const [description_en, setDescription_en] = useState(stateData ? 
+        RichTextEditor.createValueFromString(stateData?.description || '', 'html') : 
+        RichTextEditor.createEmptyValue()
+    );
+    const [description_hi, setDescription_hi] = useState(stateData ? 
+        RichTextEditor.createValueFromString(stateData?.description_hi || '', 'html') : 
+        RichTextEditor.createEmptyValue()
+    );
+    const [currentLang, setCurrentLang] = useState('en');
 
     //* Handle Input Field : Error
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value }))
@@ -31,6 +58,10 @@ const AddProduct = ({ mode }) => {
     const handleInputField = (e) => {
         const { name, value } = e.target;
         setInputFieldDetail({ ...inputFieldDetail, [name]: value });
+        // Clear error when user starts typing
+        if (inputFieldError[name]) {
+            handleInputFieldError(name, '');
+        }
     };
 
     //! Handle Image : Normally
@@ -40,9 +71,8 @@ const AddProduct = ({ mode }) => {
                 file: URL.createObjectURL(e.target.files[0]),
                 bytes: e.target.files[0],
             });
+            handleInputFieldError("image", null);
         }
-
-        handleInputFieldError("image", null)
     };
 
     //! Handle Image : Drop Feature
@@ -53,126 +83,183 @@ const AddProduct = ({ mode }) => {
                 file: URL.createObjectURL(e.dataTransfer.files[0]),
                 bytes: e.dataTransfer.files[0],
             });
+            handleInputFieldError("image", null);
         }
-
-        handleInputFieldError("image", null)
     };
 
-    // Handle Image :  //! Bulk Image
+    // Handle Image : Bulk Image
     const handleBulkImage = (e) => {
-        // console.log("Bulk Image length :: ", bulkImage?.length + 1)
-        if (bulkImage.length + 1 <= 5) {
-            setBulkImage([...bulkImage, {
-                file: URL.createObjectURL(e.target.files[0]),
-                bytes: e.target.files[0],
-            }]);
-        } else {
-            alert('You have cross your limit bugger')
+        if (e.target.files && e.target.files.length > 0) {
+            const newImages = Array.from(e.target.files).slice(0, 5 - bulkImage.length).map(file => ({
+                file: URL.createObjectURL(file),
+                bytes: file,
+            }));
+            
+            if (bulkImage.length + newImages.length <= 5) {
+                setBulkImage([...bulkImage, ...newImages]);
+            } else {
+                alert('You can only upload up to 5 images');
+            }
         }
-    }
+    };
+
+    // Remove bulk image
+    const removeBulkImage = (index) => {
+        setBulkImage(bulkImage.filter((_, currIndex) => currIndex !== index));
+    };
 
     //* Handle Validation
     const handleValidation = () => {
         let isValid = true;
-        const { categoryId, productName, price } = inputFieldDetail;
+        const { categoryId, productName, price, commission } = inputFieldDetail;
 
-        const { file } = image;
+        // Reset errors
+        const newErrors = { ...inputFieldError };
+        
         if (!categoryId) {
-            handleInputFieldError("categoryId", "Please Select Category Name")
+            newErrors.categoryId = "Please Select Category Name";
             isValid = false;
-        }
-        if (!productName) {
-            handleInputFieldError("productName", "Please Enter Product Name")
-            isValid = false;
-        }
-        if (!Regex_Accept_Alpha_Dot_Comma_Space.test(productName)) {
-            handleInputFieldError("productName", "Please Enter Valid Product Name")
-            isValid = false;
-        }
-        if (productName.toString().length > 70) {
-            handleInputFieldError("productName", "Please Enter Product Name Less Than 70 Letter")
-            isValid = false;
-        }
-        if (!price) {
-            handleInputFieldError("price", "Please Enter price")
-            isValid = false;
-        }
-        if (description?.toString('html') === "<p><br></p>") {
-            handleInputFieldError("description", "Please Enter Description");
-            isValid = false;
-        }
-        if (!file) {
-            handleInputFieldError("image", "Please Select Image")
-            isValid = false;
+        } else {
+            newErrors.categoryId = '';
         }
 
+        if (!productName) {
+            newErrors.productName = "Please Enter Product Name";
+            isValid = false;
+        } else if (!Regex_Accept_Alpha_Dot_Comma_Space.test(productName)) {
+            newErrors.productName = "Please Enter Valid Product Name";
+            isValid = false;
+        } else if (productName.toString().length > 70) {
+            newErrors.productName = "Please Enter Product Name Less Than 70 Letters";
+            isValid = false;
+        } else {
+            newErrors.productName = '';
+        }
+
+        if (!price || price < 0) {
+            newErrors.price = "Please Enter Valid Price";
+            isValid = false;
+        } else {
+            newErrors.price = '';
+        }
+
+        // Commission validation for specific category
+        if (inputFieldDetail?.categoryId === "67de7a2dc85bfe89e5cfc012") {
+            if (!commission || commission < 0) {
+                newErrors.commission = "Please Enter Valid Commission";
+                isValid = false;
+            } else {
+                newErrors.commission = '';
+            }
+        }
+
+        // Description validation
+        const hasEnglishText = description_en.getEditorState().getCurrentContent().hasText();
+        const hasHindiText = description_hi.getEditorState().getCurrentContent().hasText();
+        
+        if (!hasEnglishText) {
+            newErrors.description_en = "Please Enter Description in English";
+            isValid = false;
+        } else {
+            newErrors.description_en = '';
+        }
+
+        if (!hasHindiText) {
+            newErrors.description_hi = "Please Enter Description in Hindi";
+            isValid = false;
+        } else {
+            newErrors.description_hi = '';
+        }
+
+        if (!image.file && !image.bytes) {
+            newErrors.image = "Please Select Image";
+            isValid = false;
+        } else {
+            newErrors.image = '';
+        }
+
+        setInputFieldError(newErrors);
         return isValid;
+    };
+
+    //! Handle Description Change based on language - FIXED
+    const handleDescriptionChange = (value) => {
+        if (currentLang === 'en') {
+            setDescription_en(value);
+            if (value.getEditorState().getCurrentContent().hasText()) {
+                handleInputFieldError("description_en", '');
+            }
+        } else {
+            setDescription_hi(value); // Fixed this line
+            if (value.getEditorState().getCurrentContent().hasText()) {
+                handleInputFieldError("description_hi", '');
+            }
+        }
+    };
+
+    //! Get current description value based on language
+    const getCurrentDescription = () => {
+        return currentLang === 'en' ? description_en : description_hi;
+    };
+
+    //! Get current description error based on language
+    const getCurrentDescriptionError = () => {
+        return currentLang === 'en' ? inputFieldError.description_en : inputFieldError.description_hi;
     };
 
     //! Handle Submit - Creating Ecommerce Product
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const bulkImageArray = bulkImage?.map((value) => value?.bytes);
-
-        const { categoryId, productName, price, commission } = inputFieldDetail;
-
+        
         if (handleValidation()) {
-            if (stateData) {
-                let formData = new FormData();
-                formData.append("category", categoryId);
-                formData.append("name", productName);
-                formData.append("description", description.toString('html'));
-                formData.append("price", price);
+            const { categoryId, productName, price, commission } = inputFieldDetail;
+            const bulkImageArray = bulkImage?.map((value) => value?.bytes).filter(Boolean);
+
+            let formData = new FormData();
+            formData.append("category", categoryId);
+            formData.append("name", productName);
+            formData.append("description", description_en.toString('html'));
+            formData.append("description_hi", description_hi.toString('html'));
+            formData.append("price", price);
+            
+            if (commission) {
                 formData.append("adminCommissionPercentage", commission);
+            }
 
-                formData.append("image", image?.bytes);
-                bulkImageArray.map((value, index) => (
-                    formData.append(`bannerImage`, value)
-                ))
+            // Only append image if it's a new file
+            if (image.bytes) {
+                formData.append("image", image.bytes);
+            }
 
-                for (let pair of formData.entries()) {
-    console.log(pair[0], pair[1]);
-}
+            // Append bulk images
+            bulkImageArray.forEach((value) => {
+                formData.append("bannerImage", value);
+            });
 
+            if (stateData) {
+                // Update existing product
                 const payload = {
                     data: formData,
                     id: stateData?._id,
                     onComplete: () => navigate('/ecommerce/product')
-                }
-
-                //! Dispatching API for Updating Products
-                dispatch(EcommerceActions.updateEcommerceProduct(payload))
-
+                };
+                dispatch(EcommerceActions.updateEcommerceProduct(payload));
             } else {
-                let formData = new FormData();
-                formData.append("category", categoryId);
-                formData.append("name", productName);
-                formData.append("description", description.toString('html'));
-                formData.append("price", price);
-                formData.append("adminCommissionPercentage", commission);
-
-                formData.append("image", image?.bytes);
-                bulkImageArray.map((value, index) => (
-                    formData.append(`bannerImage`, value)
-                ))
-
+                // Create new product
                 const payload = {
                     data: formData,
                     onComplete: () => navigate('/ecommerce/product')
-                }
-
-                //! Dispatching API for Creating Products
-                dispatch(EcommerceActions.createEcommerceProduct(payload))
+                };
+                dispatch(EcommerceActions.createEcommerceProduct(payload));
             }
         } else {
-            console.log("Validation Error !!!")
+            console.log("Validation Error !!!");
         }
     };
 
     useEffect(() => {
-        //! Dispatching API for Getting Category
-        dispatch(EcommerceActions.getEcommerceCategory())
-    }, []);
+        dispatch(EcommerceActions.getEcommerceCategory());
+    }, [dispatch]);
 
     return (
         <>
@@ -183,11 +270,15 @@ const AddProduct = ({ mode }) => {
                 </div>
 
                 <Grid container sx={{ alignItems: "center" }} spacing={3}>
-                    <Grid item lg={12} sm={12} md={12} xs={12} >
+                    {/* Main Image Upload */}
+                    <Grid item lg={12} sm={12} md={12} xs={12}>
                         <div style={{ color: "#000", border: "1px solid #C4C4C4", borderRadius: "3px" }}>
                             {image?.file ?
                                 <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px", cursor: "pointer" }}>
-                                    <Avatar src={image.file} style={{ height: '300px', minWidth: "50%", borderRadius: "initial" }} />
+                                    <Avatar 
+                                        src={typeof image.file === 'string' ? image.file : URL.createObjectURL(image.file)} 
+                                        style={{ height: '300px', minWidth: "50%", borderRadius: "initial" }} 
+                                    />
                                 </label>
                                 :
                                 <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-image" style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center", padding: "100px 0", cursor: "pointer" }}>
@@ -197,118 +288,181 @@ const AddProduct = ({ mode }) => {
                                 </label>}
                             <input id="upload-image" onChange={handleImage} hidden accept="image/*" type="file" />
                         </div>
-                        {inputFieldError?.image && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px", }}>{inputFieldError?.image}</div>}
+                        {inputFieldError?.image && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px" }}>{inputFieldError?.image}</div>}
                     </Grid>
 
-                    <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <FormControl fullWidth>
+                    {/* Category Selection */}
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                        <FormControl fullWidth error={!!inputFieldError?.categoryId}>
                             <InputLabel id="select-label">Select Category Name<span style={{ color: "red" }}>* </span></InputLabel>
                             <Select
-                                label="Select Category Name * " variant="outlined" fullWidth
+                                labelId="select-label"
+                                label="Select Category Name *"
+                                variant="outlined"
+                                fullWidth
                                 name='categoryId'
                                 value={inputFieldDetail?.categoryId}
                                 onChange={handleInputField}
-                                error={inputFieldError?.categoryId ? true : false}
                                 onFocus={() => handleInputFieldError("categoryId", null)}
                             >
-                                <MenuItem disabled>---Select Category Name---</MenuItem>
+                                <MenuItem value="">---Select Category Name---</MenuItem>
                                 {ecommerceCategoryData.map((value, index) => {
                                     return <MenuItem key={index} value={value?._id}>{value?.categoryName}</MenuItem>
                                 })}
                             </Select>
+                            {inputFieldError?.categoryId && <div style={{ color: "#D32F2F", fontSize: "12px", padding: "3px 15px 0 15px" }}>{inputFieldError?.categoryId}</div>}
                         </FormControl>
-                        {inputFieldError?.categoryId && <div style={{ color: "#D32F2F", fontSize: "10px", padding: "3px 15px 0 15px" }}>{inputFieldError?.categoryId}</div>}
                     </Grid>
 
-                    <Grid item lg={6} md={6} sm={12} xs={12} >
+                    {/* Product Name */}
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
                         <TextField
-                            label={<>Product Name <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
+                            label={<>Product Name <span style={{ color: "red" }}>*</span></>}
+                            variant='outlined'
+                            fullWidth
                             name='productName'
                             value={inputFieldDetail?.productName}
                             onChange={handleInputField}
-                            error={inputFieldError.productName ? true : false}
+                            error={!!inputFieldError.productName}
                             helperText={inputFieldError.productName}
                             onFocus={() => handleInputFieldError("productName", null)}
                         />
                     </Grid>
 
-                    <Grid item lg={6} md={6} sm={12} xs={12} >
+                    {/* Price */}
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
                         <TextField
-                            label={<>Price <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='price' type="number"
+                            label={<>Price <span style={{ color: "red" }}>*</span></>}
+                            variant='outlined'
+                            fullWidth
+                            name='price'
+                            type="number"
                             value={inputFieldDetail?.price}
                             onChange={handleInputField}
-                            error={inputFieldError.price ? true : false}
+                            error={!!inputFieldError.price}
                             helperText={inputFieldError.price}
                             onFocus={() => handleInputFieldError("price", null)}
                             inputProps={{ min: 0 }}
                         />
                     </Grid>
 
-                    {inputFieldDetail?.categoryId == "67de7a2dc85bfe89e5cfc012" && <Grid item lg={6} md={6} sm={12} xs={12} >
-                        <TextField
-                            label={<>Commission <span style={{ color: "red" }}>*</span></>} variant='outlined' fullWidth
-                            name='commission' type="number"
-                            value={inputFieldDetail?.commission}
-                            onChange={handleInputField}
-                            error={inputFieldError.commission ? true : false}
-                            helperText={inputFieldError.commission}
-                            onFocus={() => handleInputFieldError("commission", null)}
-                            inputProps={{ min: 0 }}
-                        />
-                    </Grid>}
-
-                    {/* <Grid item lg={12} md={12} sm={12} xs={12} >
-                        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                            <label style={{ color: "#000", marginBottom: "#000", fontSize: "14.5px", color: "grey" }}>Description <span style={{ color: "red" }}>*</span></label>
-                            <textarea
-                                name='description'
-                                value={inputFieldDetail?.description}
+                    {/* Commission (Conditional) */}
+                    {inputFieldDetail?.categoryId === "67de7a2dc85bfe89e5cfc012" && (
+                        <Grid item lg={6} md={6} sm={12} xs={12}>
+                            <TextField
+                                label={<>Commission <span style={{ color: "red" }}>*</span></>}
+                                variant='outlined'
+                                fullWidth
+                                name='commission'
+                                type="number"
+                                value={inputFieldDetail?.commission}
                                 onChange={handleInputField}
-                                placeholder="Description"
-                                rows={8}
-                                onFocus={() => handleInputFieldError("description", null)}
-                                style={{ minWidth: "100%", maxWidth: "100%", minHeight: "50px", padding: "10px", outline: "none", border: `1px solid ${inputFieldError?.description ? 'red' : '#C4C4C4'}`, borderRadius: "3.5px", fontFamily: "Philosopher" }}
+                                error={!!inputFieldError.commission}
+                                helperText={inputFieldError.commission}
+                                onFocus={() => handleInputFieldError("commission", null)}
+                                inputProps={{ min: 0 }}
                             />
-                        </div>
-                        {inputFieldError?.description && <div style={{ color: "#D32F2F", fontSize: "12.5px", padding: "10px 0 0 12px", }}>{inputFieldError?.description}</div>}
-                    </Grid> */}
+                        </Grid>
+                    )}
 
+                    {/* Language Toggle */}
                     <Grid item lg={12} md={12} sm={12} xs={12}>
-                        <RichTextEditor
-                            value={description}
-                            onChange={setDescription}
-                            editorStyle={{ minHeight: '50vh' }}
-                            onFocus={() => handleInputFieldError("description", null)}
-                        />
-                        {inputFieldError.description && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "400" }}>{inputFieldError.description}</div>}
+                        <div style={{ marginBottom: '10px' }}>
+                            <button
+                                type="button"
+                                onClick={() => setCurrentLang('en')}
+                                style={{
+                                    marginRight: '10px',
+                                    backgroundColor: currentLang === 'en' ? Color.primary : '#f0f0f0',
+                                    color: currentLang === 'en' ? '#fff' : '#000',
+                                    padding: '5px 10px',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer',
+                                    border: 'none'
+                                }}
+                            >
+                                English
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setCurrentLang('hi')}
+                                style={{
+                                    backgroundColor: currentLang === 'hi' ? Color.primary : '#f0f0f0',
+                                    color: currentLang === 'hi' ? '#fff' : '#000',
+                                    padding: '5px 10px',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer',
+                                    border: 'none'
+                                }}
+                            >
+                                Hindi
+                            </button>
+                        </div>
                     </Grid>
 
-                    <Grid item lg={12} md={12} sm={12} xs={12} sx={{ color: "#000" }}>
+                    {/* Description Editor */}
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <label style={{ display: 'block', marginBottom: '8px' }}>
+                            Description {currentLang === 'en' ? '(English)' : '(Hindi)'} <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <RichTextEditor
+                            value={getCurrentDescription()}
+                            onChange={handleDescriptionChange}
+                            editorStyle={{ minHeight: '200px' }}
+                        />
+                        {getCurrentDescriptionError() && (
+                            <div style={{ color: "#D32F2F", fontSize: "12px", padding: "3px 15px 0 15px" }}>
+                                {getCurrentDescriptionError()}
+                            </div>
+                        )}
+                    </Grid>
+
+                    {/* Bulk Images */}
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
                         <div style={{ display: "flex", gap: "40px", flexWrap: "wrap", justifyContent: "space-evenly", marginBottom: "20px" }}>
-                            {bulkImage.length > 0 && bulkImage?.map((value, index) => (
+                            {bulkImage.map((value, index) => (
                                 <div key={index} style={{ position: "relative" }}>
-                                    <Avatar src={value.file} style={{ height: '150px', width: "250px", borderRadius: "initial" }} />
-                                    <div onClick={() => setBulkImage(bulkImage.filter((curr, currIndex) => currIndex !== index))} style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}><CrossSvg /></div>
+                                    <Avatar 
+                                        src={typeof value.file === 'string' ? value.file : URL.createObjectURL(value.file)} 
+                                        style={{ height: '150px', width: "250px", borderRadius: "initial" }} 
+                                    />
+                                    <div 
+                                        onClick={() => removeBulkImage(index)} 
+                                        style={{ position: "absolute", top: '-13px', right: '-15px', cursor: "pointer" }}
+                                    >
+                                        <CrossSvg />
+                                    </div>
                                 </div>
                             ))}
                         </div>
 
-                        <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>Upload More Images(Max File Count : 5)</div>
-                        <label onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} htmlFor="upload-bulk-image" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
-                            <UploadImageSvg h="25" w="25" color="#000" />
-                            <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
-                        </label>
-                        <input id="upload-bulk-image" multiple type="file" onChange={handleBulkImage} hidden />
+                        {bulkImage.length < 5 && (
+                            <>
+                                <div style={{ textAlign: "center", marginBottom: "10px", fontSize: "13px", color: "gray" }}>
+                                    Upload More Images (Max File Count: 5)
+                                </div>
+                                <label htmlFor="upload-bulk-image" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "25px", cursor: "pointer", border: "1px solid #C4C4C4", borderRadius: "3.5px", padding: "5px 0", backgroundColor: "#F1F1F7" }}>
+                                    <UploadImageSvg h="25" w="25" color="#000" />
+                                    <div style={{ fontWeight: "600", fontSize: "15px" }}>Upload</div>
+                                </label>
+                                <input id="upload-bulk-image" multiple type="file" onChange={handleBulkImage} hidden accept="image/*" />
+                            </>
+                        )}
                     </Grid>
 
+                    {/* Submit Button */}
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <Grid container sx={{ justifyContent: "space-between" }}>
-                            <div onClick={handleSubmit} style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "10px 20px", borderRadius: "5px", cursor: "pointer", fontSize: "15px" }}>Submit</div>
+                            <div 
+                                onClick={handleSubmit} 
+                                style={{ fontWeight: "500", backgroundColor: Color.primary, color: Color.white, padding: "10px 20px", borderRadius: "5px", cursor: "pointer", fontSize: "15px" }}
+                            >
+                                Submit
+                            </div>
                         </Grid>
                     </Grid>
                 </Grid>
-            </div >
+            </div>
         </>
     );
 };

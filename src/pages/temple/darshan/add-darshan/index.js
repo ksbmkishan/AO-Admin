@@ -29,7 +29,8 @@ const AddDarshan = ({ mode }) => {
     const [inputFieldDetail, setInputFieldDetail] = useState({
         title: stateData ? stateData?.title : '',
         temple: stateData ? stateData?.temple : '',
-        description: stateData ? RichTextEditor.createValueFromString(stateData?.description, 'html') : RichTextEditor.createEmptyValue(),
+        description_en: stateData ? RichTextEditor.createValueFromString(stateData?.description, 'html') : RichTextEditor.createEmptyValue(),
+        description_hi: stateData ? RichTextEditor.createValueFromString(stateData?.description_hi, 'html') : RichTextEditor.createEmptyValue(),
         aarti: stateData ? stateData?.aarti : '',
         aartilyrics: stateData ? RichTextEditor.createValueFromString(stateData?.aartilyrics, 'html') : RichTextEditor.createEmptyValue(),
         chalisa: stateData ? stateData?.chalisa : '',
@@ -40,7 +41,7 @@ const AddDarshan = ({ mode }) => {
         bhjanlyrics: stateData ? RichTextEditor.createValueFromString(stateData?.bhjanlyrics, 'html') : RichTextEditor.createEmptyValue(),
         vr_mode: stateData?.vr_mode?.length ? stateData.vr_mode.map(vr => ({
             vr_title: vr.vr_title || "",
-            vr_image: base_url + vr.vr_image || null,
+            vr_image: vr.vr_image || null,
             vr_image_file: null,
             tags: Array.isArray(vr.tags) ? vr.tags.join(",") : vr.tags || "",
             vr_type: vr.vr_type || "VR",
@@ -63,19 +64,20 @@ const AddDarshan = ({ mode }) => {
         }
     });
     const [inputFieldError, setInputFieldError] = useState({
-        image: '', temple: '', title: '', description: '', bulkImage: '', bulkVideo: '',
+        image: '', temple: '', title: '', description_en: '',description_hi: '', bulkImage: '', bulkVideo: '',
         aarti: '', aartilyrics: '', chalisa: '', chalisalyrics: '', mantralink: '', mantralyrics: '', bhajan: '', bhjanlyrics: ''
     });
-    const [image, setImage] = useState({ file: stateData ? api_urls + stateData?.image : '', bytes: '' });
-    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bulkImageOnly && stateData?.bulkImageOnly?.map(value => ({ file: base_url + value })) : []);
+    const [image, setImage] = useState({ file: stateData ? stateData?.image : '', bytes: '' });
+    const [bulkImage, setBulkImage] = useState(stateData ? stateData?.bulkImageOnly && stateData?.bulkImageOnly?.map(value => ({ file: value })) : []);
     const [bulkVideo, setbulkVideo] = useState(stateData ? stateData?.
-        bulkVideoUpload.map(value => ({ file: base_url + value })) : []);
+        bulkVideoUpload.map(value => ({ file: value })) : []);
 
     const [modal, setModal] = useState(false);
     const [modalVideo, setModalVideo] = useState(false);
     const [imageView, setImageView] = useState(null);
     const [imageViewVideo, setImageViewVideo] = useState(null);
-    // console.log('bulkImage :: ', bulkImage);
+
+     const [currentLang, setCurrentLang] = useState('en');
 
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value })); //* Handle Input Field : Error
@@ -174,7 +176,7 @@ const AddDarshan = ({ mode }) => {
     //! Handle validation
     const handleValidation = () => {
         let isValid = true;
-        const { title } = inputFieldDetail;
+        const { title, description_en, description_hi} = inputFieldDetail;
         const { file } = image;
 
         if (!title) {
@@ -192,6 +194,25 @@ const AddDarshan = ({ mode }) => {
         if (!file) {
             handleInputFieldError("image", "Please Upload Image")
             isValid = false;
+        }
+
+         // Description validation
+        const hasEnglishText = description_en.getEditorState().getCurrentContent().hasText();
+        const hasHindiText = description_hi.getEditorState().getCurrentContent().hasText();
+        
+        if (!hasEnglishText) {
+            handleInputFieldError("description_en", "Please Enter Description in English");
+            isValid = false;
+        } else {
+            handleInputFieldError("description_en","");
+        }
+
+        if (!hasHindiText) {
+           handleInputFieldError("description_hi", "Please Enter Description in Hindi");
+            isValid = false;
+        } else {
+            handleInputFieldError("description_hi","");
+           
         }
 
         return isValid;
@@ -577,11 +598,36 @@ const AddDarshan = ({ mode }) => {
     }
 
 
+    //! Handle Description Change based on language
+    const handleDescriptionChange = (value) => {
+        if (currentLang === 'en') {
+            setInputFieldDetail({ ...inputFieldDetail, description_en: value });
+            if (inputFieldError.description_en) {
+                handleInputFieldError("description_en", null);
+            }
+        } else {
+            setInputFieldDetail({ ...inputFieldDetail, description_hi: value });
+            if (inputFieldError.description_hi) {
+                handleInputFieldError("description_hi", null);
+            }
+        }
+    };
+
+     //! Get current description value based on language
+    const getCurrentDescription = () => {
+        return currentLang === 'en' ? inputFieldDetail.description_en : inputFieldDetail.description_hi;
+    };
+
+    //! Get current description error based on language
+    const getCurrentDescriptionError = () => {
+        return currentLang === 'en' ? inputFieldError.description_en : inputFieldError.description_hi;
+    };
+
     //! Handle Submit - Creating Darshan
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Darshan Data :: ", { ...inputFieldDetail, image, bulkImage, bulkVideo })
-        const { title, description, temple, aarti, aartilyrics, chalisa, chalisalyrics, mantralink, mantralyrics, bhajan, bhjanlyrics } = inputFieldDetail;
+        const { title, description_en,description_hi, temple, aarti, aartilyrics, chalisa, chalisalyrics, mantralink, mantralyrics, bhajan, bhjanlyrics } = inputFieldDetail;
 
         console.log('Vr Mode ', inputFieldDetail.vr_mode)
 
@@ -592,7 +638,8 @@ const AddDarshan = ({ mode }) => {
                 formData.append("id", stateData?._id);
                 formData.append("temple", temple);
                 formData.append("title", title);
-                formData.append("description", description?.toString('html'));
+                formData.append("description", description_en?.toString('html'));
+                formData.append("description_hi", description_hi?.toString('html'));
                 formData.append("aarti", aarti);
                 formData.append("aartilyrics", aartilyrics?.toString('html'));
                 formData.append("chalisa", chalisa);
@@ -637,7 +684,8 @@ const AddDarshan = ({ mode }) => {
                 let formData = new FormData();
                 formData.append("temple", temple);
                 formData.append("title", title);
-                formData.append("description", description?.toString('html'));
+                formData.append("description", description_en?.toString('html'));
+                formData.append("description_hi", description_hi?.toString('html'));
                 formData.append("aarti", aarti);
                 formData.append("aartilyrics", aartilyrics?.toString('html'));
                 formData.append("chalisa", chalisa);
@@ -735,20 +783,57 @@ const AddDarshan = ({ mode }) => {
                     </Grid>
 
                     <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <div style={{ marginBottom: '10px' }}>
+                            <button
+                                type="button"
+                                onClick={() => setCurrentLang('en')}
+                                style={{
+                                    marginRight: '10px',
+                                    backgroundColor: currentLang === 'en' ? Color.primary : '#f0f0f0',
+                                    color: currentLang === 'en' ? '#fff' : '#000',
+                                    padding: '5px 10px',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                English
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setCurrentLang('hi')}
+                                style={{
+                                    backgroundColor: currentLang === 'hi' ? Color.primary : '#f0f0f0',
+                                    color: currentLang === 'hi' ? '#fff' : '#000',
+                                    padding: '5px 10px',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Hindi
+                            </button>
+                        </div>
+                    </Grid>
+
+
+                    {/* Description */}
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
                         <label>
-                            Description <span style={{ color: "red" }}>*</span>
+                            Description {currentLang === 'en' ? '(English)' : '(Hindi)'} <span style={{ color: "red" }}>*</span>
                         </label>
 
                         <RichTextEditor
-                            value={inputFieldDetail?.description}
-                            onChange={(value) => setInputFieldDetail({ ...inputFieldDetail, description: value })}
+                            value={getCurrentDescription()}
+                            onChange={handleDescriptionChange}
                             editorStyle={{ minHeight: '50vh', }}
-                            onFocus={() => handleInputFieldError("description", null)}
+                            onFocus={() => handleInputFieldError(
+                                currentLang === 'en' ? "description_en" : "description_hi", 
+                                null
+                            )}
                         />
-                        {/* Optionally, display error */}
-                        {inputFieldError.description && (
-                            <span style={{ color: "red" }}>
-                                {inputFieldError.description}
+                        {/* Display error for current language */}
+                        {getCurrentDescriptionError() && (
+                            <span style={{ color: "red", display: "block", marginTop: "5px" }}>
+                                {getCurrentDescriptionError()}
                             </span>
                         )}
                     </Grid>

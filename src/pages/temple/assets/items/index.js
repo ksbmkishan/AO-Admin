@@ -26,7 +26,7 @@ const Items = () => {
         { name: 'S.No.', selector: row => templeAssetsItemsByAssetsIdData.indexOf(row) + 1, width: '80px' },
         { name: 'Titleeeee', selector: row => row?.itemName || 'N/A' },
         { name: 'Price', selector: row => row?.itemPrice || 'N/A' },
-        { name: 'Image', selector: row => <Avatar src={api_urls + row?.itemImage} /> },
+        { name: 'Image', selector: row => <Avatar src={row?.itemImage} /> },
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >

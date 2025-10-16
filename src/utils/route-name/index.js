@@ -128,7 +128,12 @@ export const RouteName = [
                 path: "/temple/vardani-shivalya",
                 name: "Vardani Shivalya",
                 icon: <OtherRouteSvg />,
-            }
+            },
+            // {
+            //     path: "/temple/video",
+            //     name: "Temple Video",
+            //     icon: <OtherRouteSvg />,
+            // }
         ],
     },
     {
@@ -223,11 +228,11 @@ export const RouteName = [
         name: "Testimonial",
         icon: <OtherRouteSvg />,
     },
-    {
-        path: "/teerthDham",
-        name: "Teerth Dham",
-        icon: <OtherRouteSvg />,
-    },
+    // {
+    //     path: "/teerthDham",
+    //     name: "Teerth Dham",
+    //     icon: <OtherRouteSvg />,
+    // },
     {
         path: "/templeFoundation",
         name: "Temple Foundation",

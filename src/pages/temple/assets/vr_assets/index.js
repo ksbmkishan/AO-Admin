@@ -60,7 +60,7 @@ const Items = () => {
         { name: 'Payment Type', selector: row => row?.payment || 'N/A' },
         {
             name: 'Image',
-            selector: row => <Avatar src={`https://api.astroone.in/${row?.itemImage}`} />,
+            selector: row => <Avatar src={`${row?.itemImage}`} />,
         },
         {
             name: 'Audio',

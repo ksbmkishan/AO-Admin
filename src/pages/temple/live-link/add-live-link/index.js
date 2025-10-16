@@ -18,7 +18,7 @@ const AddLiveLink = ({ mode }) => {
 
     const [inputFieldDetail, setInputFieldDetail] = useState({ templeName: stateData ? stateData?.TempleName : '', priority: stateData ? stateData?.priority : '', videoLink: stateData ? stateData?.VideoLink : '', startTime: stateData ? moment.utc(stateData?.fromTimeOfArti).format("YYYY-MM-DD HH:mm") : '', endTime: stateData ? moment.utc(stateData?.toTimeOfArti).format("YYYY-MM-DD HH:mm") : '' });
     const [inputFieldError, setInputFieldError] = useState({ templeName: '', priority: '', videoLink: '', startTime: '', endTime: '', });
-    const [image, setImage] = useState({ file: stateData ? api_urls + stateData?.image : '', bytes: '' });
+    const [image, setImage] = useState({ file: stateData ?  stateData?.image : '', bytes: '' });
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value })); //* Handle Input Field : Error
 

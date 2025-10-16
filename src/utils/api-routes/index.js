@@ -177,6 +177,10 @@ export const delete_temple_live_link = (id) => `api/admin/delete_Darshan/${id}`;
 export const get_temple_mandir = 'api/admin/get-vardani-shivalya';
 export const update_temple_mandir =`api/admin/update-vardani-shivalya`;
 
+export const get_temple_video = 'api/admin/get_temple_videos';
+export const create_temple_video = 'api/admin/add_temple_video';
+export const delete_temple_video_by_id = (id) => `api/admin/delete_temple_video/${id}`;
+
 //TODO---------------------Working-----------------------TODO// 
 
 //! Banner 

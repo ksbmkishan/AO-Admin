@@ -18,9 +18,17 @@ const AddAstroblog = ({ mode }) => {
     const { astroblogCategoryData } = useSelector(state => state.blogs);
 
     const [inputFieldDetail, setInputFieldDetail] = useState({ title: stateData ? stateData?.title : '', created_by: stateData ? stateData?.created_by : '', categoryId: stateData ? stateData?.blogCategoryId?._id : '' });
-    const [description, setDescription] = useState(stateData ? RichTextEditor.createValueFromString(stateData?.description, 'html') : RichTextEditor.createEmptyValue());
-    const [inputFieldError, setInputFieldError] = useState({ title: '', created_by: '', category: '', description: '', image: '', categoryId: '' });
-    const [image, setImage] = useState({ file: stateData ? img_url + stateData.image : '', bytes: '' });
+    const [description_en, setDescription_en] = useState(stateData ?
+        RichTextEditor.createValueFromString(stateData?.description || '', 'html') :
+        RichTextEditor.createEmptyValue()
+    );
+    const [description_hi, setDescription_hi] = useState(stateData ?
+        RichTextEditor.createValueFromString(stateData?.description_hi || '', 'html') :
+        RichTextEditor.createEmptyValue()
+    );
+    const [currentLang, setCurrentLang] = useState('en');
+    const [inputFieldError, setInputFieldError] = useState({ title: '', created_by: '', category: '', description_en: '', image: '', categoryId: '', description_hi: '' });
+    const [image, setImage] = useState({ file: stateData ? stateData.image : '', bytes: '' });
 
     //* Handle Input Field : Error
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value }))
@@ -83,22 +91,59 @@ const AddAstroblog = ({ mode }) => {
             handleInputFieldError("categoryId", "Please Select Category");
             isValid = false;
         }
-        if (description?.toString('html') === "<p><br></p>") {
-            handleInputFieldError("description", "Please Enter Description");
-            isValid = false;
-        }
+       
         if (!file) {
             handleInputFieldError("image", "Please Upload Image");
             isValid = false;
         }
 
+        // Description validation
+        const hasEnglishText = description_en.getEditorState().getCurrentContent().hasText();
+        const hasHindiText = description_hi.getEditorState().getCurrentContent().hasText();
+        
+        if (!hasEnglishText) {
+            handleInputFieldError("description_en" , "Please Enter Description in English");
+            isValid = false;
+        } 
+
+        if (!hasHindiText) {
+            handleInputFieldError("description_hi" , "Please Enter Description in Hindi");
+            isValid = false;
+        } 
+
+
         return isValid;
+    };
+
+    //! Handle Description Change based on language
+    const handleDescriptionChange = (value) => {
+        if (currentLang === 'en') {
+            setDescription_en(value);
+            if (value.getEditorState().getCurrentContent().hasText()) {
+                handleInputFieldError("description_en", null);
+            }
+        } else {
+            setDescription_hi(value);
+            if (value.getEditorState().getCurrentContent().hasText()) {
+                handleInputFieldError("description_hi", null);
+            }
+        }
+    };
+
+    //! Get current description value based on language
+    const getCurrentDescription = () => {
+        return currentLang === 'en' ? description_en : description_hi;
+    };
+
+    //! Get current description error based on language
+    const getCurrentDescriptionError = () => {
+        return currentLang === 'en' ? inputFieldError.description_en : inputFieldError.description_hi;
     };
 
     //! Handle Submit 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log({ ...inputFieldDetail, description: description.toString('html') });
+        console.log({ ...inputFieldDetail });
 
         if (handleValidation()) {
             const { title, created_by, categoryId } = inputFieldDetail;
@@ -107,7 +152,8 @@ const AddAstroblog = ({ mode }) => {
             formData.append("title", title);
             formData.append("created_by", created_by);
             formData.append("blogCategoryId", categoryId);
-            formData.append("description", description.toString('html'));
+            formData.append("description", description_en.toString('html'));
+            formData.append("description_hi", description_hi.toString('html'));
             formData.append("image", image.bytes);
 
             if (stateData) {
@@ -197,14 +243,56 @@ const AddAstroblog = ({ mode }) => {
                     />
                 </Grid>
 
+                {/* Language Toggle */}
                 <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <div style={{ marginBottom: '10px' }}>
+                        <button
+                            type="button"
+                            onClick={() => setCurrentLang('en')}
+                            style={{
+                                marginRight: '10px',
+                                backgroundColor: currentLang === 'en' ? Color.primary : '#f0f0f0',
+                                color: currentLang === 'en' ? '#fff' : '#000',
+                                padding: '5px 10px',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                border: 'none'
+                            }}
+                        >
+                            English
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setCurrentLang('hi')}
+                            style={{
+                                backgroundColor: currentLang === 'hi' ? Color.primary : '#f0f0f0',
+                                color: currentLang === 'hi' ? '#fff' : '#000',
+                                padding: '5px 10px',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                border: 'none'
+                            }}
+                        >
+                            Hindi
+                        </button>
+                    </div>
+                </Grid>
+
+                {/* Description Editor */}
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <label style={{ display: 'block', marginBottom: '8px' }}>
+                        Description {currentLang === 'en' ? '(English)' : '(Hindi)'} <span style={{ color: "red" }}>*</span>
+                    </label>
                     <RichTextEditor
-                        value={description}
-                        onChange={setDescription}
-                        editorStyle={{ minHeight: '50vh' }}
-                        onFocus={() => handleInputFieldError("description", null)}
+                        value={getCurrentDescription()}
+                        onChange={handleDescriptionChange}
+                        editorStyle={{ minHeight: '200px' }}
                     />
-                    {inputFieldError.description && <div style={{ color: "#D32F2F", fontSize: "13px", padding: "5px 15px 0 12px", fontWeight: "400" }}>{inputFieldError.description}</div>}
+                    {getCurrentDescriptionError() && (
+                        <div style={{ color: "#D32F2F", fontSize: "12px", padding: "3px 15px 0 15px" }}>
+                            {getCurrentDescriptionError()}
+                        </div>
+                    )}
                 </Grid>
 
                 <Grid item lg={12} md={12} sm={12} xs={12}>

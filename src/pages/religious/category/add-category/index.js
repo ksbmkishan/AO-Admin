@@ -18,7 +18,7 @@ const AddReligiousCategory = ({ mode }) => {
     const [categoryDetail, setCategoryDetail] = useState({ title: stateData ? stateData?.categoryName : '' });
     const [inputFieldError, setInputFieldError] = useState({ title: '', image: '' });
     // const [image, setImage] = useState({ file: '', bytes: '' });
-    const [image, setImage] = useState({ file: stateData ? img_url + stateData?.image : '', bytes: '' });
+    const [image, setImage] = useState({ file: stateData ? stateData?.image : '', bytes: '' });
 
     //* Handle Input Field : Error
     const handleInputFieldError = (input, value) => {

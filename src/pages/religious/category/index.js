@@ -19,7 +19,7 @@ const ReligiousCategory = () => {
     const categoryColumns = [
         { name: 'S.No.', selector: row => religiousCategoryData.indexOf(row) + 1 },
         { name: 'Title', selector: row => row?.categoryName },
-        { name: 'Image', cell: row => <img src={row?.image ? img_url + row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
+        { name: 'Image', cell: row => <img src={row?.image ? row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> },
         {
             name: 'Action',
             cell: row => <div style={{ display: "flex", gap: "20px", alignItems: "center" }} >

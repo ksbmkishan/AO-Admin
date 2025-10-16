@@ -23,7 +23,7 @@ const Astroblog = () => {
         { name: 'Category', selector: row => row?.blogCategoryId?.blog_category },
         { name: 'Description', selector: row => row?.description ? <div onClick={() => dispatch(CommonActions?.openTextModal({ title: 'Description', text: row?.description, type: 'editor' }))} dangerouslySetInnerHTML={{ __html: row?.description?.toString().slice(0, 50) }} style={{ cursor: "pointer" }} /> : 'N/A' },
         { name: 'Created By', selector: row => row?.created_by },
-        { name: 'Image', cell: row => <Avatar src={row?.image ? img_url + row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />, width: '100px' },
+        { name: 'Image', cell: row => <Avatar src={row?.image ? row?.image : logo} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />, width: '100px' },
         { name: 'Date', selector: row => moment(row?.createdAt)?.format('DD MMM YYYY'), width: '150px' },
         { name: 'View Count', selector: row => row?.viewsCount ?row?.viewsCount : 0 , width: '110px' },
         {
