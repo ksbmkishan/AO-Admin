@@ -81,7 +81,6 @@ const AddDarshan = ({ mode }) => {
 
     const handleInputField = (e) => setInputFieldDetail({ ...inputFieldDetail, [e?.target?.name]: e?.target?.value });  //* Handle Input Field : Data
     const handleInputFieldError = (input, value) => setInputFieldError((prev) => ({ ...prev, [input]: value })); //* Handle Input Field : Error
-    console.log('inputFieldDetail. ', inputFieldDetail)
     //     // VR Mode Handlers
     const handleVRChange = (index, field, value) => {
         const updatedVR = [...inputFieldDetail.vr_mode];
@@ -634,6 +633,7 @@ const AddDarshan = ({ mode }) => {
         if (handleValidation()) {
 
             if (stateData) {
+                console.log('state data ', stateData?._id);
                 let formData = new FormData();
                 formData.append("id", stateData?._id);
                 formData.append("temple", temple);

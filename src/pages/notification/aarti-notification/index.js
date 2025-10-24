@@ -17,8 +17,8 @@ const AddAarti = () => {
   });
 
   // store file separately for upload, preview separately for audio player
-  const [audioFile, setAudioFile] = useState(null);
-  const [audioPreview, setAudioPreview] = useState("");
+  const [videoFile, setVideoFile] = useState(null);
+  const [videoPreview, setVideoPreview] = useState("");
   const [inputFieldError, setInputFieldError] = useState({});
 
   // Handle input change
@@ -27,21 +27,22 @@ const AddAarti = () => {
     setAartiDetail({ ...aartiDetail, [name]: value });
   };
 
-  // Handle audio upload
-  const handleAudio = (e) => {
+  // Handle video upload
+  const handleVideo = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
 
-      if (!file.type.startsWith("audio/")) {
-        setInputFieldError({ audio: "Only audio files allowed (mp3/wav)" });
+      if (!file.type.startsWith("video/")) {
+        setInputFieldError({ video: "Only video files allowed (mp4, mov, avi, etc.)" });
         return;
       }
 
-      setAudioFile(file); // ✅ real File object
-      setAudioPreview(URL.createObjectURL(file)); // ✅ preview only
-      setInputFieldError({ ...inputFieldError, audio: "" });
+      setVideoFile(file); // ✅ real File object
+      setVideoPreview(URL.createObjectURL(file)); // ✅ preview only
+      setInputFieldError({ ...inputFieldError, video: "" });
     }
   };
+
 
   // Validation
   const handleValidation = () => {
@@ -77,8 +78,8 @@ const AddAarti = () => {
       formData.append("title", aartiDetail.title);
       formData.append("time", aartiDetail.time);
 
-      if (audioFile) {
-        formData.append("audio", audioFile, audioFile.name); // ✅ attach File
+     if (videoFile) {
+        formData.append("video", videoFile, videoFile.name); // ✅ attach File
       }
 
       if (stateData?._id) {
@@ -142,6 +143,7 @@ const AddAarti = () => {
 
       <Grid container spacing={3}>
         {/* Upload Audio */}
+       {/* Upload Video */}
         <Grid item lg={12} sm={12} md={12} xs={12}>
           <div
             style={{
@@ -152,25 +154,26 @@ const AddAarti = () => {
             }}
           >
             <input
-              id="upload-audio"
-              onChange={handleAudio}
-              accept="audio/*"
+              id="upload-video"
+              onChange={handleVideo}
+              accept="video/*"
               type="file"
             />
-            {audioPreview && (
-              <audio
+            {videoPreview && (
+              <video
                 controls
-                src={audioPreview}
-                style={{ marginTop: "10px", width: "100%" }}
+                src={videoPreview}
+                style={{ marginTop: "10px", width: "100%", maxHeight: "400px" }}
               />
             )}
           </div>
-          {inputFieldError?.audio && (
+          {inputFieldError?.video && (
             <div style={{ color: "#D32F2F", fontSize: "12.5px" }}>
-              {inputFieldError.audio}
+              {inputFieldError.video}
             </div>
           )}
         </Grid>
+
 
         {/* Title */}
         <Grid item lg={6} md={6} sm={12} xs={12}>
