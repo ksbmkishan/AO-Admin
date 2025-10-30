@@ -30,7 +30,7 @@
     "material-table": "^2.0.5",
     "material-ui-dropzone": "^3.5.0",
     "moment": "^2.30.1",
-    "onnxruntime-web": "^1.21.0",
+    "onnxruntime-web": "1.21.0",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-avatar-editor": "^13.0.2",
