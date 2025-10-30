@@ -10,7 +10,7 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.15",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
-    "@mui/styles": "^5.15.15",
+    "@mui/styles": "^5.5.5",
     "@mui/x-charts": "^7.6.1",
     "@mui/x-date-pickers": "^7.2.0",
     "@react-pdf/renderer": "^3.4.4",
