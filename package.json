@@ -6,8 +6,6 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@imgly/background-removal": "1.6.0",
-    "@material-ui/core": "^4.12.4",
-    "@minchat/react-chat-ui": "^0.16.2",
     "@mui/icons-material": "^5.15.15",
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.15",
@@ -28,17 +26,16 @@
     "firebase": "^10.11.0",
     "framer-motion": "^11.1.1",
     "material-table": "^2.0.5",
-    "material-ui-dropzone": "^3.5.0",
     "moment": "^2.30.1",
     "onnxruntime-web": "1.21.0",
-    "react": "^18.2.0",
+    "react": "18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-avatar-editor": "^13.0.2",
     "react-csv": "^2.2.2",
     "react-data-table-component": "^7.6.2",
     "react-date-picker": "^11.0.0",
     "react-datepicker": "^6.8.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "18.2.0",
     "react-easy-crop": "^5.4.2",
     "react-error-overlay": "^6.0.11",
     "react-hot-toast": "^2.4.1",
@@ -66,7 +63,7 @@
     "cross-env": "^7.0.3"
   },
   "scripts": {
-    "start": "set PORT=3015 && react-scripts start",
+    "start": "cross-env PORT=3015 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -76,6 +73,9 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "engines": {
+    "node": "20.x"
   },
   "browserslist": {
     "production": [
